@@ -131,14 +131,16 @@ public class Projectile : MonoBehaviour {
 		}
 
 		//If bullet collides with "GasTank" tag
-		if (collision.transform.tag == "GasTank") 
+		if (collision.transform.tag == "GasTank")
 		{
 			//Toggle "isHit" on gas tank object
 			collision.transform.gameObject.GetComponent
-				<GasTankScript> ().isHit = true;
+				<GasTankScript>().isHit = true;
 			//Destroy bullet object
 			Destroy(gameObject);
 		}
+		
+		
 	}
 
 	private IEnumerator DestroyTimer () 

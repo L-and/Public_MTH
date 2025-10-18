@@ -230,11 +230,17 @@ namespace InfimaGames.LowPolyShooterPack
             if (Physics.Raycast(new Ray(playerCamera.position, playerCamera.forward),
                 out RaycastHit hit, maximumDistance, mask))
                 rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
-                
+
             //Spawn projectile from the projectile spawn point.
             GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
             //Add velocity to the projectile.
-            projectile.GetComponent<Rigidbody>().linearVelocity = projectile.transform.forward * projectileImpulse;   
+            Rigidbody rb = projectile.GetComponent<Rigidbody>();
+            if(rb != null)
+            {
+                rb.AddForce(projectile.transform.forward * projectileImpulse, ForceMode.VelocityChange);
+            }
+            // projectile.GetComponent<Rigidbody>().linearVelocity = projectile.transform.forward * projectileImpulse;
+            
         }
 
         public override void FillAmmunition(int amount)
