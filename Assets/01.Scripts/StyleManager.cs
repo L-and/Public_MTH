@@ -22,7 +22,6 @@ public class StyleManager : MonoBehaviour
     void Start()
     {
         targetCanvas = FindFirstObjectByType<Canvas>();
-        RestoreComboBar();
     }
 
     void Update()

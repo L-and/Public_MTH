@@ -1,14 +1,19 @@
 using TMPro;
+using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
 
+    public GameObject hud;
+    public GameObject gameover;
     public Slider hpBar;
     public Slider ohBar;
     public TextMeshProUGUI ohBarText;
     public Slider stmBar;
+    public Animation ohAnim;
+    public Animation stmAnim;
 
     float hp = 100f;
     float maxHp = 100f;
@@ -16,6 +21,8 @@ public class UIManager : MonoBehaviour
     float maxOh = 100f;
     float stm = 1;
     float maxStm = 1;
+    bool ohFulled = false;
+    bool stmFulled = false; 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -44,14 +51,22 @@ public class UIManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            SetStm(0);
+            if (stm >= 1)
+            {
+                stmFulled = false;
+                SetStm(stm - 1);
+            }
         }
         if (stm < 1) SetStm(stm + 0.5f * Time.deltaTime);
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            GameOver();
+        }
     }
     void SetHp(float value)
     {
         hp = Mathf.Clamp(value, 0, maxHp);
-        if (hp > maxHp) hp = maxHp;
         hpBar.maxValue = maxHp;
         hpBar.value = hp;
     }
@@ -61,13 +76,32 @@ public class UIManager : MonoBehaviour
         ohBar.maxValue = maxOh;
         ohBarText.text = oh + "%";
         ohBar.value = oh;
+        if (oh < maxOh)
+        {
+            Color color; 
+            ColorUtility.TryParseHtmlString("#D6D21D", out color);
+            ohBar.transform.Find("Fill Area").transform.Find("Fill").GetComponent<Image>().color = color;
+            ohFulled = false;
+        }
+        if (!ohFulled && oh >= maxOh)
+        {
+            ohFulled = true;
+            ohAnim.Play();
+            Debug.Log("aa");
+        }
     }
     void SetStm(float value)
     {
         stm = Mathf.Clamp(value, 0, maxStm);
-        if (stm > maxStm) hp = maxHp;
         stmBar.maxValue = maxStm;
         stmBar.value = stm;
+
+
+        if (!stmFulled && stm >= maxStm)
+        {
+            stmFulled = true;
+            stmAnim.Play();
+        }
     }
     
     void StatusReset()
@@ -76,4 +110,12 @@ public class UIManager : MonoBehaviour
         SetOh(maxOh);
         SetStm(maxStm);
     }
+
+    void GameOver()
+    {
+        hud.SetActive(false);
+        gameover.SetActive(true);
+    }
+
+    void Restart
 }
