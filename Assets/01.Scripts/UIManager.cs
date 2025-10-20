@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using TMPro;
 using UnityEditor.Playables;
 using UnityEngine;
@@ -16,8 +17,10 @@ public class UIManager : MonoBehaviour
     public Slider ohBar;
     public TextMeshProUGUI ohBarText;
     public Slider stmBar;
+    public Image hpBarFill;
     public Image ohBarFill;
     public Image stmBarFill;
+    public TextMeshProUGUI levelInfo;
 
     float hp = 100f;
     float maxHp = 100f;
@@ -25,6 +28,9 @@ public class UIManager : MonoBehaviour
     float maxOh = 100f;
     float stm = 1;
     float maxStm = 1;
+    Color hpBarFillColor;
+    Color ohBarFillColor;
+    Color stmBarFillColor;
     bool ohFulled = false;
     bool stmFulled = false;
     bool isGameover = false;
@@ -32,6 +38,10 @@ public class UIManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        hpBarFillColor = hpBarFill.color;
+        ohBarFillColor = ohBarFill.color;
+        stmBarFillColor = stmBarFill.color;
+        StartCoroutine(ShowLevelInfoCoroutine());
         StatusReset();
     }
 
@@ -72,8 +82,16 @@ public class UIManager : MonoBehaviour
             GameOver();
         }
     }
+
+    #region METHOD
     void SetHp(float value)
     {
+        if (value > hp)
+        {
+            DOTween.Kill(hpBarFill);
+            hpBarFill.color = hpBarFillColor;
+            hpBarFill.DOColor(Color.green, 0.2f).SetLoops(2, LoopType.Yoyo);
+        }
         hp = Mathf.Clamp(value, 0, maxHp);
         hpBar.maxValue = maxHp;
         hpBar.value = hp;
@@ -84,16 +102,16 @@ public class UIManager : MonoBehaviour
         ohBar.maxValue = maxOh;
         ohBarText.text = oh + "%";
         ohBar.value = oh;
-        Color color1;
-        ColorUtility.TryParseHtmlString("#D6D21D", out color1);
         Color color2; 
         ColorUtility.TryParseHtmlString("#FF8D00", out color2);
-        ohBarFill.color = Color.Lerp(color1,color2, oh/100);
+        ohBarFill.color = Color.Lerp(ohBarFillColor,color2, oh/100);
 
         if (oh < maxOh)  ohFulled = false;
         if (!ohFulled && oh >= maxOh)
         {
             ohFulled = true;
+            DOTween.Kill(ohBarFill);
+            ohBarFill.color = color2;
             ohBarFill.DOColor(Color.white, 0.8f).SetLoops(2,LoopType.Yoyo);
         }
     }
@@ -107,6 +125,8 @@ public class UIManager : MonoBehaviour
         if (!stmFulled && stm >= maxStm)
         {
             stmFulled = true;
+            DOTween.Kill(stmBarFill);
+            stmBarFill.color = stmBarFillColor;
             stmBarFill.DOColor(Color.white, 0.15f).SetLoops(2, LoopType.Yoyo);
         }
     }
@@ -133,4 +153,15 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    IEnumerator ShowLevelInfoCoroutine()
+    {
+        levelInfo.DOFade(0, 0);
+        levelInfo.DOFade(1, 1);
+        yield return new WaitForSeconds(5);
+        levelInfo.DOFade(0, 1);
+    }
+
+    #endregion
 }
+

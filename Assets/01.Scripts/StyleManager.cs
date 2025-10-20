@@ -60,16 +60,16 @@ public class StyleManager : MonoBehaviour
     {
         float value = Mathf.Round(Random.Range(1f, 10f));
         CreateText("style", " Àû Ã³Ä¡ +" + value + "%", 48, Color.white);
-        RemoveLatestStyle();
 
+        if (textGrid.transform.childCount > 7)
+        {
+            RemoveLatestStyle();
+        }
     }
 
     public void RemoveLatestStyle()
     {
-        if (textGrid.transform.childCount > 7)
-        {
-            Destroy(textGrid.transform.GetChild(0).gameObject);
-        }
+        Destroy(textGrid.transform.GetChild(0).gameObject);
     }
 
     public void SetCombo(int value)
@@ -78,7 +78,7 @@ public class StyleManager : MonoBehaviour
         {
             DOTween.Kill(combo.rectTransform);
             combo.rectTransform.localScale = new Vector2(1, 1);
-            combo.rectTransform.DOScale(new Vector2(1.1f, 1.1f), 0.2f).SetLoops(2, LoopType.Yoyo);
+            combo.rectTransform.DOScale(new Vector2(1.1f, 1.1f), 0.1f).SetLoops(2, LoopType.Yoyo);
         }
         comboes = value;
         combo.text = value + "x";
