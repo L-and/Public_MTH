@@ -23,17 +23,22 @@ public class DashState : MovementState
 
     public override void OnUpdate()
     {
-        base.OnUpdate();
-        
         _elapsedTime += Time.deltaTime;
         
-        // 
+        // 입력에 따른 상태 전환
         if (controller.PlayerInput.actions["Jump"].IsPressed() && controller.IsGrounded)
         {
             stateMachine.ChangeState(stateMachine.JumpState);
         }
         
-        // 무적시간 이후 다른상태로 전이
+        // 슬라이딩 상태 전환
+        if (controller.PlayerInput.actions["Sliding"].IsPressed() && controller.IsGrounded)
+        {
+            stateMachine.ChangeState(stateMachine.SlidingState);
+            return;
+        }
+        
+        // 무적시간 이후 상태 전환
         if (_elapsedTime >= controller.Status.DashDurationtime)
         {
             if (!controller.IsGrounded) // 점프상태 전환조건
@@ -50,6 +55,11 @@ public class DashState : MovementState
                 
             }
         }
+    }
+
+    public override void OnFixedUpdate()
+    {
+        base.OnFixedUpdate();
     }
 
 

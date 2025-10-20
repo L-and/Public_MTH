@@ -10,16 +10,22 @@ public class IdleState : MovementState
     {
         base.OnUpdate();
         
-        // 만약 이동 입력이 있다면 MoveState로 전환
+        // 이동상태 전환
         if (controller.MoveInput.magnitude > 0.1f)
         {
             stateMachine.ChangeState(stateMachine.MoveState);
         }
 
-        // 만약 점프 입력이 있다면 JumpState로 전환
+        // 점프상태 전환
         if (controller.PlayerInput.actions["Jump"].IsPressed() && controller.IsGrounded)
         {
             stateMachine.ChangeState(stateMachine.JumpState);
+        }
+        
+        // 대쉬상태 전환
+        if (controller.PlayerInput.actions["Dash"].IsPressed())
+        {
+            stateMachine.ChangeState(stateMachine.DashState);
         }
     }
 }

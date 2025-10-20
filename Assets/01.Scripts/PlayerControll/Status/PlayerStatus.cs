@@ -14,7 +14,8 @@ namespace _01.Scripts.PlayerControll.Status
         [Header("최대속도")] 
         [SerializeField] private float maxSpeed = 10f;
         [SerializeField] private float dashMaxSpeed = 15f;
-        [SerializeField] private float slidingMaxSpeed = 25f;
+        [SerializeField] private float slidingMaxSpeed = 13f;
+        [SerializeField] private float jumpMaxSpeed = 15f;
         
         public float CurrentMaxSpeed
                 {
@@ -23,11 +24,13 @@ namespace _01.Scripts.PlayerControll.Status
                         if (_pc.MovementFSM.CurrentState ==
                             _pc.MovementFSM.DashState)
                             return dashMaxSpeed;
-                        else if (_pc.MovementFSM.CurrentState ==
-                                 _pc.MovementFSM.JumpState ||
-                                 _pc.MovementFSM.CurrentState ==
-                                 _pc.MovementFSM.SlidingState)
+                        else if (
+                            _pc.MovementFSM.CurrentState == 
+                            _pc.MovementFSM.SlidingState)
                             return slidingMaxSpeed;
+                        else if (_pc.MovementFSM.CurrentState ==
+                                 _pc.MovementFSM.JumpState)
+                            return jumpMaxSpeed;
                         else
                             return maxSpeed;
                     }
@@ -38,6 +41,11 @@ namespace _01.Scripts.PlayerControll.Status
         [SerializeField] private float airAcc = 5f;
         [SerializeField] private float slidingAcc = 5f;
 
+        [Header("대쉬/슬라이딩 파워")] 
+        [SerializeField] public float dashPower = 30f;
+        [SerializeField] public float slidingPower = 100f;
+        
+        
         public float CurrentAcceleration
         {
             get

@@ -38,14 +38,16 @@ namespace _01.Scripts.PlayerControll
 
         // 입력 값
         public Vector2 MoveInput { get; private set; }
-
         public Vector2 mouseDeltaInput;
         private float _xRotation;
         private float _yRotation;
         
+        // 이동방향 프로퍼티
+        public Vector3 MoveDirection => (transform.forward * MoveInput.y + transform.right * MoveInput.x).normalized; // 플레이어의 Transform과 입력에따른 단위벡터
+
         // 지면검사관련 필드/메서드
         [Header("지면 검사")] 
-        [Tooltip("지면검사의 기준위치"), SerializeField] private Transform groundCheckPivot; // 지면검사의 기준위치 (플레이어의 발 아래지점)
+        [Tooltip("지면검사의 기준위치"), SerializeField] public Transform groundCheckPivot; // 지면검사의 기준위치 (플레이어의 발 아래지점)
         [SerializeField] private float groundCheckDistance = 0.02f; // 지면검사용 거리
         [SerializeField] private LayerMask groundLayerMask;
         public bool IsGrounded => Physics.Raycast(groundCheckPivot.position, -transform.up, groundCheckDistance, groundLayerMask);
@@ -94,7 +96,7 @@ namespace _01.Scripts.PlayerControll
         {
             Gizmos.color = IsGrounded ? Color.green : Color.red;
 
-            Gizmos.DrawRay(groundCheckPivot.position, -transform.up * groundCheckDistance);
+            Gizmos.DrawRay(groundCheckPivot.position, -transform.up * 10f);
         }
         
         private void Awake()
@@ -134,7 +136,6 @@ namespace _01.Scripts.PlayerControll
             
             // 디버그
             speedText.text = PlatSpeed.ToString(CultureInfo.InvariantCulture);
-            stateText.text = MovementState;
         }
 
         private void FixedUpdate()
@@ -146,6 +147,9 @@ namespace _01.Scripts.PlayerControll
             RightHandFSM.CurrentState?.OnFixedUpdate();
             SubWeaponFSM.CurrentState?.OnFixedUpdate();
             EmissionFSM.CurrentState?.OnFixedUpdate();
+            
+            // 디버그
+            stateText.text = MovementState;
         }
 
 
@@ -182,17 +186,6 @@ namespace _01.Scripts.PlayerControll
             mouseDeltaInput = value.Get<Vector2>();
         }
         
-        // 대쉬 조작
-        private void OnDash(InputValue value)
-        {
-            // 키입력 and 대쉬상태가 아닐경우 대쉬 실행
-            // if (value.isPressed && MovementFSM.CurrentState != MovementFSM.DashState)
-            // {
-            //     MovementFSM.ChangeState(MovementFSM.DashState);
-            // }
-            MovementFSM.ChangeState(MovementFSM.DashState);
-        }
-        
         # endregion
         
         #region Coordinator (중재자) 역할
@@ -211,14 +204,9 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         public void MovePlayer(float acceleration)
         {
-            // 움직이는 방향을 계산
-            var moveDir = playerOrientation.forward * MoveInput.y + playerOrientation.right * MoveInput.x;
-            var flatMoveDir = new Vector3(moveDir.x, 0f, moveDir.z);
-            
-            
-            Rb.AddForce(flatMoveDir.normalized * acceleration, ForceMode.Force);
+            Rb.AddForce(MoveDirection * acceleration, ForceMode.Force);
 
-            Debug.DrawRay(transform.position, moveDir.normalized, Color.yellow);
+            Debug.DrawRay(transform.position, MoveDirection, Color.yellow);
             // Debug.Log($"Speed: {Rb.linearVelocity.magnitude}");
             
         }
@@ -233,7 +221,6 @@ namespace _01.Scripts.PlayerControll
             // 속도제한 적용
             if (flatVel.magnitude > Status.CurrentMaxSpeed)
             {
-                Debug.Log($"현재 최대속도: {Status.CurrentMaxSpeed}");
                 Vector3 limitedVel = flatVel.normalized * Status.CurrentMaxSpeed;
                 Rb.linearVelocity = new Vector3(limitedVel.x, Rb.linearVelocity.y, limitedVel.z);
             }
@@ -243,26 +230,28 @@ namespace _01.Scripts.PlayerControll
         {
             if (!IsGrounded) return;
             
+            Debug.Log("점프성공!");
             Rb.AddForce(transform.up * Status.CurrentJumpForce, ForceMode.Impulse);
         }
 
         public void Dash()
         {
+            // TODO 스테미너에 따른 대쉬가능여부 처리
+            
             // 방향조작이 있으면 해당방향, 없으면 바라보는 방향으로 대쉬방향 계산
             var dir = (MoveInput == Vector2.zero) ? 
                 transform.forward : 
-                (transform.forward * MoveInput.y+ transform.right * MoveInput.x).normalized;
+                MoveDirection;
             
-            var velocity = dir * 30f; // TODO 대쉬속도 상수값을 다른곳으로 이동
+            var velocity = dir * Status.dashPower;
             Rb.AddForce(velocity, ForceMode.Impulse);
         }
 
         public void Sliding()
         {
-            var dir = transform.forward;
-            
-            var velocity = dir * 30f; // TODO 슬라이딩 가속속도 상수값을 다른곳으로 이동
-            Rb.AddForce(velocity, ForceMode.Impulse);
+            var slidingForce = Status.slidingPower;
+            var velocity = MoveDirection * slidingForce; 
+            Rb.AddForce(velocity, ForceMode.Force);
             
         }
         # endregion

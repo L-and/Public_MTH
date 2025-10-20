@@ -21,14 +21,24 @@ public class JumpState : MovementState
 
     public override void OnUpdate()
     {
-        base.OnUpdate();
-        
         if (controller.isMovementStateLocked) return;
         
+        // 대쉬상태 전환
+        if (controller.PlayerInput.actions["Dash"].IsPressed())
+        {
+            stateMachine.ChangeState(stateMachine.DashState);
+        }
+        
+        // 지면에 닿으면 Idle상태 전환
         if (controller.IsGrounded)
         {
             stateMachine.ChangeState(stateMachine.IdleState);
         }
+    }
+
+    public override void OnFixedUpdate()
+    {
+        base.OnFixedUpdate();
     }
 
     public override void OnExit()

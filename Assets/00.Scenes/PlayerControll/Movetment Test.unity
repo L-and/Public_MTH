@@ -727,7 +727,7 @@ Transform:
   m_GameObject: {fileID: 1488423611}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.008, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -992,7 +992,7 @@ MonoBehaviour:
   playerOrientation: {fileID: 1388401195}
   mouseDeltaInput: {x: 0, y: 0}
   groundCheckPivot: {fileID: 1488423612}
-  groundCheckDistance: 0.02
+  groundCheckDistance: 0.5
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 1073741824
@@ -1013,10 +1013,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.PlayerControll.Status.PlayerStatus
   maxSpeed: 10
   dashMaxSpeed: 15
-  slidingMaxSpeed: 25
-  baseAcc: 100
+  slidingMaxSpeed: 13
+  jumpMaxSpeed: 15
+  baseAcc: 200
   airAcc: 50
   slidingAcc: 5
+  dashPower: 30
+  slidingPower: 100
   dashDurationTime: 0.5
   mouseSensitivity: 0.5
   jumpForce: 10

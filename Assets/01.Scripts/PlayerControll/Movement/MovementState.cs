@@ -18,16 +18,12 @@ public abstract class MovementState : IState
 
     public virtual void OnEnter() { }
 
-    public virtual void OnUpdate()
-    {
-        controller.MovePlayer(controller.Status.CurrentAcceleration);
-        controller.LimitSpeed();
-    }
+    public virtual void OnUpdate() { }
 
     public virtual void OnFixedUpdate()
     {
- 
-        
+        controller.MovePlayer(controller.Status.CurrentAcceleration);
+        controller.LimitSpeed();
     }
     public virtual void OnLateUpdate() { }
     public virtual void OnExit() { }
