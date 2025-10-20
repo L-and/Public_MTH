@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -75,8 +76,9 @@ public class StyleManager : MonoBehaviour
     {
         if (comboes < value)
         {
-            comboAnim.Stop();
-            comboAnim.Play();
+            DOTween.Kill(combo.rectTransform);
+            combo.rectTransform.localScale = new Vector2(1, 1);
+            combo.rectTransform.DOScale(new Vector2(1.1f, 1.1f), 0.2f).SetLoops(2, LoopType.Yoyo);
         }
         comboes = value;
         combo.text = value + "x";

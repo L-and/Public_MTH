@@ -1,6 +1,8 @@
+using DG.Tweening;
 using TMPro;
 using UnityEditor.Playables;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -8,12 +10,14 @@ public class UIManager : MonoBehaviour
 
     public GameObject hud;
     public GameObject gameover;
+    public Image gameoverBackground;
+    public Image gameoverFade;
     public Slider hpBar;
     public Slider ohBar;
     public TextMeshProUGUI ohBarText;
     public Slider stmBar;
-    public Animation ohAnim;
-    public Animation stmAnim;
+    public Image ohBarFill;
+    public Image stmBarFill;
 
     float hp = 100f;
     float maxHp = 100f;
@@ -22,7 +26,8 @@ public class UIManager : MonoBehaviour
     float stm = 1;
     float maxStm = 1;
     bool ohFulled = false;
-    bool stmFulled = false; 
+    bool stmFulled = false;
+    bool isGameover = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -53,13 +58,16 @@ public class UIManager : MonoBehaviour
         {
             if (stm >= 1)
             {
-                stmFulled = false;
                 SetStm(stm - 1);
             }
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Restart();
+        }
         if (stm < 1) SetStm(stm + 0.5f * Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G) && !isGameover)
         {
             GameOver();
         }
@@ -76,18 +84,17 @@ public class UIManager : MonoBehaviour
         ohBar.maxValue = maxOh;
         ohBarText.text = oh + "%";
         ohBar.value = oh;
-        if (oh < maxOh)
-        {
-            Color color; 
-            ColorUtility.TryParseHtmlString("#D6D21D", out color);
-            ohBar.transform.Find("Fill Area").transform.Find("Fill").GetComponent<Image>().color = color;
-            ohFulled = false;
-        }
+        Color color1;
+        ColorUtility.TryParseHtmlString("#D6D21D", out color1);
+        Color color2; 
+        ColorUtility.TryParseHtmlString("#FF8D00", out color2);
+        ohBarFill.color = Color.Lerp(color1,color2, oh/100);
+
+        if (oh < maxOh)  ohFulled = false;
         if (!ohFulled && oh >= maxOh)
         {
             ohFulled = true;
-            ohAnim.Play();
-            Debug.Log("aa");
+            ohBarFill.DOColor(Color.white, 0.8f).SetLoops(2,LoopType.Yoyo);
         }
     }
     void SetStm(float value)
@@ -96,11 +103,11 @@ public class UIManager : MonoBehaviour
         stmBar.maxValue = maxStm;
         stmBar.value = stm;
 
-
+        if (stm < maxStm) stmFulled = false;
         if (!stmFulled && stm >= maxStm)
         {
             stmFulled = true;
-            stmAnim.Play();
+            stmBarFill.DOColor(Color.white, 0.15f).SetLoops(2, LoopType.Yoyo);
         }
     }
     
@@ -113,9 +120,17 @@ public class UIManager : MonoBehaviour
 
     void GameOver()
     {
+        isGameover = true;
         hud.SetActive(false);
         gameover.SetActive(true);
+        gameoverBackground.DOFade(0.2f, 0f);
+        gameoverBackground.DOFade(1f, 8f);
+        gameoverFade.DOFade(1f, 0f);
+        gameoverFade.DOFade(0f, 5f);
     }
 
-    void Restart
+    void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

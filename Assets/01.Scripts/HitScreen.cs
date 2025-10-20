@@ -14,7 +14,6 @@ public class HitScreen : MonoBehaviour
         {
             Hit();
         }
-        if (Input.GetKeyUp(KeyCode.Alpha1)) FrozenGameOver();
     }
     public void Hit()
     {
