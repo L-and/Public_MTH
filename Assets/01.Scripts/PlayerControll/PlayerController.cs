@@ -25,7 +25,7 @@ namespace _01.Scripts.PlayerControll
         
         // 상태 머신 참조
         public MovementStateMachine MovementFSM { get; private set; }
-        public RightHandStateMachine RightHandFSM { get; private set; }
+        public WeaponStateMachine WeaponFsm { get; private set; }
         public SubWeaponStateMachine SubWeaponFSM { get; private set; }
         public EmissionStateMachine EmissionFSM { get; private set; }
 
@@ -111,7 +111,7 @@ namespace _01.Scripts.PlayerControll
 
             // 상태 머신 생성
             MovementFSM = new MovementStateMachine(this);
-            RightHandFSM = new RightHandStateMachine(this);
+            WeaponFsm = new WeaponStateMachine(this);
             SubWeaponFSM = new SubWeaponStateMachine(this);
             EmissionFSM = new EmissionStateMachine(this);
         }
@@ -121,16 +121,18 @@ namespace _01.Scripts.PlayerControll
         {
             // 각 상태 머신의 초기 상태 설정
             MovementFSM.Initialize(MovementFSM.IdleState);
-            RightHandFSM.Initialize(RightHandFSM.IdleState);
+            WeaponFsm.Initialize(WeaponFsm.IdleState);
             SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
             EmissionFSM.Initialize(EmissionFSM.ReadyState);
         }
 
         private void Update()
         {
+            Aim();
+            
             // 각 상태 머신의 Update 로직 실행
             MovementFSM.CurrentState?.OnUpdate();
-            RightHandFSM.CurrentState?.OnUpdate();
+            WeaponFsm.CurrentState?.OnUpdate();
             SubWeaponFSM.CurrentState?.OnUpdate();
             EmissionFSM.CurrentState?.OnUpdate();
             
@@ -140,11 +142,11 @@ namespace _01.Scripts.PlayerControll
 
         private void FixedUpdate()
         {
-            Aim();
-            
+            AimRotation();
+                
             // 각 상태 머신의 FixedUpdate 로직 실행 (주로 물리 관련)
             MovementFSM.CurrentState?.OnFixedUpdate();
-            RightHandFSM.CurrentState?.OnFixedUpdate();
+            WeaponFsm.CurrentState?.OnFixedUpdate();
             SubWeaponFSM.CurrentState?.OnFixedUpdate();
             EmissionFSM.CurrentState?.OnFixedUpdate();
             
@@ -155,17 +157,18 @@ namespace _01.Scripts.PlayerControll
 
         #endregion
 
-        # region InputSystem 
-        private void OnMove(InputValue value)
+        # region Inputs
+        public void OnMove(InputAction.CallbackContext context)
         {
-            MoveInput = value.Get<Vector2>();
+            MoveInput = context.ReadValue<Vector2>();
         }
 
-        // 입력에 따라 마우스커서를 On/Off
-        // TODO: 커서를 On/Off하는 코드를 공용스크립트로 옮겨야 함
-        private void OnCursor(InputValue value)
+        /// <summary>
+        /// 입력에 따라 마우스커서를 On/Off TODO: 커서를 On/Off하는 코드를 공용스크립트로 옮겨야 함
+        /// </summary>
+        public void OnCursor(InputAction.CallbackContext context)
         {
-            if (value.isPressed)
+            if (context.phase == InputActionPhase.Started)
             {
                 Cursor.visible = !Cursor.visible;
             }
@@ -180,17 +183,36 @@ namespace _01.Scripts.PlayerControll
             }
         }
         
-        // 마우스 조작
-        private void OnLook(InputValue value)
+        /// <summary>
+        /// 마우스조작
+        /// </summary>
+        public void OnLook(InputAction.CallbackContext context)
         {
-            mouseDeltaInput = value.Get<Vector2>();
+            mouseDeltaInput = context.ReadValue<Vector2>();
+        }
+
+        public void OnTryFire(InputAction.CallbackContext context)
+        {
+            switch (context)
+            {
+                case {phase: InputActionPhase.Started}:
+                    Debug.Log("마우스 버튼 클릭");
+                    break;
+                case {phase: InputActionPhase.Performed}:
+                    Debug.Log("마우스 홀드");
+                    break;
+                case {phase: InputActionPhase.Canceled}:
+                    Debug.Log("마우스 뗌");
+                    break;
+            }
         }
         
         # endregion
         
+        
         #region Coordinator (중재자) 역할
         // 다른 상태 머신이 현재 상태를 쉽게 조회할 수 있도록 프로퍼티 제공
-        public bool IsReloading => RightHandFSM.CurrentState is WeaponReloadState;
+        public bool IsReloading => WeaponFsm.CurrentState is WeaponReloadState;
         public bool IsUsingSubWeapon => SubWeaponFSM.CurrentState is SubWeaponUsingState;
         public bool IsUsingEmission => EmissionFSM.CurrentState is EmissionUsingState;
         // 두 왼손 액션 중 하나라도 사용 중인지 확인하는 편의용 프로퍼티
@@ -258,6 +280,9 @@ namespace _01.Scripts.PlayerControll
         
         # region 플레이어 조작관련 메서드(마우스)
 
+        /// <summary>
+        /// 마우스 입력으로 회전값 계산
+        /// </summary>
         public void Aim()
         {
             var mouseX = mouseDeltaInput.x * Status.mouseSensitivity;
@@ -266,7 +291,13 @@ namespace _01.Scripts.PlayerControll
             _yRotation += mouseX;
             _xRotation -= mouseY;
             _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
-          
+        }
+
+        /// <summary>
+        /// 마우스 입력에 의한 회전값 적용
+        /// </summary>
+        public void AimRotation()
+        {
             transform.rotation = Quaternion.Euler(0.0f, _yRotation, 0f);
             playerOrientation.rotation = Quaternion.Euler(_xRotation, _yRotation, 0.0f);
         }
