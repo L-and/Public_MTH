@@ -2,9 +2,9 @@
 
 using _01.Scripts.PlayerControll;
 
-public class WeaponFireState : RightHandState
+public class WeaponFireState : WeaponState
 {
-    public WeaponFireState(PlayerController controller, RightHandStateMachine stateMachine) : base(controller, stateMachine) { }
+    public WeaponFireState(PlayerController controller, WeaponStateMachine stateMachine) : base(controller, stateMachine) { }
 
     public override void OnEnter()
     {

@@ -2,9 +2,9 @@
 
 using _01.Scripts.PlayerControll;
 
-public class WeaponIdleState : RightHandState
+public class WeaponIdleState : WeaponState
 {
-    public WeaponIdleState(PlayerController controller, RightHandStateMachine stateMachine) : base(controller, stateMachine) { }
+    public WeaponIdleState(PlayerController controller, WeaponStateMachine stateMachine) : base(controller, stateMachine) { }
 
     public override void OnUpdate()
     {

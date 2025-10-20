@@ -1,13 +1,11 @@
-// RightHand/RightHandState.cs
-
 using _01.Scripts.PlayerControll;
 
-public abstract class RightHandState : IState
+public abstract class WeaponState : IState
 {
     protected readonly PlayerController controller;
-    protected readonly RightHandStateMachine stateMachine;
+    protected readonly WeaponStateMachine stateMachine;
 
-    protected RightHandState(PlayerController controller, RightHandStateMachine stateMachine)
+    protected WeaponState(PlayerController controller, WeaponStateMachine stateMachine)
     {
         this.controller = controller;
         this.stateMachine = stateMachine;
