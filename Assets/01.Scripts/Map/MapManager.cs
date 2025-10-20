@@ -13,6 +13,7 @@ public class MapManager : MonoBehaviour
   [Header("Options")]
   [SerializeField] private int _roomsPerFloor = 5;        // 한 층 방 개수
   [SerializeField] private Transform _floorRoot;          // 생성 부모
+  [SerializeField] private int _thisFloor = 0;            // 현재 층
 
   private Transform _attachPoint; // 현재 진행 Anchor
   private int _floorCount = 0;    // 층 카운트

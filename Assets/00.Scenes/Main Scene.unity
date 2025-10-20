@@ -277,16 +277,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   _roomPrefabs:
   - {fileID: 4685667245777150354, guid: ff0cbf59a1aebf34a94cd2619878710c, type: 3}
-  - {fileID: 4685667245777150354, guid: ff0cbf59a1aebf34a94cd2619878710c, type: 3}
-  - {fileID: 4685667245777150354, guid: ff0cbf59a1aebf34a94cd2619878710c, type: 3}
-  - {fileID: 4685667245777150354, guid: ff0cbf59a1aebf34a94cd2619878710c, type: 3}
-  - {fileID: 4685667245777150354, guid: ff0cbf59a1aebf34a94cd2619878710c, type: 3}
+  - {fileID: 4685667245777150354, guid: 9ca23070568df44478a2a0b12e15286e, type: 3}
+  - {fileID: 4685667245777150354, guid: 4e1192db91e2bb240ad1679095c738aa, type: 3}
+  - {fileID: 4685667245777150354, guid: 80e43b252d42c294ca2d409092c1fdb3, type: 3}
+  - {fileID: 4685667245777150354, guid: 9042920080047c5478421928e5f98e76, type: 3}
   _connectorPrefab: {fileID: 1041954163480263592, guid: 5f10c2b329bc91f40bc9e676a5f01a06,
     type: 3}
   _elevatorPrefab: {fileID: 2720415459213308446, guid: 22543653c55d3e84e9c7f347432bdb89,
     type: 3}
   _roomsPerFloor: 5
   _floorRoot: {fileID: 0}
+  _thisFloor: 0
 --- !u!4 &1372053007
 Transform:
   m_ObjectHideFlags: 0
@@ -645,6 +646,7 @@ MonoBehaviour:
   walkSpeed: 2
   runSpeed: 5
   turnSpeed: 10
+  mainCamera: {fileID: 3378214248534360060}
 --- !u!54 &9122684339276480065
 Rigidbody:
   m_ObjectHideFlags: 0

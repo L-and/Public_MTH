@@ -2,22 +2,25 @@ using UnityEngine;
 
 public class DoorTrigger : MonoBehaviour
 {
-  [SerializeField] RoomDoorHandler roomDoorHandler;
+  [SerializeField] DoorController doorController;
+
+  private bool isOpen = false;
 
   private void OnTriggerEnter(Collider other)
   {
-    if (other.CompareTag("Player"))
+    if (other.CompareTag("Player") && !isOpen)
     {
-      roomDoorHandler.OpenEntryDoor();
+      isOpen = true;
+
+      doorController.OpenDoor();
     }
   }
 
   private void OnTriggerExit(Collider other)
   {
-    Debug.Log("Exit 호출");
-    roomDoorHandler.CloseEntryDoor();
-
     var collider = GetComponent<BoxCollider>();
     collider.enabled = false;
+
+    isOpen = false;
   }
 }

@@ -9,8 +9,10 @@ public class PlayerMovement : MonoBehaviour
   [SerializeField] private float walkSpeed = 2f;
   [SerializeField] private float runSpeed = 5f;
   [SerializeField] private float turnSpeed = 10f;
+  [SerializeField] private Camera mainCamera;
   private Vector3 velocity;
   private const float GRAVITY = -9.8f;
+  private float interactionDistance = 3f;
 
   private Transform cam;
 
@@ -30,6 +32,25 @@ public class PlayerMovement : MonoBehaviour
 
     // 회전 담당
     Turn();
+
+    // 상호작용 담당
+    if (Input.GetKeyDown(KeyCode.F))
+    {
+      // 카메라 화면 정중앙에서 앞 방향으로 Ray(광선)를 생성합니다.
+      Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+      RaycastHit hit; // Ray가 부딪힌 물체의 정보를 담을 변수
+
+      // Ray를 쏴서 interactionDistance 거리 안에 무언가 부딪혔다면
+      if (Physics.Raycast(ray, out hit, interactionDistance))
+      {
+        // 부딪힌 물체가 IInteractable 인터페이스를 가지고 있는지 확인합니다.
+        if (hit.collider.TryGetComponent(out IInteractable interactable))
+        {
+          // 가지고 있다면, 그 물체의 Interact() 함수를 실행합니다.
+          interactable.Interact();
+        }
+      }
+    }
   }
 
   private void OnMove(InputValue value)
