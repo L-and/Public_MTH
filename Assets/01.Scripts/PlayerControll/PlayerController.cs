@@ -6,17 +6,21 @@ using _01.Scripts.PlayerControll.Status;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using WeaponBehaviour = _01.Scripts.Weapon.WeaponBehaviour;
 
-// 플레이어의 최상위 컨트롤러이자, 각 상태 머신을 중재하는 Coordinator 역할을 합니다.
 namespace _01.Scripts.PlayerControll
 {
+    /// <summary>
+    /// 플레이어에 대한 입력을 받아 필드로 다른 스크립트로 전달,
+    /// 컴포넌트에 직접적인 처리를 총괄하는 스크립트
+    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerStatus))]
     public class PlayerController : MonoBehaviour
     {
-        // 플레이어 모델 오브젝트
-        [SerializeField] private Transform playerOrientation;
+        [Tooltip("지면검사의 기준위치"), SerializeField] public Transform groundCheckPivot;
+        
         
         /// <summary>
         /// 플레이어의 속성정보 컴포넌트 프로퍼티
@@ -25,7 +29,6 @@ namespace _01.Scripts.PlayerControll
         
         // 상태 머신 참조
         public MovementStateMachine MovementFSM { get; private set; }
-        public WeaponStateMachine WeaponFsm { get; private set; }
         public SubWeaponStateMachine SubWeaponFSM { get; private set; }
         public EmissionStateMachine EmissionFSM { get; private set; }
 
@@ -36,26 +39,21 @@ namespace _01.Scripts.PlayerControll
         public Animator Anim { get; private set; }
         public Transform PlayerCamera { get; private set; }
 
-        // 입력 값
+        // PlayerInput 입력값 프로퍼티
         public Vector2 MoveInput { get; private set; }
-        public Vector2 mouseDeltaInput;
-        private float _xRotation;
-        private float _yRotation;
+        public Vector2 MouseDeltaInput { get; private set; }
         
-        // 이동방향 프로퍼티
-        public Vector3 MoveDirection => (transform.forward * MoveInput.y + transform.right * MoveInput.x).normalized; // 플레이어의 Transform과 입력에따른 단위벡터
-
-        // 지면검사관련 필드/메서드
-        [Header("지면 검사")] 
-        [Tooltip("지면검사의 기준위치"), SerializeField] public Transform groundCheckPivot; // 지면검사의 기준위치 (플레이어의 발 아래지점)
+        #region 지면검사관련 필드/메서드
+        [Header("지면 검사용 필드")] 
         [SerializeField] private float groundCheckDistance = 0.02f; // 지면검사용 거리
         [SerializeField] private LayerMask groundLayerMask;
         public bool IsGrounded => Physics.Raycast(groundCheckPivot.position, -transform.up, groundCheckDistance, groundLayerMask);
-        
-        // 디버그용 
-        [SerializeField] private Text speedText;
-        [SerializeField] private Text stateText;
-        
+        #endregion
+       
+        # region 이동속도, 입력 이동방향 프로퍼티
+        /// <summary>
+        /// 평면 이동속도
+        /// </summary>
         public float PlatSpeed
         {
             get
@@ -63,7 +61,36 @@ namespace _01.Scripts.PlayerControll
                 return new Vector3(Rb.linearVelocity.x, 0f, Rb.linearVelocity.z).magnitude;
             }
         }
-
+  
+        /// <summary>
+        /// 입력에 따른 이동방향 프로퍼티
+        /// </summary>
+        public Vector3 MoveDirection => (transform.forward * MoveInput.y + transform.right * MoveInput.x).normalized; // 플레이어의 Transform과 입력에따른 단위벡터
+        
+        # endregion
+        
+        # region 주무기관련 필드/컴포넌트
+        
+        private bool _holdingFire;
+        
+        /// <summary>
+        /// 마지막 발사시간
+        /// </summary>
+        private float _lastShotTime;
+        
+        /// <summary>
+        /// 현재무기 스크립트
+        /// </summary>
+        public WeaponBehaviour equippedWeapon;
+        
+        # endregion
+        
+        # region 디버그용 필드/프로퍼티
+        
+        [Header("디버그")]
+        [SerializeField] private Text speedText;
+        [SerializeField] private Text stateText;
+        
         public string MovementState
         {
             get
@@ -72,7 +99,9 @@ namespace _01.Scripts.PlayerControll
                 return MovementFSM.CurrentState.ToString();
             }
         }
-
+        
+        # endregion
+        
         # region MovementState 상태전환 무시 기능
         public bool isMovementStateLocked; // MovementState의 상태전환을 강제로 무시하는 플래그 변수
 
@@ -91,6 +120,7 @@ namespace _01.Scripts.PlayerControll
         }
         
         #endregion
+        
         
         private void OnDrawGizmos()
         {
@@ -111,7 +141,6 @@ namespace _01.Scripts.PlayerControll
 
             // 상태 머신 생성
             MovementFSM = new MovementStateMachine(this);
-            WeaponFsm = new WeaponStateMachine(this);
             SubWeaponFSM = new SubWeaponStateMachine(this);
             EmissionFSM = new EmissionStateMachine(this);
         }
@@ -121,18 +150,23 @@ namespace _01.Scripts.PlayerControll
         {
             // 각 상태 머신의 초기 상태 설정
             MovementFSM.Initialize(MovementFSM.IdleState);
-            WeaponFsm.Initialize(WeaponFsm.IdleState);
             SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
             EmissionFSM.Initialize(EmissionFSM.ReadyState);
         }
 
         private void Update()
         {
-            Aim();
+            // 무기발사 (코드이동 필요)
+            if (_holdingFire)
+            {
+                if (Time.time - _lastShotTime > 60.0f / equippedWeapon.GetRateOfFire())
+                {
+                    Fire(); // 사격
+                }
+            }
             
             // 각 상태 머신의 Update 로직 실행
             MovementFSM.CurrentState?.OnUpdate();
-            WeaponFsm.CurrentState?.OnUpdate();
             SubWeaponFSM.CurrentState?.OnUpdate();
             EmissionFSM.CurrentState?.OnUpdate();
             
@@ -142,19 +176,14 @@ namespace _01.Scripts.PlayerControll
 
         private void FixedUpdate()
         {
-            AimRotation();
-                
             // 각 상태 머신의 FixedUpdate 로직 실행 (주로 물리 관련)
             MovementFSM.CurrentState?.OnFixedUpdate();
-            WeaponFsm.CurrentState?.OnFixedUpdate();
             SubWeaponFSM.CurrentState?.OnFixedUpdate();
             EmissionFSM.CurrentState?.OnFixedUpdate();
             
             // 디버그
             stateText.text = MovementState;
         }
-
-
         #endregion
 
         # region Inputs
@@ -188,35 +217,75 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         public void OnLook(InputAction.CallbackContext context)
         {
-            mouseDeltaInput = context.ReadValue<Vector2>();
+            MouseDeltaInput = context.ReadValue<Vector2>();
         }
 
+        /// <summary>
+        /// 발사 입력
+        /// </summary>
         public void OnTryFire(InputAction.CallbackContext context)
         {
             switch (context)
             {
                 case {phase: InputActionPhase.Started}:
+                    _holdingFire = true;
                     Debug.Log("마우스 버튼 클릭");
                     break;
                 case {phase: InputActionPhase.Performed}:
                     Debug.Log("마우스 홀드");
                     break;
                 case {phase: InputActionPhase.Canceled}:
+                    _holdingFire = false;
                     Debug.Log("마우스 뗌");
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 재장전 입력
+        /// </summary>
+        public void OnTryReload(InputAction.CallbackContext context)
+        {
+            switch (context)
+            {
+                case {phase: InputActionPhase.Started}:
+                    Reload();
                     break;
             }
         }
         
         # endregion
+
+        # region 무기관련 메서드
         
+        /// <summary>
+        /// 무기 발사
+        /// </summary>
+        private void Fire()
+        {
+            _lastShotTime = Time.time;
+
+            equippedWeapon.Fire();
+
+        }
+
+        /// <summary>
+        /// 무기 재장전
+        /// </summary>
+        private void Reload()
+        {
+            equippedWeapon.Reload();
+        }
+        
+        # endregion
         
         #region Coordinator (중재자) 역할
         // 다른 상태 머신이 현재 상태를 쉽게 조회할 수 있도록 프로퍼티 제공
-        public bool IsReloading => WeaponFsm.CurrentState is WeaponReloadState;
         public bool IsUsingSubWeapon => SubWeaponFSM.CurrentState is SubWeaponUsingState;
         public bool IsUsingEmission => EmissionFSM.CurrentState is EmissionUsingState;
         // 두 왼손 액션 중 하나라도 사용 중인지 확인하는 편의용 프로퍼티
         public bool IsAnyLeftHandActionInUse => IsUsingSubWeapon || IsUsingEmission;
+        
         #endregion
         
         # region 플레이어 조작관련 메서드(키보드)
@@ -229,8 +298,6 @@ namespace _01.Scripts.PlayerControll
             Rb.AddForce(MoveDirection * acceleration, ForceMode.Force);
 
             Debug.DrawRay(transform.position, MoveDirection, Color.yellow);
-            // Debug.Log($"Speed: {Rb.linearVelocity.magnitude}");
-            
         }
 
         /// <summary>
@@ -276,32 +343,6 @@ namespace _01.Scripts.PlayerControll
             Rb.AddForce(velocity, ForceMode.Force);
             
         }
-        # endregion
-        
-        # region 플레이어 조작관련 메서드(마우스)
-
-        /// <summary>
-        /// 마우스 입력으로 회전값 계산
-        /// </summary>
-        public void Aim()
-        {
-            var mouseX = mouseDeltaInput.x * Status.mouseSensitivity;
-            var mouseY = mouseDeltaInput.y * Status.mouseSensitivity;
-
-            _yRotation += mouseX;
-            _xRotation -= mouseY;
-            _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
-        }
-
-        /// <summary>
-        /// 마우스 입력에 의한 회전값 적용
-        /// </summary>
-        public void AimRotation()
-        {
-            transform.rotation = Quaternion.Euler(0.0f, _yRotation, 0f);
-            playerOrientation.rotation = Quaternion.Euler(_xRotation, _yRotation, 0.0f);
-        }
-        
         # endregion
     }
 }
