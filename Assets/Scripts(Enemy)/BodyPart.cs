@@ -26,9 +26,20 @@ public class BodyPart : MonoBehaviour
         var target = GetComponentInParent<IDamageableZone>();
         if (target != null)
         {
-            Vector3 hitPoint = collision.contacts.Length > 0 ?
-                collision.contacts[0].point : transform.position;
+            Vector3 hitPoint = transform.position; // fallback
+
+            if (collision.contacts != null && collision.contacts.Length > 0)
+            {
+                hitPoint = collision.contacts[0].point;
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ No contact point for {name}, fallback to transform.position");
+            }
             target.ApplyHit(src.damage, hitPoint, zone);
+            // Vector3 hitPoint = collision.contacts.Length > 0 ?
+            //     collision.contacts[0].point : transform.position;
+            // target.ApplyHit(src.damage, hitPoint, zone);
         }
 
         // 총알 제거

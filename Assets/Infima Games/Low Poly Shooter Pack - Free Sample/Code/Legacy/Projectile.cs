@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using System.Collections;
 using InfimaGames.LowPolyShooterPack;
@@ -139,8 +139,29 @@ public class Projectile : MonoBehaviour {
 			//Destroy bullet object
 			Destroy(gameObject);
 		}
+
+		var bp = collision.collider.GetComponentInParent<BodyPart>();
 		
-		
+		if (bp != null)
+		{
+			// EnemyDamage 로 전달
+			if (collision.collider.GetComponentInParent<IDamageableZone>() is { } dmg)
+			{
+				// 총알에도 HitSource가 붙어 있으면 데미지 사용, 없으면 기본값
+				float dmgValue = GetComponent<HitSource>()?.damage ?? 10f;
+				Vector3 hitPoint = collision.contacts.Length > 0 
+					? collision.contacts[0].point 
+					: transform.position;
+
+				dmg.ApplyHit(dmgValue, hitPoint, bp.zone);
+			}
+
+			// 피/충돌 이펙트도 여기서 처리 가능
+			// 예) if (bp.zone == HitZone.Head) Instantiate(headImpact, hitPoint, ...);
+
+			Destroy(gameObject); // 총알 제거
+			return; // ★ 아래 태그 분기는 실행하지 않음
+		}
 	}
 
 	private IEnumerator DestroyTimer () 
