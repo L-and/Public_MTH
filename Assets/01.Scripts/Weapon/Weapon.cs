@@ -195,11 +195,13 @@ namespace _01.Scripts.Weapon
             var playerCamera = Camera.main.transform;
             
             //Determine the rotation that we want to shoot our projectile in.
-            Quaternion rotation = Quaternion.LookRotation(playerCamera.forward * 1000.0f - muzzleSocket.position);
-            
+            Quaternion rotation = Quaternion.LookRotation(playerCamera.position + playerCamera.forward * 1000.0f - muzzleSocket.position);
+
             if (Physics.Raycast(new Ray(playerCamera.position, playerCamera.forward),
                     out RaycastHit hit, maximumDistance, mask))
+            {
                 rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
+            }
             
             GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
             
