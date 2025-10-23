@@ -23,7 +23,7 @@ public class CutsceneController : MonoBehaviour
     public TextMeshProUGUI cutText;
     
     public Cut[] cuts;
-    public string nextSceneName = "Game Test";
+    public string nextSceneName = "MainMenu";
 
     private bool isTyping = false;
     private bool nextPressed = false;
