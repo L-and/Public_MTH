@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using _01.Scripts.PlayerControll.Animation;
 using _01.Scripts.PlayerControll.Status;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,13 +16,9 @@ namespace _01.Scripts.PlayerControll
     /// 컴포넌트에 직접적인 처리를 총괄하는 스크립트
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerStatus))]
     public class PlayerController : MonoBehaviour
     {
-        [Tooltip("지면검사의 기준위치"), SerializeField] public Transform groundCheckPivot;
-        
-        
         /// <summary>
         /// 플레이어의 속성정보 컴포넌트 프로퍼티
         /// </summary>
@@ -36,15 +33,21 @@ namespace _01.Scripts.PlayerControll
         public CapsuleCollider CapsuleCollider { get; private set; }
         public PlayerInput PlayerInput { get; private set; }
         public Rigidbody Rb { get; private set; }
-        public Animator Anim { get; private set; }
         public Transform PlayerCamera { get; private set; }
-
+        
+        /// <summary>
+        /// 캐릭터 팔 애니메이션 스크립트
+        /// </summary>
+        private CharacterAnimationController _characterAnimationController;
+        
+        
         // PlayerInput 입력값 프로퍼티
         public Vector2 MoveInput { get; private set; }
         public Vector2 MouseDeltaInput { get; private set; }
         
         #region 지면검사관련 필드/메서드
         [Header("지면 검사용 필드")] 
+        [Tooltip("지면검사의 기준위치"), SerializeField] public Transform groundCheckPivot;
         [SerializeField] private float groundCheckDistance = 0.02f; // 지면검사용 거리
         [SerializeField] private LayerMask groundLayerMask;
         public bool IsGrounded => Physics.Raycast(groundCheckPivot.position, -transform.up, groundCheckDistance, groundLayerMask);
@@ -136,8 +139,8 @@ namespace _01.Scripts.PlayerControll
             CapsuleCollider = GetComponent<CapsuleCollider>();
             PlayerInput = GetComponent<PlayerInput>();
             Rb = GetComponent<Rigidbody>();
-            Anim = GetComponent<Animator>();
             PlayerCamera = Camera.main.transform;
+            _characterAnimationController = transform.GetComponentInChildren<CharacterAnimationController>();
 
             // 상태 머신 생성
             MovementFSM = new MovementStateMachine(this);
@@ -156,6 +159,9 @@ namespace _01.Scripts.PlayerControll
 
         private void Update()
         {
+            // 애니메이터에 필요한 값 전달
+            _characterAnimationController.movementVelocity = Rb.linearVelocity;
+            
             // 무기발사 (코드이동 필요)
             if (_holdingFire)
             {
@@ -266,7 +272,6 @@ namespace _01.Scripts.PlayerControll
             _lastShotTime = Time.time;
 
             equippedWeapon.Fire();
-
         }
 
         /// <summary>
@@ -274,7 +279,22 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         private void Reload()
         {
+            _characterAnimationController.ReloadAnimation(!equippedWeapon.HasAmmunition());
             equippedWeapon.Reload();
+        }
+        
+        # endregion
+        
+        # region 애니메이션 이벤트 메서드
+
+        public void EjectCasing()
+        {
+            equippedWeapon.EjectCasing();
+        }
+        
+        public void FillAmmunition(int amount)
+        {
+            equippedWeapon.FillAmmunition(-1);
         }
         
         # endregion

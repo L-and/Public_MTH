@@ -60,6 +60,13 @@ namespace _01.Scripts.Weapon
 			//
 			//If destroy on impact is false, start 
 			//coroutine with random destroy timer
+
+			if (collision.gameObject.CompareTag("Wall"))
+			{
+				var enemy = collision.gameObject.GetComponent<IDamageable>();
+				enemy.Hit();
+			}
+			
 			if (!destroyOnImpact)
 			{
 				StartCoroutine(DestroyTimer());

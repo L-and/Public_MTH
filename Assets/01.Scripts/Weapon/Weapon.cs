@@ -74,7 +74,7 @@ namespace _01.Scripts.Weapon
         /// <summary>
         /// Weapon Animator.
         /// </summary>
-        private Animator _animator;
+        private Animator _gunAnimator;
         /// <summary>
         /// 무기의 부가정보 스크립트
         /// </summary>
@@ -110,7 +110,7 @@ namespace _01.Scripts.Weapon
         protected override void Awake()
         {
             // 컴포넌트들 캐싱
-            _animator = GetComponent<Animator>();
+            _gunAnimator = GetComponent<Animator>();
             _audioSource = GetComponent<AudioSource>();
             _attachmentManager = GetComponent<WeaponAttachmentManagerBehaviour>();
             _recoilScript = transform.root.GetComponentInChildren<Recoil>();
@@ -134,7 +134,7 @@ namespace _01.Scripts.Weapon
         
         #region GETTERS
         
-        public override Animator GetAnimator() => _animator;
+        public override Animator GetAnimator() => _gunAnimator;
         
         public override AudioClip GetAudioClipReload() => audioClipReload;
         public override AudioClip GetAudioClipReloadEmpty() => audioClipReloadEmpty;
@@ -177,7 +177,7 @@ namespace _01.Scripts.Weapon
             
             // 발사 애니메이션 재생
             const string animName = "Fire";
-            _animator.Play(animName, 0, 0f);
+            _gunAnimator.Play(animName, 0, 0f);
             
             // 반동 적용
             _recoilScript.ApplyRecoil();
@@ -215,7 +215,7 @@ namespace _01.Scripts.Weapon
         public override void Reload()
         {
             string animName = HasAmmunition() ? "Reload" : "Reload Empty";
-            _animator.Play(animName, 0, 0f);
+            _gunAnimator.Play(animName, 0, 0f);
         }
         
         // amount가 -1이면 탄약을 전부 충전
