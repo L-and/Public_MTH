@@ -63,8 +63,8 @@ namespace _01.Scripts.Weapon
 
 			if (collision.gameObject.CompareTag("Wall"))
 			{
-				var enemy = collision.gameObject.GetComponent<IDamageable>();
-				enemy.Hit();
+				// var enemy = collision.gameObject.GetComponent<IDamageable>();
+				// enemy.Hit();
 			}
 			
 			if (!destroyOnImpact)
