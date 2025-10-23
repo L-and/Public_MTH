@@ -72,7 +72,7 @@ namespace InfimaGames.LowPolyShooterPack
             playerCharacter ??= ServiceLocator.Current.Get<IGameModeService>().GetPlayerCharacter();
 
             //Get Inventory.
-            // playerInventory ??= playerCharacter.GetInventory();
+            playerInventory ??= playerCharacter.GetInventory();
 
             //Try to get the equipped weapon's Weapon component.
             if (!(playerInventory.GetEquipped() is { } weaponBehaviour))
