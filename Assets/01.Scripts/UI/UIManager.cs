@@ -1,3 +1,4 @@
+using _01.Scripts.PlayerControll.Status;
 using DG.Tweening;
 using System.Collections;
 using TMPro;
@@ -12,7 +13,6 @@ public class UIManager : MonoBehaviour
     public GameObject hud;
     public GameObject gameover;
     public Image gameoverBackground;
-    public Image gameoverFade;
     public Slider hpBar;
     public Slider ohBar;
     public TextMeshProUGUI ohBarText;
@@ -44,7 +44,7 @@ public class UIManager : MonoBehaviour
         ohBarFillColor = ohBarFill.color;
         stmBarFillColor = stmBarFill.color;
         StartCoroutine(ShowLevelInfoCoroutine());
-        StatusReset();
+        UpdateStatus();
     }
 
     // Update is called once per frame
@@ -87,6 +87,8 @@ public class UIManager : MonoBehaviour
         {
             Pause();
         }
+
+        UpdateStatus();
     }
 
     #region METHOD
@@ -151,8 +153,7 @@ public class UIManager : MonoBehaviour
         gameover.SetActive(true);
         gameoverBackground.DOFade(0.2f, 0f);
         gameoverBackground.DOFade(1f, 8f);
-        gameoverFade.DOFade(1f, 0f);
-        gameoverFade.DOFade(0f, 5f);
+        GlobalMethod.Fade(gameObject, 5f);
     }
 
     void Restart()
@@ -186,6 +187,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    void UpdateStatus()
+    {
+        if (GameObject.Find("Player") == null) return;
+
+        PlayerStatus playerStatus = GameObject.Find("Player").GetComponent<PlayerStatus>();
+//        SetHp(playerStatus.hp);
+//        SetOh(playerStatus.oh);
+//        SetStm(playerStatus.stm);
+    }
 
     #endregion
 }

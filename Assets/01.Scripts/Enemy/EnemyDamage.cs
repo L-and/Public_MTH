@@ -47,12 +47,14 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
         if (zone == HitZones.Head)
         {
+            OnHeadShotDead();
             Kill();
             return;
         }
 
         bodyHitCount++;
         if (bodyHitCount >= bodyHitsToDie)
+            OnBodyShotDead();
             Kill();
     }
 
@@ -62,6 +64,19 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
         lastHitPoint = point;
         if (direction.sqrMagnitude > 0.0001f)
             lastHitDir = direction.normalized;
+    }
+
+    public void OnHeadShotDead()
+    {
+        StyleManager styleManager = GameObject.Find("Style Panel").GetComponent<StyleManager>();
+        if (styleManager == null) return;
+        styleManager.CreateNewStyle(1);
+    }
+    public void OnBodyShotDead()
+    {
+        StyleManager styleManager = GameObject.Find("Style Panel").GetComponent<StyleManager>();
+        if (styleManager == null) return;
+        styleManager.CreateNewStyle(0);
     }
     #endregion
 
