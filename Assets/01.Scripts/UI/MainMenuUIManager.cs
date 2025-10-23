@@ -38,4 +38,9 @@ public class MainMenuUIManager : MonoBehaviour
         ButtonsOn();
         options.SetActive(false);
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }

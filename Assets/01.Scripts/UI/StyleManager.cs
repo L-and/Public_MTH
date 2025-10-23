@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,6 +20,13 @@ public class StyleManager : MonoBehaviour
 
     private bool comboStopped = false;
 
+    Dictionary<string, float> styleList = new Dictionary<string, float>()
+    {
+        {"처치", 3 },
+        {"대형 처치", 8 },
+        {"회피", 6 }
+    };
+
 
     void Start()
     {
@@ -27,12 +35,25 @@ public class StyleManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            CreateNewStyle();
+            CreateNewStyle("처치");
             SetCombo(comboes + 1);
             RestoreComboBar();
         }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            CreateNewStyle("대형 처치");
+            SetCombo(comboes + 1);
+            RestoreComboBar();
+        }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            CreateNewStyle("회피");
+            SetCombo(comboes + 1);
+            RestoreComboBar();
+        }
+
         DecreaseComboBar();
     }
     public TextMeshProUGUI CreateText(string name, string text, float size, Color color)
@@ -56,10 +77,10 @@ public class StyleManager : MonoBehaviour
         return tmpText;
     }
 
-    public void CreateNewStyle()
+    public void CreateNewStyle(string name)
     {
-        float value = Mathf.Round(Random.Range(1f, 10f));
-        CreateText("style", " 적 처치 +" + value + "%", 48, Color.white);
+        float value = styleList[name];
+        CreateText("style"," "+ name +" +"+ value + "%", 36, Color.white);
 
         if (textGrid.transform.childCount > 7)
         {

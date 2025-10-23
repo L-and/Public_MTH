@@ -6,6 +6,8 @@ public class MainMenuCamera : MonoBehaviour
     public GameObject mainCamera;
     bool diveStarted = false;
 
+    public GameObject canvas;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -21,11 +23,8 @@ public class MainMenuCamera : MonoBehaviour
     public void DiveInHole()
     {
         diveStarted = true;
-        mainCamera.transform.DOLocalRotate( new Vector3(90,0,0), 2);
+        mainCamera.transform.DOLocalRotate(new Vector3(90,0,0), 1.5f);
         mainCamera.transform.DOMove(Vector3.zero, 1.75f);
-    }
-    public void Quit()
-    {
-        Application.Quit();
+        GlobalMethod.Fade(canvas, 2, false, false);
     }
 }

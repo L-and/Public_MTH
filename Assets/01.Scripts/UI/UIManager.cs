@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
     public Image ohBarFill;
     public Image stmBarFill;
     public TextMeshProUGUI levelInfo;
+    public GameObject pauseMenu;
+    public UpgradeData upgradeData;
 
     float hp = 100f;
     float maxHp = 100f;
@@ -34,6 +36,7 @@ public class UIManager : MonoBehaviour
     bool ohFulled = false;
     bool stmFulled = false;
     bool isGameover = false;
+    bool isPause = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -48,19 +51,19 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             SetHp(hp + 1);
         }
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             SetHp(hp - 1);
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             SetOh(oh + 1);
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             SetOh(oh - 1);
         }
@@ -71,7 +74,7 @@ public class UIManager : MonoBehaviour
                 SetStm(stm - 1);
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             Restart();
         }
@@ -80,6 +83,10 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G) && !isGameover)
         {
             GameOver();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause();
         }
     }
 
@@ -161,6 +168,25 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(5);
         levelInfo.DOFade(0, 1);
     }
+
+    public void Pause()
+    {
+        if (!isPause)
+        {
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0;
+            isPause = true;
+            return;
+        }
+        else
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1;
+            isPause = false;
+            return;
+        }
+    }
+
 
     #endregion
 }
