@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InteractObject : MonoBehaviour, IInteractable
 {
   public void Interact()
   {
-    Debug.Log("버튼 누름");
-    //TODO: 다음 씬으로 넘어감
+    Scene currentScene = SceneManager.GetActiveScene();
+    SceneManager.LoadScene(currentScene.buildIndex);
   }
 }

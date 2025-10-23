@@ -447,6 +447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4357470770582113515}
   - component: {fileID: 1177154346484060896}
+  - component: {fileID: 7002940594072774486}
   m_Layer: 0
   m_Name: Elevator_Dummy
   m_TagString: Untagged
@@ -486,6 +487,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorAnchor
   elevatorAnchor: {fileID: 2917294870353892223}
+--- !u!114 &7002940594072774486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2720415459213308446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 005f9785f24ff8f43b1a9cd97fe04ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElevatorController
+  startPointObject: {fileID: 7056286751321563849}
+  reloadButtonObject: {fileID: 5960555852802231308}
 --- !u!1 &5960555852802231308
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,7 +636,7 @@ GameObject:
   - component: {fileID: 6995188996543364758}
   m_Layer: 0
   m_Name: StartPosition
-  m_TagString: Untagged
+  m_TagString: PlayerSpawnPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
