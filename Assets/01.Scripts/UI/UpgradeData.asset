@@ -12,5 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f24f143469b7d9f4394fe36e016c53d5, type: 3}
   m_Name: UpgradeData
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  upgradeName: "\uBC29\uD0C4\uC870\uB07C"
-  upgradeName1: "\uBC29\uD0C4\uC870\uB07C"
+  Upgrade:
+    _serializedList:
+    - Key: 0
+      Value:
+        Name: "\uB9E4\uADF8\uB118"
+        Type: gun
+        Feature: "\uB9E4\uADF8\uB118 \uC7A5\uCC29"
+        Flavour: "\uC2EC\uC0AC\uC219\uACE0\uD55C \uAC15\uB825\uD55C \uD55C \uBC29\uC744"
+    - Key: 1
+      Value:
+        Name: "\uB300\uAD6C\uACBD \uD0C4\uC54C"
+        Type: gun
+        Feature: "\uC0AC\uACA9\uBC94\uC704 \uC99D\uAC00"
+        Flavour: "\uBA38\uB9AC\uAC00 \uD391 \uD391 \uD130\uC838\uC694!"
+    - Key: 2
+      Value:
+        Name: "\uC18C\uB4DC-\uC624\uD504"
+        Type: gun
+        Feature: "\uC18C\uB4DC-\uC624\uD504 \uAC1C\uC870"
+        Flavour: "\uAC00\uAE4C\uC774 \uAC00\uAE30\uB9CC \uD558\uBA74 \uC989\uC0B4\uD655\uC815"

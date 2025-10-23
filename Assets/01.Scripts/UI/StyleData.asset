@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8eb3aef5a687bb41bdc8ed7933339c6, type: 3}
+  m_Name: StyleData
+  m_EditorClassIdentifier: Assembly-CSharp::StyleData
+  Style:
+    _serializedList:
+    - Key: 0
+      Value:
+        Name: "\uCC98\uCE58"
+        Value: 3
+        color: {r: 1, g: 1, b: 1, a: 1}
+    - Key: 1
+      Value:
+        Name: "\uB300\uD615 \uCC98\uCE58"
+        Value: 3
+        color: {r: 1, g: 1, b: 1, a: 1}
+    - Key: 2
+      Value:
+        Name: "\uD68C\uD53C"
+        Value: 3
+        color: {r: 0.26666665, g: 0.76573384, b: 0.99215686, a: 1}
+    - Key: 3
+      Value:
+        Name: "\uD328\uB9C1"
+        Value: 3
+        color: {r: 0.18396229, g: 0.3727977, b: 1, a: 1}

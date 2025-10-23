@@ -22,14 +22,13 @@ public class UIManager : MonoBehaviour
     public Image stmBarFill;
     public TextMeshProUGUI levelInfo;
     public GameObject pauseMenu;
-    public UpgradeData upgradeData;
 
-    float hp = 100f;
-    float maxHp = 100f;
-    float oh = 100f;
-    float maxOh = 100f;
-    float stm = 1;
-    float maxStm = 1;
+    public float hp = 100f;
+    public float maxHp = 100f;
+    public float oh = 100f;
+    public float maxOh = 100f;
+    public float stm = 1;
+    public float maxStm = 1;
     Color hpBarFillColor;
     Color ohBarFillColor;
     Color stmBarFillColor;
@@ -91,7 +90,7 @@ public class UIManager : MonoBehaviour
     }
 
     #region METHOD
-    void SetHp(float value)
+    public void SetHp(float value)
     {
         if (value > hp)
         {
@@ -103,7 +102,7 @@ public class UIManager : MonoBehaviour
         hpBar.maxValue = maxHp;
         hpBar.value = hp;
     }
-    void SetOh(float value)
+    public void SetOh(float value)
     {
         oh = Mathf.Clamp(value, 0, maxOh);
         ohBar.maxValue = maxOh;
@@ -122,7 +121,7 @@ public class UIManager : MonoBehaviour
             ohBarFill.DOColor(Color.white, 0.8f).SetLoops(2,LoopType.Yoyo);
         }
     }
-    void SetStm(float value)
+    public void SetStm(float value)
     {
         stm = Mathf.Clamp(value, 0, maxStm);
         stmBar.maxValue = maxStm;

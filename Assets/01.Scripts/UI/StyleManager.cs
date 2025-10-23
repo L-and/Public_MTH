@@ -10,11 +10,10 @@ public class StyleManager : MonoBehaviour
     private Canvas targetCanvas;
     [SerializeField] private GameObject textGrid;
     [SerializeField] private TextMeshProUGUI combo;
-    [SerializeField] private Animation comboAnim;
     [SerializeField] private Slider comboBar;
-
-
     public TMP_FontAsset font;
+    public StyleData styleData;
+    public UIManager uiManager;
 
     public int comboes = 0;
 
@@ -37,19 +36,19 @@ public class StyleManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            CreateNewStyle("처치");
+            CreateNewStyle(0);
             SetCombo(comboes + 1);
             RestoreComboBar();
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            CreateNewStyle("대형 처치");
+            CreateNewStyle(1);
             SetCombo(comboes + 1);
             RestoreComboBar();
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            CreateNewStyle("회피");
+            CreateNewStyle(2);
             SetCombo(comboes + 1);
             RestoreComboBar();
         }
@@ -77,10 +76,14 @@ public class StyleManager : MonoBehaviour
         return tmpText;
     }
 
-    public void CreateNewStyle(string name)
+    public void CreateNewStyle(int id)
     {
-        float value = styleList[name];
-        CreateText("style"," "+ name +" +"+ value + "%", 36, Color.white);
+        string name = styleData.Style[id].Name;
+        float value = styleData.Style[id].Value;
+        Color color = styleData.Style[id].Color;
+
+        uiManager.SetOh(uiManager.oh + value);
+        CreateText("style"," "+ name +" +"+ value + "%", 36, color);
 
         if (textGrid.transform.childCount > 7)
         {

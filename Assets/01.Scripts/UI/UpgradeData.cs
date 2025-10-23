@@ -4,11 +4,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UpgradeData", menuName = "Scriptable Object/UpgradeData", order = 31)]
 public class UpgradeData : ScriptableObject
 {
-    [SerializedDictionary("Type", "Description")]
-    Dictionary<string, string> upgrade1 = new Dictionary<string, string>()
+    [SerializedDictionary("ID", "Info")]
+    public SerializedDictionary<int, Info> Upgrade;
+
+    [System.Serializable]
+    public class Info
     {
-        {"name", "방탄조끼" },
-        {"info","체력 추가" },
-        {"flavor", "미리 보험을 들어두는 것도 나쁘지 않죠" }
-    };
+        public string Name;
+        public string Type;
+        public string Feature;
+        public string Flavour;
+    }
 }
