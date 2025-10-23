@@ -14,20 +14,22 @@ public class CutsceneController : MonoBehaviour
         [TextArea] public string text;
         public float fadeDuration = 1f;
         public bool isPanEffect = false;  //  4번 컷용 옵션
-        public Vector2 panOffset = new Vector2(0, 800f); // 4번 pan 움직일 거리
+        public Vector2 panOffset = new Vector2(0, 800f); // 4번 pan 움직일 거리 
     }
 
     [Header("UI 연결")]
     public Image cutImage;   // 일반 컷 (1500x550)
     public Image cutImageLarge;  //4번 컷 (1500x1357) 
     public TextMeshProUGUI cutText;
-    
+    public TextMeshProUGUI continueIcon; // ▼ 아이콘 
+
     public Cut[] cuts;
     public string nextSceneName = "Game Test";
 
     private bool isTyping = false;
     private bool nextPressed = false;
-    
+    private Coroutine blinkCoroutine;
+
 
     void Start()
     {
@@ -58,6 +60,7 @@ public class CutsceneController : MonoBehaviour
             // 초기 세팅
             activeImage.sprite = cut.image;
             cutText.text = "";
+            continueIcon.gameObject.SetActive(false); // ▼ 아이콘 숨김
             SetAlpha(activeImage, 0);
             SetAlpha(cutText, 0);
 
@@ -69,13 +72,23 @@ public class CutsceneController : MonoBehaviour
             {
                 yield return StartCoroutine(PanUp(cutImageLarge.rectTransform, cut.panOffset, 4f));
             }
+
             // 텍스트 타이핑
             yield return StartCoroutine(TypeText(cut.text));
 
-            
+            // ▼ 아이콘 깜빡임 시작
+            blinkCoroutine = StartCoroutine(BlinkContinueIcon());
+
             // 엔터 입력 기다리기
             yield return new WaitUntil(() => nextPressed);
             nextPressed = false;
+
+            // ▼ 깜빡임 정지
+            if (blinkCoroutine != null)
+            {
+                StopCoroutine(blinkCoroutine);
+                continueIcon.gameObject.SetActive(false);
+            }
 
             //페이드 아웃
             yield return FadeBoth(activeImage, cutText, 1, 0, cut.fadeDuration);
@@ -127,7 +140,7 @@ public class CutsceneController : MonoBehaviour
             }
 
             // 글자 당 속도
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.1f);
         }
         isTyping = false;
     }
@@ -146,5 +159,19 @@ public class CutsceneController : MonoBehaviour
             yield return null;
         }
         rect.anchoredPosition = end;
+    }
+
+    // 아이콘 깜빡임 
+    IEnumerator BlinkContinueIcon()
+    {
+        continueIcon.gameObject.SetActive(true);
+
+        while (true)
+        {
+            // 투명도 변화
+            float alpha = Mathf.PingPong(Time.time * 2f, 1f); // 2초 주기 깜빡임
+            SetAlpha(continueIcon, alpha);
+            yield return null;
+        }
     }
 }
