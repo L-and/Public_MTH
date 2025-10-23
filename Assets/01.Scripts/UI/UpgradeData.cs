@@ -1,8 +1,10 @@
+using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "UpgradeData", menuName = "Scriptable Object/UpgradeData", order = 31)]
 public class UpgradeData : ScriptableObject
 {
+    [SerializedDictionary("Type", "Description")]
     Dictionary<string, string> upgrade1 = new Dictionary<string, string>()
     {
         {"name", "πÊ≈∫¡∂≥¢" },
