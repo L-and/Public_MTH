@@ -1,3 +1,3 @@
 using UnityEngine;
 
-public enum HitZones {Head, Body}
+public enum HitZones {Weak, Body}

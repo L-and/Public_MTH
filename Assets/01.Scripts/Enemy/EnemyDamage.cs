@@ -38,6 +38,16 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
     // ────────────────────────────────────────────────────────────────────────────
     #region Damage Entry
+
+    private void Awake()
+    {
+        var parts = GetComponentsInChildren<BodyPart>(includeInactive: true);
+
+        foreach(var part in parts)
+        {
+            part.Initialize(this);
+        }
+    }
     public void ApplyHit(float rawDamage, Vector3 hitPoint, HitZones zone)
     {
         if (IsDead) return;
@@ -45,7 +55,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
         // 피격 위치 저장(사망 시 사용할 수 있음)
         lastHitPoint = hitPoint;
 
-        if (zone == HitZones.Head)
+        if (zone == HitZones.Weak)
         {
             Kill();
             return;
