@@ -113,7 +113,13 @@ namespace _01.Scripts.PlayerControll.Status
         public void ApplyDamage(float damage)
         {
             Debug.Log("플레이어 피격당함");
-            hp.Value -= (int)damage;
+            hp.Value -= damage;
+
+            if (hp.Value <= 0f)
+            {
+                Debug.Log("## 플레이어 사망 ##");
+                // TODO 플레이어 사망로직 추가
+            }
         }
 
         # endregion
