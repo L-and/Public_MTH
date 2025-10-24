@@ -106,7 +106,7 @@ namespace _01.Scripts.PlayerControll.Status
             
             // 상태값 초기화
             hp.Initialize();
-            stamina.Initialize();
+            stamina.Initialize(1);
             overheat.Initialize();
         }
 
