@@ -11,10 +11,10 @@ namespace _01.Scripts.PlayerControll.Status
         // PlayerController 참조
         private PlayerController _pc;
 
-        [Header("체력/스테미너/과열")] 
-        [SerializeField] private Stat hp;
-        [SerializeField] private Stat stamina;
-        [SerializeField] private Stat overheat;
+        [Header("체력/스테미너/과열")]
+        public Stat hp;
+        public Stat stamina;
+        public Stat overheat;
         
         [Header("최대속도")] 
         [SerializeField] private float maxSpeed = 10f;
@@ -106,8 +106,9 @@ namespace _01.Scripts.PlayerControll.Status
             
             // 상태값 초기화
             hp.Initialize();
-            stamina.Initialize();
+            stamina.Initialize(1);
             overheat.Initialize();
+            overheat.Value = 0;
         }
 
         public void ApplyDamage(float damage)

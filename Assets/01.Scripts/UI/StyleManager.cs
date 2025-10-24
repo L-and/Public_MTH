@@ -1,3 +1,4 @@
+using _01.Scripts.PlayerControll.Status;
 using DG.Tweening;
 using System.Collections.Generic;
 using TMPro;
@@ -82,7 +83,9 @@ public class StyleManager : MonoBehaviour
         float value = styleData.Style[id].Value;
         Color color = styleData.Style[id].Color;
 
-        uiManager.SetOh(uiManager.oh + value);
+        PlayerStatus status = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
+
+        uiManager.SetOh(status.overheat.Value + value);
         CreateText("style"," "+ name +" +"+ value + "%", 36, color);
 
         if (textGrid.transform.childCount > 7)
