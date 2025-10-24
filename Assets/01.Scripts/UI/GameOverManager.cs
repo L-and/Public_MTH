@@ -11,8 +11,8 @@ public class GameOverManager : MonoBehaviour
     public TextMeshProUGUI killsValue;
     public TextMeshProUGUI time;
     public TextMeshProUGUI timeValue;
-    public TextMeshProUGUI levels;
-    public TextMeshProUGUI levelsValue;
+    public TextMeshProUGUI styles;
+    public TextMeshProUGUI stylesValue;
     public TextMeshProUGUI score;
     public Button restartButton;
     public Button menuButton;
@@ -29,13 +29,13 @@ public class GameOverManager : MonoBehaviour
 
     IEnumerator ShowScore()
     {
-        SetScore(23, 610, 4);
+        SetScore(23, 2300, 600);
         yield return new WaitForSeconds(3);
         kills.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.7f);
-        time.gameObject.SetActive(true);
+        styles.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.7f);
-        levels.gameObject.SetActive(true);
+        time.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.7f);
         score.gameObject.SetActive(true);
 
@@ -50,14 +50,14 @@ public class GameOverManager : MonoBehaviour
         menuButton.gameObject.SetActive(true);
     }
 
-    public void SetScore(int killsValue, float timeValue, int levelsValue)
+    public void SetScore(int killsValue, int stylesValue, float timeValue)
     {
         TimeSpan displayTime = TimeSpan.FromSeconds(timeValue);
         string timeFormat = string.Format("{0:00}:{1:00}", displayTime.Minutes, displayTime.Seconds);
 
         kills.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = killsValue.ToString();
         time.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = timeFormat;
-        levels.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = levelsValue.ToString();
+        styles.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = stylesValue.ToString();
 
         ScoreFormula();
 

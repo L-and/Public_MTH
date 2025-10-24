@@ -1326,7 +1326,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 196}
+  m_AnchoredPosition: {x: 400, y: 196}
   m_SizeDelta: {x: 228.0701, y: 84.197}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7916766420278834414
@@ -2420,7 +2420,7 @@ GameObject:
   - component: {fileID: 3154230003802633052}
   - component: {fileID: 6210147894760145869}
   m_Layer: 5
-  m_Name: Levels
+  m_Name: Styles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2443,7 +2443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 400, y: 187}
+  m_AnchoredPosition: {x: 0, y: 187}
   m_SizeDelta: {x: 228.0701, y: 84.197}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3154230003802633052
@@ -2474,7 +2474,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB808\uBCA8"
+  m_text: "\uC2A4\uD0C0\uC77C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f8e716160fb8dc148a86ed23576eee5a, type: 2}
   m_sharedMaterial: {fileID: -8942720327657735671, guid: f8e716160fb8dc148a86ed23576eee5a,
@@ -3199,8 +3199,8 @@ MonoBehaviour:
   combo: {fileID: 4464713477212808089}
   comboBar: {fileID: 4878473806395818345}
   font: {fileID: 11400000, guid: f8e716160fb8dc148a86ed23576eee5a, type: 2}
-  styleData: {fileID: 0}
-  uiManager: {fileID: 0}
+  styleData: {fileID: 11400000, guid: eb71ffc4ac47e6c4a841049e508a0e7c, type: 2}
+  uiManager: {fileID: 4219951465941207361}
   comboes: 0
 --- !u!1 &6223905303961319706
 GameObject:
@@ -3763,8 +3763,8 @@ RectTransform:
   - {fileID: 2099720324280540669}
   - {fileID: 5844348467930736429}
   - {fileID: 4769747077864399631}
-  - {fileID: 7300392432226592089}
   - {fileID: 4399435406429840710}
+  - {fileID: 7300392432226592089}
   - {fileID: 2252234167171110063}
   - {fileID: 3348501557842501951}
   - {fileID: 4990568271899605752}
@@ -3792,8 +3792,8 @@ MonoBehaviour:
   killsValue: {fileID: 0}
   time: {fileID: 3377937525392149216}
   timeValue: {fileID: 0}
-  levels: {fileID: 6210147894760145869}
-  levelsValue: {fileID: 0}
+  styles: {fileID: 6210147894760145869}
+  stylesValue: {fileID: 0}
   score: {fileID: 8399966701954466084}
   restartButton: {fileID: 8039150206429845198}
   menuButton: {fileID: 1003809210978912168}
