@@ -14,5 +14,6 @@ public class UpgradeData : ScriptableObject
         public string Type;
         public string Feature;
         public string Flavour;
+        public Sprite Icon;
     }
 }

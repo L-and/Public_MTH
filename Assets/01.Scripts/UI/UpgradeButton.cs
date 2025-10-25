@@ -16,12 +16,14 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private bool isTouchable = false;
 
     private Tween scaleTween;
+    private int dataId;
 
     void Start()
     {
         upgradeUiCanvasGroup = upgradeUi.GetComponent<CanvasGroup>();
         upgradeUiManager = upgradeUi.GetComponent<UpgradeUIManager>();
         button = GetComponent<Button>();
+        dataId = Random.Range(0, 21);
         UpgradeOn();
     }
 
@@ -31,7 +33,7 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             transform.DOScale(1, 0);
             scaleTween = transform.DOScale(1.2f, 0.2f);
-            upgradeUiManager.SetUpgradeText(order);
+            upgradeUiManager.SetUpgradeText(dataId);
         }
     }
     public void OnPointerExit(PointerEventData eventData) 
