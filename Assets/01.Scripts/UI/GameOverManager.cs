@@ -29,7 +29,7 @@ public class GameOverManager : MonoBehaviour
 
     IEnumerator ShowScore()
     {
-        SetScore(23, 2300, 600);
+        SetScore(23, 2300, 600, false);
         yield return new WaitForSeconds(3);
         kills.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.7f);
@@ -39,10 +39,10 @@ public class GameOverManager : MonoBehaviour
         yield return new WaitForSeconds(0.7f);
         score.gameObject.SetActive(true);
 
-        for (int i = 0; i <= scoreValue; i++)
+        for (int i = 0; i <= scoreValue; i += (scoreValue - i == 1) ? 1 : 2)
         {
             score.text = "Á¡¼ö : " + i.ToString();
-            yield return new WaitForSeconds(0.003f);
+            yield return new WaitForSeconds(0.000001f);
         }
 
         yield return new WaitForSeconds(0.3f);
@@ -50,7 +50,7 @@ public class GameOverManager : MonoBehaviour
         menuButton.gameObject.SetActive(true);
     }
 
-    public void SetScore(int killsValue, int stylesValue, float timeValue)
+    public void SetScore(int killsValue, int stylesValue, int timeValue, bool isBossKilled)
     {
         TimeSpan displayTime = TimeSpan.FromSeconds(timeValue);
         string timeFormat = string.Format("{0:00}:{1:00}", displayTime.Minutes, displayTime.Seconds);
@@ -59,11 +59,13 @@ public class GameOverManager : MonoBehaviour
         time.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = timeFormat;
         styles.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = stylesValue.ToString();
 
-        ScoreFormula();
+        ScoreFormula(stylesValue,timeValue, isBossKilled);
 
     }
-    private void ScoreFormula()
+    private void ScoreFormula(int style, int time, bool bosskill)
     {
-        scoreValue = 1222;
+        int bossBonus = bosskill ? 1000 : 0;
+        scoreValue = style + time * 5 + bossBonus;
+        
     }
 }
