@@ -26,7 +26,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
     [Header("Corpse / Collision")]
     [SerializeField] private bool changeLayerOnDeath = true;
-    [SerializeField] private string corpseLayer = "Corpse";    // Projectile과 충돌하지 않는 레이어
+    [SerializeField] private string corpseLayer = "Dead";    // Projectile과 충돌하지 않는 레이어
     [SerializeField] private float corpseDisableDelay = 1.2f;  // 튕긴 뒤 래그돌 정리까지 지연
 
     private int bodyHitCount;
