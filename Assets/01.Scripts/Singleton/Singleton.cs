@@ -1,36 +1,34 @@
 using UnityEngine;
+
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    private static T _instance;
+  private static T _instance;
 
-    public static T Instance
+  public static T Instance
+  {
+    get
     {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindFirstObjectByType<T>();
-                if (_instance == null)
-                {
-                    GameObject obj = new GameObject(typeof(T).Name);
-                    _instance = obj.AddComponent<T>();
-                    DontDestroyOnLoad(obj);
-                }
-            }
-            return _instance;
-        }
-    }
+      if (_instance == null)
+      {
+        Debug.LogWarning($"[Singleton] {typeof(T)} 의 인스턴스에 접근을 했지만 초기화 되지 않았거나 존재하지 않습니다.");
+      }
 
-    protected virtual void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this as T;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (_instance != this)
-        {
-            Destroy(gameObject);
-        }
+      return _instance;
     }
+  }
+
+  // 중복 방지 및 초기화
+  protected virtual void Awake()
+  {
+    if (_instance != null && _instance != this)
+    {
+      Debug.LogWarning($"[Singleton] {typeof(T)} 의 중복 인스턴스가 감지되었습니다. 중복된 인스턴스를 제거합니다.");
+      Destroy(gameObject);
+    }
+    else
+    {
+      _instance = this as T;          // 유일한 인스턴스로 설ㅈ정
+      DontDestroyOnLoad(gameObject);  // 씬 전환시 파괴되지 않도록 설정
+    }
+  }
 }

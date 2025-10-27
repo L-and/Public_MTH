@@ -1,118 +1,114 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
-  [Header("Room Pool")]
-  [SerializeField] private List<GameObject> normalRoomPrefabs;  // NormalRoom 프리팹 5개
-  [SerializeField] private GameObject boosRoomPrefab;           // BoosRoom 프리팹
+  private Dictionary<string, GameObject> _mapPrefabs; // 현재 층의 맵 리소스가 전부 들어있는 변수
 
-  [Header("Connector / Elevator / Player")]
-  [SerializeField] private GameObject connectorPrefab;    // Connector 프리팹
-  [SerializeField] private GameObject elevatorPrefab;     // Elevator 프리팹
-  [SerializeField] private GameObject playerPrefab;       // Player 프리팹
-
-  [Header("Options")]
-  [SerializeField] private int thisFloor = 0;             // 현재 층
-  [SerializeField] private int boosFloor = 3;             // 보스 층
-  [SerializeField] private int roomsPerFloor = 5;         // 한 층 방 개수
+  private List<GameObject> _normalRoomPrefabs; // 방 프리팹만 가지고 있는 리스트 변수
+  // private List<GameObject> connectorPrefabs;
+  private GameObject _connectorPrefab;
+  private GameObject _boosRoomPrefab;
+  private GameObject _elevatorPrefab;
 
   private TextMeshProUGUI floorCountText; // 현재 층 표시하는 TextUI
-  private Transform floorRoot;            // 생성 부모
+  private Transform _mapRoot;            // 맵 생성 부모
   private Transform _attachPoint;         // 현재 진행 Anchor
-  private int floorCount = 0;             // 층 카운트
-  private bool isRetry = false;           // 리트라이인지 아닌지 체크
-  private GameObject spawnPoint;          // 플레이어 스폰 포인트
 
   private const string BOSS_ROOM = "Boss Room";
   private const string NORMAL_ROOM = "Normal Room";
+  private const string ROOM = "Room_";
+  private const string CONNECTOR = "Connector_";
+  private const string ELEVATOR = "Elevator_";
 
-  private static MapManager instance;
-
-  void Awake()
+  void Start()
   {
-    if (instance == null)
-    {
-      instance = this;
-      DontDestroyOnLoad(gameObject);
-
-      SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-    else
-    {
-      Destroy(gameObject);
-    }
+    // 테스트용
+    StartCoroutine(Init());
   }
 
-  private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+  IEnumerator Init()
   {
-    floorCountText = GameObject.FindWithTag("FloorCountTextUI").GetComponent<TextMeshProUGUI>();
+    // 테스트용
+    yield return new WaitForSeconds(3f);
+
+     // 1) 씬이 시작되면 맵 리소스 데이터 전체를 가져옴.
+    _mapPrefabs = GameManager.ResourceEx.mapPrefabDict;
+
+    // 2) 프리팹 초기화
+    _normalRoomPrefabs = new List<GameObject>();
+    _connectorPrefab = null;
+    _elevatorPrefab = null;
+    _mapRoot = new GameObject("Map").transform;
+
+    // 3) 맵 리소스 데이터를 전체 순회 하면서 프리팹별로 나눔.
+    foreach (var pair in _mapPrefabs)
+    {
+      string key = pair.Key;
+      GameObject prefab = pair.Value;
+
+      if (key.StartsWith(ROOM))
+        _normalRoomPrefabs.Add(prefab);
+      else if (key.StartsWith(CONNECTOR))
+        _connectorPrefab = prefab;
+      else if (key.StartsWith(ELEVATOR))
+        _elevatorPrefab = prefab;
+    }
+
+    // 방 생성 함수 호출
     CreateFloor();
+
+    // 플레이어 생성
+    GameManager.SceneEx.PlayerSpawn();
   }
 
   // 방 초기화하고 생성하는 함수
   public void CreateFloor()
   {
-    if (!isRetry)
-    {
-      floorCount++;
-      thisFloor = floorCount;
-      floorCountText.text = $"{thisFloor} Floor";
-    }
+    //TODO: 현재층이 보스층인지 아니면 일반층인지 구분
+    var thisFloorInfo = NORMAL_ROOM;
 
-    // 초기화
-    if (floorRoot == null)
-    {
-      floorRoot = new GameObject("FloorRoot").transform;
-      floorRoot.position = Vector3.zero;
-    }
-    else
-    {
-      for (int i = floorRoot.childCount - 1; i >= 0; i--)
-        Destroy(floorRoot.GetChild(i).gameObject);
-    }
-
-    // 1) 시작 엘리베이터 생성 (플레이어 시작 위치)
-    var startElevator = Instantiate(elevatorPrefab, floorRoot);
+    // 2) 시작 엘리베이터 생성 (플레이어 시작 위치)
+    var startElevator = Instantiate(_elevatorPrefab, _mapRoot);
     startElevator.transform.position = Vector3.zero;
     startElevator.transform.rotation = Quaternion.identity;
 
     var startAnchor = startElevator.GetComponent<ElevatorAnchor>();
     _attachPoint = startAnchor.elevatorAnchor;   // 출구를 기준으로 다음 연결 시작
 
-    startElevator.GetComponent<ElevatorController>().SetupForStart();
+    //startElevator.GetComponent<ElevatorController>().SetupForStart();
 
-    // 보스층인지 일반층인지 체크
-    var floorCheck = floorCount % boosFloor;
-
-    if (floorCheck == 0)
-      BossMapSetting();
-    else
-      NormalMapSetting();
-
-    PlayerSqawner();
+    switch (thisFloorInfo)
+    {
+      case NORMAL_ROOM:
+        NormalMapSetting();
+        break;
+      case BOSS_ROOM:
+        BossMapSetting();
+        break;
+    }
   }
 
   // 일반적인 맵 생성
   private void NormalMapSetting()
   {
     // 방 목록 섞기
-    var candidates = new List<GameObject>(normalRoomPrefabs);
+    var candidates = new List<GameObject>(_normalRoomPrefabs);
     Shuffle(candidates);
 
     // 2) 방과 복도 생성
     int placed = 0;
-    while (placed < roomsPerFloor)
+    while (placed < candidates.Count)
     {
       var nextPrefab = candidates[placed % candidates.Count];
       PlaceConnectorAndRoom(nextPrefab);
       placed++;
     }
 
-    // 엘리베이터 앞 복도 배치
-    var connector = Instantiate(connectorPrefab, floorRoot);
+    // 마지막 엘리베이터 앞 복도 배치
+    var connector = Instantiate(_connectorPrefab, _mapRoot);
     var cn = connector.GetComponent<ConnectorAnchor>();
     AlignAtoB(connector.transform, cn.entryAnchor, _attachPoint);
 
@@ -120,25 +116,25 @@ public class MapManager : MonoBehaviour
     _attachPoint = cn.exitAnchor;
 
     // 3) 마지막 엘리베이터 생성 (다음 층으로 이동하는 출구)
-    if (elevatorPrefab != null && _attachPoint != null)
+    if (_elevatorPrefab != null && _attachPoint != null)
     {
-      var endElevator = Instantiate(elevatorPrefab, floorRoot);
+      var endElevator = Instantiate(_elevatorPrefab, _mapRoot);
       endElevator.transform.Rotate(0f, 180f, 0f, Space.Self);      // 엘리베이터 프리팹 회전
 
       var ea = endElevator.GetComponent<ElevatorAnchor>();
       AlignAtoB(endElevator.transform, ea.elevatorAnchor, _attachPoint);
 
-      endElevator.GetComponent<ElevatorController>().SetupForEnd();
+      //endElevator.GetComponent<ElevatorController>().SetupForEnd();
     }
   }
-  
+
   // 보스방이 있는 맵 생성
   private void BossMapSetting()
   {
     // 2) 복도복도 보스방 복도복도 배치
     for (int i = 0; i < 2; i++)
     {
-      var connector = Instantiate(connectorPrefab, floorRoot);
+      var connector = Instantiate(_connectorPrefab, _mapRoot);
       var cn = connector.GetComponent<ConnectorAnchor>();
       AlignAtoB(connector.transform, cn.entryAnchor, _attachPoint);
 
@@ -146,7 +142,7 @@ public class MapManager : MonoBehaviour
       _attachPoint = cn.exitAnchor;
     }
 
-    var room = Instantiate(boosRoomPrefab, floorRoot);
+    var room = Instantiate(_boosRoomPrefab, _mapRoot);
     var roomController = room.GetComponent<RoomController>();
     roomController.roomType = BOSS_ROOM;
     var ra = room.GetComponent<RoomAnchor>();
@@ -156,7 +152,7 @@ public class MapManager : MonoBehaviour
 
     for (int i = 0; i < 2; i++)
     {
-      var connector = Instantiate(connectorPrefab, floorRoot);
+      var connector = Instantiate(_connectorPrefab, _mapRoot);
       var cn = connector.GetComponent<ConnectorAnchor>();
       AlignAtoB(connector.transform, cn.entryAnchor, _attachPoint);
 
@@ -165,27 +161,28 @@ public class MapManager : MonoBehaviour
     }
 
     // 3) 마지막 엘리베이터 생성 (다음 층으로 이동하는 출구)
-    if (elevatorPrefab != null && _attachPoint != null)
+    if (_elevatorPrefab != null && _attachPoint != null)
     {
-      var endElevator = Instantiate(elevatorPrefab, floorRoot);
+      var endElevator = Instantiate(_elevatorPrefab, _mapRoot);
       endElevator.transform.Rotate(0f, 180f, 0f, Space.Self);      // 엘리베이터 프리팹 회전
 
       var ea = endElevator.GetComponent<ElevatorAnchor>();
       AlignAtoB(endElevator.transform, ea.elevatorAnchor, _attachPoint);
 
-      endElevator.GetComponent<ElevatorController>().SetupForEnd();
+      //endElevator.GetComponent<ElevatorController>().SetupForEnd();
     }
   }
 
+  // 복도와 방 배치하는 함수
   private void PlaceConnectorAndRoom(GameObject roomPrefab)
   {
     // a) 복도 배치
-    var connector = Instantiate(connectorPrefab, floorRoot);
+    var connector = Instantiate(_connectorPrefab, _mapRoot);
     var cn = connector.GetComponent<ConnectorAnchor>();
     AlignAtoB(connector.transform, cn.entryAnchor, _attachPoint);
 
     // b) 방 배치
-    var room = Instantiate(roomPrefab, floorRoot);
+    var room = Instantiate(roomPrefab, _mapRoot);
     var roomController = room.GetComponent<RoomController>();
     roomController.roomType = NORMAL_ROOM;
     var ra = room.GetComponent<RoomAnchor>();
@@ -206,6 +203,7 @@ public class MapManager : MonoBehaviour
     rootToMove.position += positionOffset;
   }
 
+  // list에 있는 순서를 섞는 함수
   private void Shuffle<T>(IList<T> list)
   {
     for (int i = list.Count - 1; i > 0; i--)
@@ -213,22 +211,6 @@ public class MapManager : MonoBehaviour
       int j = Random.Range(0, i + 1);
       (list[i], list[j]) = (list[j], list[i]);
     }
-  }
-
-  // 플레이어 생성
-  private void PlayerSqawner()
-  {
-    spawnPoint = GameObject.FindWithTag("PlayerSpawnPoint");
-
-    if (spawnPoint != null)
-      Instantiate(playerPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-    else
-      Debug.Log("Player가 Spawn할 SpawnPoint가 없습니다.");
-  }
-
-  private void OnDestroy()
-  {
-    SceneManager.sceneLoaded -= OnSceneLoaded;
   }
 }
 

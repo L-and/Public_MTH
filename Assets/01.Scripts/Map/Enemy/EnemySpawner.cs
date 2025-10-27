@@ -54,8 +54,8 @@ public class EnemySpawner : MonoBehaviour
       curSpawnEnemy = spawnObject.GetComponent<EnemyController>();
 
       // 5) 해당 프리팹이 사망했을 경우 알 수 있도록 이벤트 구독
-      if (curSpawnEnemy != null)
-        curSpawnEnemy.OnEnemyDied += OncurrentEnemyDied;
+      if (curSpawnEnemy != null){}
+        //curSpawnEnemy.OnEnemyDied += OncurrentEnemyDied;
       else
         Debug.Log($"{prefabToSpawn.name} 프리팹에 EnemyController 스크립트가 없습니다!!!!!!");
     }
@@ -65,7 +65,7 @@ public class EnemySpawner : MonoBehaviour
   {
     // 1) 방금 죽은 적과의 이벤트 연결을 끊습니다.
     if (curSpawnEnemy != null)
-      curSpawnEnemy.OnEnemyDied -= OncurrentEnemyDied;
+      //curSpawnEnemy.OnEnemyDied -= OncurrentEnemyDied;
 
     // 2) 다음 적을 스폰하기 위해 인덱스 1 올림.
     curEnemyIndex++;

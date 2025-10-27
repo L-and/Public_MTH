@@ -1,0 +1,313 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Resources
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Resources
+  m_GUID: 09d7e9a39bf1f8f47b088e33052b7b9e
+  m_SerializeEntries:
+  - m_GUID: 06cb2b131fe009c47a523671a8fa9ed8
+    m_Address: Assets/99.Resource/Zombie/Prefabs/Zombie3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c451ce81e0b18b4eae54e44d18461ad
+    m_Address: Assets/99.Resource/Art/CutScene image/1.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d6373858f853604b960cf84b7d3dfbf
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_Idle.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 165698eac7ca81041ad603fc5a3afa55
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_Walk_InPlace.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d31b4476a14a0246b2e0f023e8877fe
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_Walk1.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 222327a2620e68e43aa9c57ad721aa55
+    m_Address: Assets/99.Resource/Map/Sewerage_Pack/Pipelines/HDRP.unitypackage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23ee7f6864c52b243bfb4f2da09bc287
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_Idle.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2695de705873c1f44ac4a4341c85c8a4
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_Walk1.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 296069014c13ad546b9314f682613ba0
+    m_Address: Assets/99.Resource/Art/CutScene image/7.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2ef8e6599b7f9934e8ff0d64c5325a1f
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie.controller
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33de7c829c3a0224c8975ad93b61b05e
+    m_Address: Assets/99.Resource/Zombie/Textures/Zombie_metallic.tga
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 368b28840b6b52f43a0c699456f8f526
+    m_Address: Assets/99.Resource/Art/CutScene image/6.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37e6af8636979e04086967e3bd667606
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_Walk_InPlace.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37ede3c5a123fd24988fcaad7f209835
+    m_Address: Assets/99.Resource/Art/Font/RIDIBatang SDF.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3fa7045af54b82c47852949257d136c7
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_Walk1_InPlace.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4231723010ed2ca408ad4d3918a2bfbb
+    m_Address: Assets/99.Resource/Art/5.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4404748cc0cc31244b576e1f12b66866
+    m_Address: Assets/99.Resource/Art/6.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49e1facd094854c41b1187e1d2c1f0aa
+    m_Address: Assets/99.Resource/Art/4.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ef3438267568cd40b87841c3e2c22c5
+    m_Address: Assets/99.Resource/Zombie/Textures/Zombie_ao.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51c2b7bc917069942a0ac4a10bcabf01
+    m_Address: Assets/99.Resource/Zombie/ScenePrefabs.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 53e1708cf5a260249b55d13c4a715f7b
+    m_Address: Assets/99.Resource/Art/2.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 55edd2c9d257d3f4481dfd16015bf8c1
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_Run.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 59dbfb66512f63c4eb6e1e30e0603198
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_Walk.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5dee0e231703a194184cfcbcb8ea2537
+    m_Address: Assets/99.Resource/Art/8.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6291fbf5d0e7c4642ad863eaf8b60622
+    m_Address: Assets/99.Resource/Zombie/Textures/Zombie.tga
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 631762b9a30b33a42836730a6b37d13f
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_Attack.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6a28a82791e0b224081a04d42d031ccf
+    m_Address: Assets/99.Resource/Zombie/FBXs/Zombie2.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c8a6e7a9760fa242b0220011ac5a08f
+    m_Address: Assets/99.Resource/Art/CutScene image/4.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6dc4cf4496348884d8ee27743ae38562
+    m_Address: Assets/99.Resource/Zombie/Prefabs/Zombie1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 742545619750471469a8a1158cfe2209
+    m_Address: Assets/99.Resource/Art/CutScene image/2.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74a517830ee907c4fb888c644683c849
+    m_Address: Assets/99.Resource/Art/CutScene image/Intro.playable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 77c3de37a980599489d5f7f009c186fd
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_Walk.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78043ab7a8866194caa100ddf27b35bf
+    m_Address: Assets/99.Resource/Art/CutScene image/5.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79969b20b5ba62e499ee433a4dd38701
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_Run_InPlace.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 812aae90a9297f249908057eed4c0879
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_FallingBack.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 857241dcf6bb2ea45a0b3f46d78f44b5
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_FallingBack.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 892abdb3388e0594c8d3ee71db39ccbb
+    m_Address: Assets/99.Resource/Art/7.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f7380da49034cd488ddff94b1ac35d1
+    m_Address: Assets/99.Resource/Zombie/FBXs/Zombie1.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 922934026949958468099adf2c5acaa6
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_Run.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9fdb5531bdf185e448dd06dfa8192f8d
+    m_Address: Assets/99.Resource/Zombie/Materials/Zombie.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0389bcc17a6335409898ddb374c1570
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_Walk1_InPlace.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1b4b8144e2a4054199287da62cdd0da
+    m_Address: Assets/99.Resource/Zombie/FBXs/Zombie3.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a64aae49aca7ad14983dd5b78d9bd8e8
+    m_Address: Assets/99.Resource/Art/3.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2397584742e67347ace8c321c9fea55
+    m_Address: Assets/99.Resource/Art/Font/RIDIBatang.otf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b49bca58d0df1ef4da668a7455554ec6
+    m_Address: Assets/99.Resource/Map/Sewerage_Pack/Pipelines/Built-In.unitypackage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbfe7772b446cbb419cadfed96cfbdb1
+    m_Address: Assets/99.Resource/Art/CutScene image/3.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d58be77cba3adf54cb14b15052b86514
+    m_Address: Assets/99.Resource/Zombie/Prefabs/Zombie2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d681134af7b3e50479d8d90effa0e1eb
+    m_Address: Assets/99.Resource/Zombie/Textures/zombie_emission.tga
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d870b4f0cba458640b29cda304d40186
+    m_Address: Assets/99.Resource/Zombie/Animations/Zombie@Z_FallingForward.FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de559bbb071ebfd40ab5af80881e75e8
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_Attack.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: decb53c07686cc94b860f8e04d438d22
+    m_Address: Assets/99.Resource/Zombie/Textures/Zombie_nm.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e44a892308e84194f9f7a5817a6285d7
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_FallingForward.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7ed6772552b9e4488b1398f8282ed3b
+    m_Address: Assets/99.Resource/Zombie/Materials/Plane.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9bec00dbcff56443b4c86c6e693bc81
+    m_Address: Assets/99.Resource/Art/1.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb53325c546b8314b963b8cd86ca0508
+    m_Address: Assets/99.Resource/Map/Sewerage_Pack/Pipelines/URP.unitypackage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1f7e13996fb36c4f859b2bd3f2542b3
+    m_Address: Assets/99.Resource/Map/Sewerage_Pack/Pipelines/Built-In_PostProcessing.unitypackage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f53a1868380b92f4bb4267705152d279
+    m_Address: Assets/99.Resource/Art/CutScene image/8.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc9a62f9b1354f342bacfbbe077c503e
+    m_Address: Assets/99.Resource/Zombie/Animations/Z_Run_InPlace.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d052d267c79038248913c8d46e16d215, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6df1a60d1f7a87a419d5cc9bb2a862c6, type: 2}
+    - {fileID: 11400000, guid: 0ecb02803db466146b82bb565ac57810, type: 2}

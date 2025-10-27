@@ -787,6 +787,7 @@ MonoBehaviour:
   - {fileID: 8831110246821859536, guid: 17178da2f8220534894154302a1895e8, type: 3}
   - {fileID: 8831110246821859536, guid: 17178da2f8220534894154302a1895e8, type: 3}
   - {fileID: 8831110246821859536, guid: 17178da2f8220534894154302a1895e8, type: 3}
+  roomType: 
 --- !u!65 &1676540227278757982
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1280,7 +1281,7 @@ GameObject:
   - component: {fileID: 2536669539751282543}
   - component: {fileID: 4201659936176035251}
   - component: {fileID: 6451425628642997132}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}

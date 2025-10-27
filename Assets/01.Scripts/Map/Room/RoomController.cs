@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -8,13 +8,13 @@ public class RoomController : MonoBehaviour
   [SerializeField] private DoorController entryDoor;
   [SerializeField] private DoorController exitDoor;
 
-  // 프리팹 원본 배열
-  [SerializeField] private List<EnemySpawner> enemySpawnerPrefabs;
+  // 플레이어가 방에 들어왔을때 실행될 이벤트
+  public static event Action OnPlayerEnterRoom;
 
   // 씬에 생성된 스포너들 (Clone)
   private List<EnemySpawner> enemySpawners;
 
-  private bool hasBeenTriggered = false;  // 이 방이 활성화 되었는지 확인
+  private bool hasTriggered = false;  // 이 방이 활성화 되었는지 확인
   private bool isRoomClear = false;
   public bool isAllDoorOpen { get; private set; } // 방이 클리어 되었는지 체크
   public string roomType = null;
@@ -27,24 +27,24 @@ public class RoomController : MonoBehaviour
 
     enemySpawners = new List<EnemySpawner>();
 
-    if (roomType == NORMAL_ROOM)
-    {
-      var index = 0;
+    // if (roomType == NORMAL_ROOM)
+    // {
+    //   var index = 0;
 
-      foreach (EnemySpawner spawner in enemySpawnerPrefabs)
-      {
-        EnemySpawner newEnemySpawner = Instantiate(spawner, transform.position + new Vector3(-7 + (7 * index), 0, 7), transform.rotation, this.transform);
+    //   foreach (EnemySpawner spawner in enemySpawnerPrefabs)
+    //   {
+    //     EnemySpawner newEnemySpawner = Instantiate(spawner, transform.position + new Vector3(-7 + (7 * index), 0, 7), transform.rotation, this.transform);
 
-        enemySpawners.Add(newEnemySpawner);
-        index++;
-      }
-    }
-    else if(roomType == BOSS_ROOM)
-    {
-        EnemySpawner newEnemySpawner = Instantiate(enemySpawnerPrefabs[0], transform.position + new Vector3(0, 0, 7), transform.rotation, this.transform);
+    //     enemySpawners.Add(newEnemySpawner);
+    //     index++;
+    //   }
+    // }
+    // else if(roomType == BOSS_ROOM)
+    // {
+    //     EnemySpawner newEnemySpawner = Instantiate(enemySpawnerPrefabs[0], transform.position + new Vector3(0, 0, 7), transform.rotation, this.transform);
 
-        enemySpawners.Add(newEnemySpawner);      
-    }
+    //     enemySpawners.Add(newEnemySpawner);      
+    // }
   }
 
   void Update()
@@ -55,13 +55,11 @@ public class RoomController : MonoBehaviour
   void OnTriggerEnter(Collider other)
   {
     // 이미 활성화 됐거나, Player가 아닐 경우 무시
-    if (hasBeenTriggered || !other.CompareTag("Player"))
-    {
+    if (hasTriggered || !other.CompareTag("Player"))
       return;
-    }
 
     // 1) 방 활성화
-    hasBeenTriggered = true;
+    hasTriggered = true;
 
     // 2) 들어온 문 닫기
     entryDoor.CloseDoor();
