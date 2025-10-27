@@ -14,7 +14,7 @@ public class RangedAttack : MonoBehaviour, IEnemyAttack
     [SerializeField] private LayerMask obstacleMask = ~0;
 
     private float _cd; //쿨다운
-    public AttackKind Kind => AttackKind.Melee;
+    public AttackKind Kind => AttackKind.Ranged;
 
     public float MinRange => _minRange;
 
@@ -48,15 +48,26 @@ public class RangedAttack : MonoBehaviour, IEnemyAttack
         if (RequireLOS)
         {
             Vector3 origin = firePoint ? firePoint.position : transform.position + Vector3.up * 1.5f;
-            Vector3 dir = (target.position + Vector3.up * 1.5f) - origin;
-            if (Physics.Raycast(origin, dir.normalized, out var hit, MaxRange, ~0))
+            Vector3 aim = target.position + Vector3.up * 1.5f;
+            Vector3 dir = aim - origin;
+            float len = dir.magnitude;
+            if (len < 0.0001f) return false;
+
+            dir /= len;
+
+            // 막는 레이어만 대상으로 raycast. 뭔가 맞으면 가려진 것
+            if(Physics.Raycast(origin, dir, len, obstacleMask))
             {
-                // 막는 레이어면 불가
-                if (((1 << hit.collider.gameObject.layer) & obstacleMask) != 0)
-                {
-                    return false;
-                }
+                return false;
             }
+            // if (Physics.Raycast(origin, dir.normalized, out var hit, MaxRange, ~0))
+            // {
+            //     // 막는 레이어면 불가
+            //     if (((1 << hit.collider.gameObject.layer) & obstacleMask) != 0)
+            //     {
+            //         return false;
+            //     }
+            // }
         }
 
         return true;
@@ -70,13 +81,15 @@ public class RangedAttack : MonoBehaviour, IEnemyAttack
             return;
         }
         _cd = _coolDown;
+        IsAttacking = true;
 
         Vector3 origin = firePoint ? firePoint.position : transform.position + Vector3.up * 1.5f;
         Vector3 dir = (target.position + Vector3.up * 1.2f) - origin;
         var go = Instantiate(projectilePrefab, origin, Quaternion.LookRotation(dir));
-        if (go.TryGetComponent<Rigidbody>(out var rb))
+        if (go.TryGetComponent<RangeProjectile>(out var proj))
         {
-            rb.linearVelocity = dir.normalized * projectileSpeed;
+            Collider[] ignore = transform.root ? transform.root.GetComponentsInChildren<Collider>(true) : null;
+            proj.Init(dir, transform, ignore, target);
         }
 
         Invoke(nameof(End), 0.2f);

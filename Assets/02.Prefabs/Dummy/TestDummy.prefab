@@ -272,6 +272,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &539807697642970294
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,6 +511,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &622077535660773367
 GameObject:
   m_ObjectHideFlags: 0
@@ -1286,6 +1288,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &1268702671563400482
 GameObject:
   m_ObjectHideFlags: 0
@@ -1484,6 +1487,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &1794770876104757451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1650,6 +1654,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &2287865580634370047
 GameObject:
   m_ObjectHideFlags: 0
@@ -1796,6 +1801,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &2445709116421388839
 GameObject:
   m_ObjectHideFlags: 0
@@ -2300,6 +2306,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &3053626360998867853
 GameObject:
   m_ObjectHideFlags: 0
@@ -2465,6 +2472,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &4015574523789618045
 GameObject:
   m_ObjectHideFlags: 0
@@ -2832,6 +2840,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &5134185447595470473
 GameObject:
   m_ObjectHideFlags: 0
@@ -3093,6 +3102,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &5550041243504396435
 GameObject:
   m_ObjectHideFlags: 0
@@ -3433,6 +3443,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &6108686257159584712
 GameObject:
   m_ObjectHideFlags: 0
@@ -3567,6 +3578,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &6300803199716195670
 GameObject:
   m_ObjectHideFlags: 0
@@ -3764,6 +3776,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &6467678849271838615
 GameObject:
   m_ObjectHideFlags: 0
@@ -4005,8 +4018,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9813595, y: 0.51362336, z: 0.9836901}
-  m_Center: {x: 0.1684737, y: -0.24318947, z: -0.0081549585}
+  m_Size: {x: 0.5, y: 0.02, z: 0.3}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7249134903776633026
 GameObject:
   m_ObjectHideFlags: 0
@@ -4222,6 +4235,7 @@ GameObject:
   - component: {fileID: 4820005732594297681}
   - component: {fileID: 2053324355196393600}
   - component: {fileID: 2515480674471281911}
+  - component: {fileID: 504396387986192192}
   m_Layer: 0
   m_Name: TestDummy
   m_TagString: Untagged
@@ -4357,7 +4371,7 @@ MonoBehaviour:
   - {fileID: 5177564593544904068}
   deathImpulse: 8
   changeLayerOnDeath: 1
-  corpseLayer: Corpse
+  corpseLayer: Dead
   corpseDisableDelay: 1.2
 --- !u!114 &2515480674471281911
 MonoBehaviour:
@@ -4388,7 +4402,28 @@ MonoBehaviour:
   animator: {fileID: 8082212057579781445}
   speedParam: moveSpeed
   speedDamp: 0.1
+  attackBehaviours:
+  - {fileID: 504396387986192192}
+  attackFacingDot: 0.6
   enemyDamage: {fileID: 0}
+--- !u!114 &504396387986192192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7990270000511032144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdc8bdc90da478e48811d3dfce1bb406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeleeAttack
+  _minRange: 0
+  _maxRange: 2.7
+  _coolDown: 1
+  _requireLOS: 0
+  animator: {fileID: 8082212057579781445}
+  attackTrigger: Attack
 --- !u!1 &8098487428451182447
 GameObject:
   m_ObjectHideFlags: 0
@@ -4523,6 +4558,7 @@ MonoBehaviour:
   hitFrom:
     serializedVersion: 2
     m_Bits: 32768
+  owner: {fileID: 0}
 --- !u!1 &8134362849016576358
 GameObject:
   m_ObjectHideFlags: 0
