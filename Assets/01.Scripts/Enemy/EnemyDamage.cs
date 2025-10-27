@@ -70,7 +70,8 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
     {
         StyleManager styleManager = GameObject.Find("Style Panel").GetComponent<StyleManager>();
         if (styleManager == null) return;
-        styleManager.CreateNewStyle(1);
+        styleManager.CreateNewStyle(0);
+        styleManager.CreateNewStyle(5);
     }
     public void OnBodyShotDead()
     {
