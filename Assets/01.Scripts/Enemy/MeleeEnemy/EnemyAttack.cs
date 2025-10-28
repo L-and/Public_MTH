@@ -188,7 +188,22 @@ public class EnemyAttack : MonoBehaviour
         hitOnce.Add(id);
 
         if (col.CompareTag("Player"))
+        {
             col.SendMessageUpwards("ApplyDamage", damage, SendMessageOptions.DontRequireReceiver);
+            var ps = col.GetComponentInParent<_01.Scripts.PlayerControll.Status.PlayerStatus>();
+            if (ps != null)
+            {
+                ps.AddOverHeat(5f);
+                Debug.Log("Player got hit (melee). Add 5 Heat");
+            }
+            return;
+        }
+
+        // 적 끼리 공격하게 한다면 활성화. 지금은 플레이어만 공격받음
+        // if(col.TryGetComponent<IDamageableZone>(out var dmg))
+        // {
+        //     dmg.ApplyHit(damage, hitPoint, HitZones.Body);
+        // }
     }
 
     private void OnDrawGizmosSelected()
