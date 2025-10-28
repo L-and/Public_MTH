@@ -11,46 +11,46 @@ namespace _01.Scripts.PlayerControll.Status
         // PlayerController 참조
         private PlayerController _pc;
 
-        [Header("체력/스테미너/과열")] 
+        [Header("체력/스테미너/과열")]
         [SerializeField] private Stat hp;
         [SerializeField] private Stat stamina;
         [SerializeField] private Stat overheat;
-        
-        [Header("최대속도")] 
+
+        [Header("최대속도")]
         [SerializeField] private float maxSpeed = 10f;
         [SerializeField] private float dashMaxSpeed = 15f;
         [SerializeField] private float slidingMaxSpeed = 13f;
         [SerializeField] private float jumpMaxSpeed = 15f;
-        
+
         public float CurrentMaxSpeed
-                {
-                    get
-                    {
-                        if (_pc.MovementFSM.CurrentState ==
-                            _pc.MovementFSM.DashState)
-                            return dashMaxSpeed;
-                        else if (
-                            _pc.MovementFSM.CurrentState == 
-                            _pc.MovementFSM.SlidingState)
-                            return slidingMaxSpeed;
-                        else if (_pc.MovementFSM.CurrentState ==
-                                 _pc.MovementFSM.JumpState)
-                            return jumpMaxSpeed;
-                        else
-                            return maxSpeed;
-                    }
-                }
-        
+        {
+            get
+            {
+                if (_pc.MovementFSM.CurrentState ==
+                    _pc.MovementFSM.DashState)
+                    return dashMaxSpeed;
+                else if (
+                    _pc.MovementFSM.CurrentState ==
+                    _pc.MovementFSM.SlidingState)
+                    return slidingMaxSpeed;
+                else if (_pc.MovementFSM.CurrentState ==
+                         _pc.MovementFSM.JumpState)
+                    return jumpMaxSpeed;
+                else
+                    return maxSpeed;
+            }
+        }
+
         [Header("가속도(이동조작 반응성)")]
         [SerializeField] private float baseAcc = 10f;
         [SerializeField] private float airAcc = 5f;
         [SerializeField] private float slidingAcc = 5f;
 
-        [Header("대쉬/슬라이딩 파워")] 
+        [Header("대쉬/슬라이딩 파워")]
         [SerializeField] public float dashPower = 30f;
         [SerializeField] public float slidingPower = 100f;
-        
-        
+
+
         public float CurrentAcceleration
         {
             get
@@ -63,9 +63,9 @@ namespace _01.Scripts.PlayerControll.Status
                 return baseAcc;
             }
         }
-        
 
-        [Header("대쉬상태 관련변수")] 
+
+        [Header("대쉬상태 관련변수")]
         [SerializeField] private float dashDurationTime = 0.5f;
 
         public float DashDurationtime
@@ -84,15 +84,15 @@ namespace _01.Scripts.PlayerControll.Status
             }
         }
 
-        
+
         public float BaseAcc => baseAcc;
         public float AirAcc => airAcc;
-        
-        
+
+
         [Header("마우스 감도")]
         [SerializeField] public float mouseSensitivity = 0.5f;
-        
-        
+
+
         [Header("점프력 관련 필드")]
         [SerializeField] private float jumpForce = 10f;
 
@@ -103,7 +103,7 @@ namespace _01.Scripts.PlayerControll.Status
         private void Awake()
         {
             _pc = GetComponent<PlayerController>();
-            
+
             // 상태값 초기화
             hp.Initialize();
             stamina.Initialize(1);
@@ -117,5 +117,11 @@ namespace _01.Scripts.PlayerControll.Status
         }
 
         # endregion
+        public void AddOverHeat(float amount)
+        {
+            overheat.Value += amount;
+            overheat.Value = Mathf.Clamp(overheat.Value, 0, overheat.maxValue);
+        }
     }
+    
 }

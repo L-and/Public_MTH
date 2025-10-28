@@ -110,7 +110,7 @@ public class EnemyMove : MonoBehaviour
             agent.SetDestination(RandomPointOnNavmesh(roamCenter, roamRadius));
         }
     }
-
+    #region 상태변화 실행문
     private void Update()
     {
         if (enemyDamage && enemyDamage.IsDead) { SafeStopAgent(); SetSpeed(0f); return; }
@@ -231,6 +231,7 @@ public class EnemyMove : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
     #region 카이팅 관련 스크립트
     private void KiteMove(float dist, IEnemyAttack atk)

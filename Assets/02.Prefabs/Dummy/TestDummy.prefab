@@ -493,8 +493,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.17536665, y: 0.23110723, z: 0.27348322}
-  m_Center: {x: 0.000000074505806, y: -0.012187973, z: 1.657928}
+  m_Size: {x: 0.20668098, y: 0.26930478, z: 0.27348322}
+  m_Center: {x: -0.015657082, y: -0.031286746, z: 1.657928}
 --- !u!114 &4170146429408635710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3084,8 +3084,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.31875902, y: 0.2731882, z: 0.5154153}
-  m_Center: {x: 0.000000029802322, y: 0.03166993, z: 1.2160672}
+  m_Size: {x: 0.31875902, y: 0.32917583, z: 0.5735817}
+  m_Center: {x: 0.000000029802322, y: 0.027636722, z: 1.1869841}
 --- !u!114 &7939573107447579160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3425,8 +3425,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.560324, y: 0.41078907, z: 0.49529555}
-  m_Center: {x: 0.000000118001935, y: 0.04509175, z: 1.3813974}
+  m_Size: {x: 0.560324, y: 0.49196038, z: 0.49529564}
+  m_Center: {x: 0.00000011920929, y: 0.046709225, z: 1.3813974}
 --- !u!114 &8415801261714907387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3560,8 +3560,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.38435915, y: 0.27231768, z: 0.32356572}
-  m_Center: {x: -0.0000007905598, y: -0.0052492917, z: 0.9057965}
+  m_Size: {x: 0.38435915, y: 0.35517773, z: 0.32356563}
+  m_Center: {x: -0.00000078976154, y: 0.007370703, z: 0.9057965}
 --- !u!114 &7956411687046642955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4387,6 +4387,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMove
   target: {fileID: 0}
   playerTag: Player
+  tactic: 0
+  kiteRetreatSpeedMul: 1
+  kitePadding: 0.8
+  kiteStep: 3
   sightRange: 10
   fovAngle: 80
   stopDistance: 2.5

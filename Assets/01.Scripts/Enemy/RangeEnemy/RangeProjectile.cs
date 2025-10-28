@@ -1,21 +1,26 @@
+using _01.Scripts.PlayerControll.Status;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class RangeProjectile: MonoBehaviour
 {
-    [Header("Motion")]
+    [Header("투사체 속도 관련")]
     [SerializeField] private float speed = 20f;
     [SerializeField] private bool useGravity = false;
     [SerializeField] private bool faceVelocity = true;
 
-    [Header("Homing (optional)")]
+    [Header("유도 (옵션)")]
     [SerializeField] private bool homing = false;
     [SerializeField] private float turnRateDegPerSec = 360f;
 
-    [Header("Lifetime & Damage")]
+    [Header("투사체 데미지")]
     [SerializeField] private float lifeTime = 5f;
     [SerializeField] private float damage = 1f;
     [SerializeField] private LayerMask hitMask = ~0;   // 맞출 대상 레이어
+
+    [Header("플레이어 설정")]
+    [SerializeField] private PlayerStatus ps;
 
     private Rigidbody rb;
     private Vector3 initialDir = Vector3.forward;
@@ -87,6 +92,17 @@ public class RangeProjectile: MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        if(other.collider.CompareTag("Player"))
+        {
+            ps = other.collider.GetComponentInParent<PlayerStatus>();
+            if(ps == null)
+            {
+                return;
+            }
+            Debug.Log("Player got hit");
+            Debug.Log("Player add 10 Heat");            
+            ps.AddOverHeat(10);         // 임시적으로 적의 공격 적중시 player의 과열치 10 상승하게 적용
+        }
         HandleHit(other.collider, other.GetContact(0).point);
     }
 

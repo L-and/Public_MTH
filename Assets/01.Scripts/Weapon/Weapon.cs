@@ -1,5 +1,6 @@
 using System;
 using InfimaGames.LowPolyShooterPack;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 namespace _01.Scripts.Weapon
@@ -14,10 +15,14 @@ namespace _01.Scripts.Weapon
         [Tooltip("Is this weapon automatic? If yes, then holding down the firing button will continuously fire.")]
         [SerializeField] 
         private bool automatic;
-        
+
         [Tooltip("탄의 발사속도")]
         [SerializeField]
         private float projectileImpulse = 400.0f;
+
+        [Tooltip("탄 발사 위치(플레이어 카메라)")]
+        [SerializeField]
+        private Camera PlayerCamera;
         
         [Tooltip("Amount of shots this weapon can shoot in a minute. It determines how fast the weapon shoots.")]
         [SerializeField] 
@@ -187,12 +192,14 @@ namespace _01.Scripts.Weapon
             
             // 장탄수 감소
             _ammunitionCurrent = Mathf.Clamp(_ammunitionCurrent - 1, 0, _magazineBehaviour.GetAmmunitionTotal());
-            
+
             // 탄피 배출
             EjectCasing();
-            
+
             // TODO MainCamera대신 플레이어 카메라로 변경 필요
-            var playerCamera = Camera.main.transform;
+            // var playerCamera = Camera.main.transform;
+            var playerCamera = PlayerCamera.transform;
+            
             
             //Determine the rotation that we want to shoot our projectile in.
             Quaternion rotation = Quaternion.LookRotation(playerCamera.position + playerCamera.forward * 1000.0f - muzzleSocket.position);

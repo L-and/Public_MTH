@@ -268,7 +268,8 @@ MonoBehaviour:
   _maxRange: 15
   _coolDown: 1.2
   _requireLOS: 1
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 2933245234672188447, guid: 377fdb20f00a6b7498b0518aabe00c2a,
+    type: 3}
   firePoint: {fileID: 7324740280508666560}
   projectileSpeed: 20
   obstacleMask:
@@ -2446,8 +2447,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.31875902, y: 0.2731882, z: 0.5154153}
-  m_Center: {x: 0.000000029802322, y: 0.03166993, z: 1.2160672}
+  m_Size: {x: 0.31875902, y: 0.38031086, z: 0.5154153}
+  m_Center: {x: 0.000000029802322, y: -0.021891408, z: 1.2160672}
 --- !u!114 &2492464910272832228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3075,8 +3076,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.17536665, y: 0.23110723, z: 0.27348322}
-  m_Center: {x: 0.000000074505806, y: -0.012187973, z: 1.657928}
+  m_Size: {x: 0.21080658, y: 0.25638536, z: 0.27348322}
+  m_Center: {x: -0.01771988, y: -0.024827033, z: 1.657928}
 --- !u!114 &395285866481852088
 MonoBehaviour:
   m_ObjectHideFlags: 0
