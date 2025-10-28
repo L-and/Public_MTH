@@ -83,11 +83,7 @@ public class CutsceneController : MonoBehaviour
         }
 
         // 컷씬 끝 → 다음 씬 이동
-//        SceneManager.LoadScene(nextSceneName);
-        
-        //메인메뉴 활성화
-        transform.parent.gameObject.SetActive(false);
-        MainMenu.SetActive(true);
+        SceneManager.LoadScene(nextSceneName);
     }
 
     IEnumerator FadeBoth(Graphic img, Graphic txt, float start, float end, float duration)

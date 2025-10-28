@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
     }
 
 
-    void GameOver()
+    public void GameOver()
     {
         isGameover = true;
         hud.SetActive(false);
