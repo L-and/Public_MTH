@@ -343,6 +343,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 104164691}
   m_CullTransparentMesh: 1
+--- !u!20 &245691828 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5891170988872273127, guid: 928c9debda3e2eb43b91256b04f99023,
+    type: 3}
+  m_PrefabInstance: {fileID: 7505367101223140871}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &380857623
 GameObject:
   m_ObjectHideFlags: 0
@@ -1108,6 +1114,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 656111986900820474, guid: 928c9debda3e2eb43b91256b04f99023,
+        type: 3}
+      propertyPath: PlayerCamera
+      value: 
+      objectReference: {fileID: 245691828}
     - target: {fileID: 754319122756374919, guid: 928c9debda3e2eb43b91256b04f99023,
         type: 3}
       propertyPath: m_Layer

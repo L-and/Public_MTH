@@ -187,6 +187,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestDummy
       objectReference: {fileID: 0}
+    - target: {fileID: 7990270000511032144, guid: 10f4117826db1bb488ef9d0b51b65fdc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -881,6 +886,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RangeDummy
       objectReference: {fileID: 0}
+    - target: {fileID: 606348631001171818, guid: b92a7cc661e89b54da14e1a623eb2a3e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1134377031315798796, guid: b92a7cc661e89b54da14e1a623eb2a3e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -930,6 +940,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3313090653099956408, guid: b92a7cc661e89b54da14e1a623eb2a3e,
+        type: 3}
+      propertyPath: _maxRange
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8773497461664912109, guid: b92a7cc661e89b54da14e1a623eb2a3e,
         type: 3}
@@ -7561,6 +7576,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TankerDummy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7847404740231101995, guid: 7c3dc780f08661e4fa64e8da3f5eec1a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
