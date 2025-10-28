@@ -10,6 +10,16 @@ public abstract class MovementState : IState
     protected readonly PlayerController controller;
     protected readonly MovementStateMachine stateMachine;
 
+    # region 일반적인 상태전환 조건 프로퍼티
+
+    protected bool CanIdle => controller.MoveInput.magnitude <= 0.1f && controller.IsGrounded;
+    protected bool CanMove => controller.MoveInput.magnitude > 0.1f && controller.IsGrounded;
+    protected bool CanJump => controller.PlayerInput.actions["Jump"].WasPressedThisFrame() && controller.IsGrounded;
+    protected bool CanDash => controller.PlayerInput.actions["Dash"].WasPressedThisFrame() && controller.Status.Stamina.TryDecrease(controller.DashCost);
+    protected bool CanSlide => controller.PlayerInput.actions["Sliding"].IsPressed() && controller.IsGrounded;
+    
+    # endregion
+    
     protected MovementState(PlayerController controller, MovementStateMachine stateMachine)
     {
         this.controller = controller;

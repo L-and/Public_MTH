@@ -5,6 +5,7 @@ namespace _01.Scripts.PlayerControll.Animation
 {
     public class CharacterAnimationController : MonoBehaviour
     {
+        private PlayerController _playerController;
         private Animator _characterAnim;
 
         /// <summary>
@@ -17,14 +18,19 @@ namespace _01.Scripts.PlayerControll.Animation
         /// </summary>
         private static readonly int HashMovement = Animator.StringToHash("Movement");
 
+        private static readonly int EmissionFireAnimHash = Animator.StringToHash("Emission Fire");
+
         private float _dampTimeLocomotion = 0.15f;
         private int _layerActions;
+        private int _layerEmission;
 
         private void Awake()
         {
             _characterAnim = GetComponent<Animator>();
+            _playerController = transform.root.gameObject.GetComponent<PlayerController>();
             
             _layerActions = _characterAnim.GetLayerIndex("Layer Actions");
+            _layerEmission = _characterAnim.GetLayerIndex("Layer Emission");
         }
 
         private void Update()
@@ -45,6 +51,22 @@ namespace _01.Scripts.PlayerControll.Animation
         {
             var stateName = isMagazineEmpty ? "Reload Empty" : "Reload";
             _characterAnim.Play(stateName, _layerActions, 0.0f);
+        }
+
+        public void EmissionFireAnimation()
+        {
+            // var stateName = "Fire";
+            // _characterAnim.Play(stateName, _layerEmission, 0.0f);
+            
+            _characterAnim.SetTrigger(EmissionFireAnimHash);
+        }
+        
+        /// <summary>
+        /// 애니메이션 클립에서 방출무기를 발사하는 이벤트메서드 [단발] (레일건, 로켓런쳐)
+        /// </summary>
+        public void OnEmissionFire()
+        {
+            _playerController.FireEmission();
         }
     }
 }

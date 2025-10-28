@@ -7,6 +7,13 @@ public abstract class EmissionState : IState
     protected readonly PlayerController controller;
     protected readonly EmissionStateMachine stateMachine;
 
+    # region 일반적인 상태전환 조건 프로퍼티
+
+    protected bool CanReady => controller.Status.Overheat.Value >= controller.emissiondata.overheatCost;
+    protected bool CanUsing => controller.PlayerInput.actions["Emission"].WasPressedThisFrame() && controller.Status.Overheat.TryDecrease(controller.emissiondata.overheatCost);
+    
+    # endregion
+    
     protected EmissionState(PlayerController controller, EmissionStateMachine stateMachine)
     {
         this.controller = controller;
