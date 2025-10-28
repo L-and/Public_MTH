@@ -9,36 +9,31 @@ public class MoveState : MovementState
     public override void OnUpdate()
     {
         // Idle상태 전환
-        if (controller.MoveInput.magnitude <= 0.1f)
+        if (CanIdle)
         {
             stateMachine.ChangeState(stateMachine.IdleState);
             return;
         }
         
         // 점프상태 전환
-        if (controller.PlayerInput.actions["Jump"].IsPressed() && controller.IsGrounded)
+        if (CanJump)
         {
             stateMachine.ChangeState(stateMachine.JumpState);
             return;
         }
 
         // 슬라이딩 상태 전환
-        if (controller.PlayerInput.actions["Sliding"].IsPressed() && controller.IsGrounded)
+        if (CanSlide)
         {
             stateMachine.ChangeState(stateMachine.SlidingState);
             return;
         }
         
         // 대쉬상태 전환
-        if (controller.PlayerInput.actions["Dash"].IsPressed())
+        if (CanDash)
         {
             stateMachine.ChangeState(stateMachine.DashState);
             return;
         }
-    }
-
-    public override void OnFixedUpdate()
-    {
-        base.OnFixedUpdate();
     }
 }

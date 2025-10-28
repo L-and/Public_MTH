@@ -20,6 +20,9 @@ namespace _01.Scripts.PlayerControll
     [RequireComponent(typeof(PlayerStatus))]
     public class PlayerController : MonoBehaviour
     {
+        
+        # region 컴포넌트/클래스 참조 프로퍼티
+        
         /// <summary>
         /// 플레이어의 속성정보 컴포넌트 프로퍼티
         /// </summary>
@@ -36,15 +39,20 @@ namespace _01.Scripts.PlayerControll
         public Rigidbody Rb { get; private set; }
         public Transform PlayerCamera { get; private set; }
         
+        # endregion
+       
         /// <summary>
         /// 캐릭터 팔 애니메이션 스크립트
         /// </summary>
         private CharacterAnimationController _characterAnimationController;
         
-        
         // PlayerInput 입력값 프로퍼티
         public Vector2 MoveInput { get; private set; }
         public Vector2 MouseDeltaInput { get; private set; }
+
+        [Header("대쉬시 스테미너 사용량")] 
+        [SerializeField] private float dashCost = 1f;
+        public float DashCost => dashCost;
         
         #region 지면검사관련 필드/메서드
         [Header("지면 검사용 필드")] 
@@ -370,13 +378,11 @@ namespace _01.Scripts.PlayerControll
 
         public void Dash()
         {
-            // TODO 스테미너에 따른 대쉬가능여부 처리
-            
             // 방향조작이 있으면 해당방향, 없으면 바라보는 방향으로 대쉬방향 계산
             var dir = (MoveInput == Vector2.zero) ? 
                 transform.forward : 
                 MoveDirection;
-            
+        
             var velocity = dir * Status.dashPower;
             Rb.AddForce(velocity, ForceMode.Impulse);
         }
