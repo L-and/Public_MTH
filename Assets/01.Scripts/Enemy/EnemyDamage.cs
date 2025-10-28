@@ -68,6 +68,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
     public void OnHeadShotDead()
     {
+        Debug.Log("headshot");
         StyleManager styleManager = GameObject.Find("Style Panel").GetComponent<StyleManager>();
         if (styleManager == null) return;
         styleManager.CreateNewStyle(0);
@@ -75,6 +76,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
     }
     public void OnBodyShotDead()
     {
+        Debug.Log("bodyshot");
         StyleManager styleManager = GameObject.Find("Style Panel").GetComponent<StyleManager>();
         if (styleManager == null) return;
         styleManager.CreateNewStyle(0);
