@@ -130,19 +130,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
     {
       // 래그돌 ON
       EnableRagdoll(true);
-        StyleManager styleManager = GameObject.Find("Style Panel").GetComponent<StyleManager>();
-        if (styleManager == null) return;
-        styleManager.CreateNewStyle(0);
-        styleManager.CreateNewStyle(5);
-    }
-    public void OnBodyShotDead()
-    {
-        StyleManager styleManager = GameObject.Find("Style Panel").GetComponent<StyleManager>();
-        if (styleManager == null) return;
-        styleManager.CreateNewStyle(0);
-    }
-    #endregion
-
+        
       // 가장 가까운 본에 힘 적용
       var bone = FindClosestBone(lastHitPoint);
       if (bone == null && ragdollBodies != null && ragdollBodies.Length > 0)

@@ -115,6 +115,12 @@ namespace _01.Scripts.PlayerControll.Status
         {
             Debug.Log("플레이어 피격당함");
             hp.Value -= (int)damage;
+            if (hp.Value <= 0) Die();
+        }
+
+        public void Die()
+        {
+            GameObject.FindWithTag("GameUI").GetComponent<UIManager>().GameOver();
         }
 
         # endregion

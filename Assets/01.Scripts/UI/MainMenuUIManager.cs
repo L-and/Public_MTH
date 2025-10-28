@@ -1,6 +1,7 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuUIManager : MonoBehaviour
@@ -39,7 +40,10 @@ public class MainMenuUIManager : MonoBehaviour
     }
 
 
-
+    public void MoveScene()
+    {
+        SceneManager.LoadScene("0.2");
+    }
     public void Quit()
     {
         Application.Quit();

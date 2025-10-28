@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class OptionsManager : MonoBehaviour
 {
@@ -53,5 +54,5 @@ public class OptionsManager : MonoBehaviour
     {
         Screen.fullScreen = value;
     }
-    
+
 }

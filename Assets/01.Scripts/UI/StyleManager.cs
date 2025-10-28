@@ -38,19 +38,16 @@ public class StyleManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             CreateNewStyle(0);
-            SetCombo(comboes + 1);
             RestoreComboBar();
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             CreateNewStyle(1);
-            SetCombo(comboes + 1);
             RestoreComboBar();
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             CreateNewStyle(2);
-            SetCombo(comboes + 1);
             RestoreComboBar();
         }
 
@@ -79,6 +76,8 @@ public class StyleManager : MonoBehaviour
 
     public void CreateNewStyle(int id)
     {
+        SetCombo(comboes + 1);
+
         string name = styleData.Style[id].Name;
         float value = styleData.Style[id].Value;
         Color color = styleData.Style[id].Color;
