@@ -9,15 +9,14 @@ public class MainMenuUIManager : MonoBehaviour
     public RectTransform buttons;
     public GameObject options;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
 
+    private void OnEnable()
+    {
+        ButtonsOn();
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        ButtonsOn();
     }
 
     public void ButtonsOn()
@@ -38,6 +37,8 @@ public class MainMenuUIManager : MonoBehaviour
         ButtonsOn();
         options.SetActive(false);
     }
+
+
 
     public void Quit()
     {
