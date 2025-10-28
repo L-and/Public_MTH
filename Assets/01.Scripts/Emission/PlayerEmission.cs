@@ -10,10 +10,12 @@ namespace _01.Scripts.Emission
         [Header("방출공격 위치")] public Transform firePosition;
         
         public PlayerStatus Status { get; private set; }
-
+        public Transform PlayerCamera { get; private set; }
+        
         private void Awake()
         {
             Status = GetComponent<PlayerStatus>();
+            PlayerCamera = Camera.main.transform;
         }
 
         /// <summary>
@@ -26,7 +28,7 @@ namespace _01.Scripts.Emission
             EmissionAbilityData emissionData = data;
             if (emissionData.behavior != null)
             {
-                emissionData.behavior.Execute(this, emissionData);
+                emissionData.behavior.Execute(this, PlayerCamera, emissionData);
             }
             else
             {

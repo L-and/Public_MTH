@@ -8,8 +8,9 @@ public class EmissionUsingState : EmissionState
 
     public override void OnEnter()
     {
+        controller.CharacterAnimController.EmissionFireAnimation();
         // TODO 방출 애니메이션(무기들기, 무기내리기)에 맞게 방출사용 및 상태전환 되도록 추가
-        controller.UseEmission();
+        // controller.UseEmission();
     }
 
     public override void OnUpdate()

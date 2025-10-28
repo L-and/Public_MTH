@@ -40,12 +40,13 @@ namespace _01.Scripts.PlayerControll
         public Transform PlayerCamera { get; private set; }
         
         # endregion
-       
+
         /// <summary>
         /// 캐릭터 팔 애니메이션 스크립트
         /// </summary>
-        private CharacterAnimationController _characterAnimationController;
-        
+        public CharacterAnimationController CharacterAnimController { get; private set; }
+
+
         // PlayerInput 입력값 프로퍼티
         public Vector2 MoveInput { get; private set; }
         public Vector2 MouseDeltaInput { get; private set; }
@@ -161,7 +162,7 @@ namespace _01.Scripts.PlayerControll
             PlayerInput = GetComponent<PlayerInput>();
             Rb = GetComponent<Rigidbody>();
             PlayerCamera = Camera.main.transform;
-            _characterAnimationController = transform.GetComponentInChildren<CharacterAnimationController>();
+            CharacterAnimController = transform.GetComponentInChildren<CharacterAnimationController>();
 
             // 상태 머신 생성
             MovementFSM = new MovementStateMachine(this);
@@ -181,7 +182,7 @@ namespace _01.Scripts.PlayerControll
         private void Update()
         {
             // 애니메이터에 필요한 값 전달
-            _characterAnimationController.movementVelocity = Rb.linearVelocity;
+            CharacterAnimController.movementVelocity = Rb.linearVelocity;
             
             // 무기발사 (코드이동 필요)
             if (_holdingFire)
@@ -340,7 +341,7 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         private void Reload()
         {
-            _characterAnimationController.ReloadAnimation(!equippedWeapon.HasAmmunition());
+            CharacterAnimController.ReloadAnimation(!equippedWeapon.HasAmmunition());
             equippedWeapon.Reload();
         }
         
@@ -427,7 +428,7 @@ namespace _01.Scripts.PlayerControll
         /// <summary>
         /// 방출공격 사용
         /// </summary>
-        public void UseEmission()
+        public void FireEmission()
         {
             emission.ExecuteEmission(emissiondata);
         }

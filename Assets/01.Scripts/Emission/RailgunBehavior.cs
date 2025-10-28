@@ -11,19 +11,13 @@ namespace _01.Scripts.Emission
         [Tooltip("적 레이어마스크")]
         public LayerMask enemyMask = LayerMask.GetMask("Enemy"); // TODO 하드코딩 수정
         
-        public override void Execute(PlayerEmission handler, EmissionAbilityData data)
+        public override void Execute(PlayerEmission handler, Transform playerCamera, EmissionAbilityData data)
         {
-            // 사용가능여부 검사
-            var canExecute = handler.Status.Overheat.TryDecrease(data.overheatCost);
-
-            if (!canExecute) return;
-
-            
             Transform fireTransform = handler.firePosition; // 레일건 발사위치
             
             // RaycastAll을 사용해 레일건을 발사하여 적중된 적들의 히트박스 Collider를 가져옴
-            RaycastHit[] hits = Physics.RaycastAll(fireTransform.position, fireTransform.forward, range, enemyMask);
-            Debug.DrawRay(fireTransform.position, fireTransform.forward * range, Color.red, 2f);
+            RaycastHit[] hits = Physics.RaycastAll(fireTransform.position, playerCamera.forward, range, enemyMask);
+            Debug.DrawRay(fireTransform.position, playerCamera.forward * range, Color.red, 2f);
             
             // 데미지를 적용한 적들을 저장할 해쉬셋
             var damagedTarget = new HashSet<IDamageableZone>();
