@@ -220,6 +220,23 @@ namespace _01.Scripts.PlayerControll
         #endregion
 
         # region Inputs
+
+        /// <summary>
+        /// 플레이어 조작을 활성화
+        /// </summary>
+        public void ActivePlayerInput()
+        {
+            PlayerInput.ActivateInput();
+        }
+        
+        /// <summary>
+        /// 플레이어 조작을 비활성화
+        /// </summary>
+        public void DeactivePlayerInput()
+        {
+            PlayerInput.DeactivateInput();
+        }
+        
         public void OnMove(InputAction.CallbackContext context)
         {
             MoveInput = context.ReadValue<Vector2>();
