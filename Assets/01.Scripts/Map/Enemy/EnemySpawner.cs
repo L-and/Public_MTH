@@ -1,79 +1,70 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-  [Header("Enemy PreFabs")]
-  [SerializeField] private List<GameObject> enemyPrefabs;
+  [Header("스포너당 스폰한 몬스터 개수")]
+  [SerializeField] private int maxSpawns = 3;
 
-  private List<GameObject> shuffleEnemyPrefabs;
-  private int curEnemyIndex = 0;
-  private EnemyController curSpawnEnemy;
+  private List<GameObject> _enemyPrefabs;  // 몬스터 프리팹 가지고 있는 리스트 변수
+  private RoomController myRoom; // 내가 속한 방
+  private GameObject myActiveEnemy; // 현재 생성된 몬스터
 
-  public bool isEnemyCleared { get; private set; }
+  private bool isWaitingForDeath = false; // 현재 스폰 기다려야하는지 체크
+  private int spawnedCount = 0; // 현재까지 스폰된 몬스터 수
 
-  void Start()
+  public void Initialize(RoomController room)
   {
-    isEnemyCleared = false;
+    _enemyPrefabs = GameManager.ResourceEx.enemyPrefabDict.Values.ToList();
+    Shuffle(_enemyPrefabs);
+
+    myRoom = room;
+    spawnedCount = 0;
+    isWaitingForDeath = false;
   }
 
-  void Update()
+  // 몬스터 스폰 시도하는 함수
+  public void TrySpawnEnemy()
   {
-    if (curEnemyIndex == enemyPrefabs.Count && !isEnemyCleared)
-      isEnemyCleared = true;
-  }
-
-  public void SpawnEnemy()
-  {
-    if (enemyPrefabs == null || enemyPrefabs.Count == 0)
+    // 현재 스폰된 몬스터 수가 최대 몬스터 수 보다 작고 스폰을 기다리고 있는 중이 아니라면 실행
+    if (spawnedCount < maxSpawns && !isWaitingForDeath)
     {
-      Debug.Log("스폰할 적이 리스트에 없습니다.");
+      // 스폰 기다리기 위해 true
+      isWaitingForDeath = true;
+      // 생성된 몬스터를 가져옴.
+      myActiveEnemy = Instantiate(_enemyPrefabs[spawnedCount%_enemyPrefabs.Count], transform.position, transform.rotation);
+      // 스폰 카운트 증가
+      spawnedCount++;
+      // 몬스터 사망 처리하는 스크립트를 가져옴.
+      EnemyDamage enemyScript = myActiveEnemy.GetComponent<EnemyDamage>();
 
-      return;
-    }
-
-    shuffleEnemyPrefabs = new List<GameObject>(enemyPrefabs);
-    Shuffle(shuffleEnemyPrefabs);
-
-    curEnemyIndex = 0;
-    SpawnNextEnemy();
-  }
-
-  private void SpawnNextEnemy()
-  {
-    // 1) 리스트에 스폰할 적이 남아있는지 확인
-    if (curEnemyIndex < shuffleEnemyPrefabs.Count)
-    {
-      // 2) 스폰할 적 프리팹을 가져옴.
-      GameObject prefabToSpawn = shuffleEnemyPrefabs[curEnemyIndex];
-
-      // 3) 적을 스폰함.
-      GameObject spawnObject = Instantiate(prefabToSpawn, transform.position + prefabToSpawn.transform.position, transform.rotation * Quaternion.Euler(0f, 180f, 0f));
-
-      // 4) 스폰된 적의 EnemyCOntroller 스크립트를 가져옴.
-      curSpawnEnemy = spawnObject.GetComponent<EnemyController>();
-
-      // 5) 해당 프리팹이 사망했을 경우 알 수 있도록 이벤트 구독
-      if (curSpawnEnemy != null)
-        curSpawnEnemy.OnEnemyDied += OncurrentEnemyDied;
-      else
-        Debug.Log($"{prefabToSpawn.name} 프리팹에 EnemyController 스크립트가 없습니다!!!!!!");
+      if (enemyScript != null)
+        // 스폰된 몬스터에게 스포너와 방 정보 넘기면서 초기화 함수 호출
+        enemyScript.MySpawnerAndRoomInfo(this, myRoom);
     }
   }
   
-  private void OncurrentEnemyDied()
+  // 몬스터가 죽으면 해당 함수 호출 (EnemyDamage)
+  public void NotifyEnemyDied(GameObject enemy)
   {
-    // 1) 방금 죽은 적과의 이벤트 연결을 끊습니다.
-    if (curSpawnEnemy != null)
-      curSpawnEnemy.OnEnemyDied -= OncurrentEnemyDied;
+    // 내가 소환한 몬스터랑 동일한지 체크
+    if(enemy == myActiveEnemy)
+    {
+      isWaitingForDeath = false;
+      myActiveEnemy = null;
 
-    // 2) 다음 적을 스폰하기 위해 인덱스 1 올림.
-    curEnemyIndex++;
-
-    // 3) 다음 적 스폰을 위해 적 스폰 함수 호출
-    SpawnNextEnemy();
+      TrySpawnEnemy(); 
+    }
   }
 
+  // maxSpawns 프로퍼티
+  public int GetMaxSpawnCount()
+  {
+    return maxSpawns;
+  }
+
+  // list에 있는 순서를 섞는 함수
   private void Shuffle<T>(IList<T> list)
   {
     for (int i = list.Count - 1; i > 0; i--)

@@ -21,9 +21,10 @@ public class CutsceneController : MonoBehaviour
     public Image cutImage;   // ÀÏ¹Ý ÄÆ (1500x550)
     public Image cutImageLarge;  //4¹ø ÄÆ (1500x1357) 
     public TextMeshProUGUI cutText;
+    public GameObject MainMenu;
     
     public Cut[] cuts;
-    public string nextSceneName = "Game Test";
+    public string nextSceneName = "MainMenu";
 
     private bool isTyping = false;
     private bool nextPressed = false;
