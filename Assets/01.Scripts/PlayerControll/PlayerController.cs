@@ -315,7 +315,7 @@ namespace _01.Scripts.PlayerControll
                     // TODO
                     // EmissionFSM의 EmissionUsingState.Enter에서
                     // 애니메이션과 동작이 실행되도록 수정해야 함
-                    emission.ExecuteEmission(emissiondata);
+                    // emission.ExecuteEmission(emissiondata);
                     break;
             }
         }
@@ -423,6 +423,14 @@ namespace _01.Scripts.PlayerControll
             
         }
         # endregion
+
+        /// <summary>
+        /// 방출공격 사용
+        /// </summary>
+        public void UseEmission()
+        {
+            emission.ExecuteEmission(emissiondata);
+        }
         
         public void ApplyDamage(float damage)
         {
