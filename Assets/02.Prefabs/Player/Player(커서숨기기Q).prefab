@@ -9030,6 +9030,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef6dbd3a6224cefb1a747c3a9020740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.PlayerControll.Status.PlayerStatus
+  hp:
+    maxValue: 0
+    value: 0
+  stamina:
+    maxValue: 0
+    value: 0
+  overheat:
+    maxValue: 0
+    value: 0
   maxSpeed: 10
   dashMaxSpeed: 15
   slidingMaxSpeed: 13
@@ -9040,7 +9049,7 @@ MonoBehaviour:
   dashPower: 30
   slidingPower: 100
   dashDurationTime: 0.5
-  mouseSensitivity: 0.5
+  mouseSensitivity: 0.1
   jumpForce: 10
 --- !u!114 &4614945885310112252
 MonoBehaviour:
