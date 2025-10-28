@@ -119,6 +119,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &314070514 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 504396387986192192, guid: 10f4117826db1bb488ef9d0b51b65fdc,
+    type: 3}
+  m_PrefabInstance: {fileID: 335794524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdc8bdc90da478e48811d3dfce1bb406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeleeAttack
 --- !u!1001 &335794524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -191,7 +203,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'attackBehaviours.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 314070514}
     - target: {fileID: 4405648293308548250, guid: 10f4117826db1bb488ef9d0b51b65fdc,
         type: 3}
       propertyPath: m_Enabled
