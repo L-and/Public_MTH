@@ -74,11 +74,9 @@ public class MapManager : MonoBehaviour
     var startElevator = Instantiate(_elevatorPrefab, _mapRoot);
     startElevator.transform.position = Vector3.zero;
     startElevator.transform.rotation = Quaternion.identity;
-
     var startAnchor = startElevator.GetComponent<ElevatorAnchor>();
     _attachPoint = startAnchor.elevatorAnchor;   // 출구를 기준으로 다음 연결 시작
-
-    //startElevator.GetComponent<ElevatorController>().SetupForStart();
+    startElevator.GetComponent<ElevatorController>().SetupForStart();
 
     switch (thisFloorInfo)
     {
@@ -123,8 +121,7 @@ public class MapManager : MonoBehaviour
 
       var ea = endElevator.GetComponent<ElevatorAnchor>();
       AlignAtoB(endElevator.transform, ea.elevatorAnchor, _attachPoint);
-
-      //endElevator.GetComponent<ElevatorController>().SetupForEnd();
+      endElevator.GetComponent<ElevatorController>().SetupForEnd();
     }
   }
 
@@ -143,8 +140,6 @@ public class MapManager : MonoBehaviour
     }
 
     var room = Instantiate(_boosRoomPrefab, _mapRoot);
-    var roomController = room.GetComponent<RoomController>();
-    roomController.roomType = BOSS_ROOM;
     var ra = room.GetComponent<RoomAnchor>();
     AlignAtoB(room.transform, ra.entryAnchor, _attachPoint);
 
@@ -183,8 +178,6 @@ public class MapManager : MonoBehaviour
 
     // b) 방 배치
     var room = Instantiate(roomPrefab, _mapRoot);
-    var roomController = room.GetComponent<RoomController>();
-    roomController.roomType = NORMAL_ROOM;
     var ra = room.GetComponent<RoomAnchor>();
     AlignAtoB(room.transform, ra.entryAnchor, cn.exitAnchor);
 

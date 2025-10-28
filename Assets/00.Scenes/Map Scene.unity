@@ -129,7 +129,6 @@ GameObject:
   m_Component:
   - component: {fileID: 155690595}
   - component: {fileID: 155690594}
-  - component: {fileID: 155690596}
   m_Layer: 0
   m_Name: SceneLogic
   m_TagString: Untagged
@@ -149,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c91cf138078eca44cb0bb3794201dbe0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
-  normalRoomPrefabs: []
 --- !u!4 &155690595
 Transform:
   m_ObjectHideFlags: 0
@@ -165,18 +163,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &155690596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155690593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43143b367296f7f4dbc58d41d60f5a9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
 --- !u!1 &713892777
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,10 +412,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d9ae35e48cd59e4fb029c221928c8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneManagerEx
-  _playerPrefab: {fileID: 8545972391412665673, guid: 928c9debda3e2eb43b91256b04f99023,
-    type: 3}
-  _elevatorPrefab: {fileID: 2720415459213308446, guid: 22543653c55d3e84e9c7f347432bdb89,
-    type: 3}
 --- !u!114 &1753956444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,6 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b495126dbfcbbd488507fa38ead867a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+  playerPrefab: {fileID: 0}
 --- !u!114 &1753956446
 MonoBehaviour:
   m_ObjectHideFlags: 0
