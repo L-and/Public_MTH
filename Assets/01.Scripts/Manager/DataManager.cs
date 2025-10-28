@@ -1,0 +1,12 @@
+using UnityEngine;
+
+public class DataManager : MonoBehaviour
+{
+  /////////////////////////////////////////////////////////////////
+  /// 리소스 데이터를 제외한 Game 전반적으로 쓰는 Data를 관리하는 Manager
+  /////////////////////////////////////////////////////////////////
+  
+  [Header("현재 층")]
+  public int currentFloor = 0;
+  
+}
