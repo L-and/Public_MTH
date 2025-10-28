@@ -79,7 +79,7 @@ namespace _01.Scripts.PlayerControll.Status
             private set => dashDurationTime = value;
         }
 
-        // 무적상태인지 판단하는 프로퍼티 TODO 무적의 지속시간을 어떤식으로 판별할지 정의 후 수정해야 함
+        // 무적상태인지 판단하는 프로퍼티
         public bool IsInvincible
         {
             get
@@ -113,18 +113,6 @@ namespace _01.Scripts.PlayerControll.Status
             hp.Initialize();
             stamina.Initialize(1);
             overheat.Initialize();
-        }
-
-        public void ApplyDamage(float damage)
-        {
-            Debug.Log("플레이어 피격당함");
-            hp.Value -= damage;
-
-            if (hp.Value <= 0f)
-            {
-                Debug.Log("## 플레이어 사망 ##");
-                // TODO 플레이어 사망로직 추가
-            }
         }
 
         # endregion

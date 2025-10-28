@@ -50,9 +50,14 @@ namespace _01.Scripts.PlayerControll
         public Vector2 MoveInput { get; private set; }
         public Vector2 MouseDeltaInput { get; private set; }
 
-        [Header("대쉬시 스테미너 사용량")] 
-        [SerializeField] private float dashCost = 1f;
+        # region 스테미너 관련
+        
+        [Header("스테미너 관련 필드")] 
+        [Tooltip("초당 스테미너 충전량"), SerializeField] private float staminaRegenAmount = 0.5f;
+        [Tooltip("대쉬할 때 스테미너 소모량"), SerializeField] private float dashCost = 1f;
         public float DashCost => dashCost;
+        
+        # endregion
         
         #region 지면검사관련 필드/메서드
         [Header("지면 검사용 필드")] 
@@ -185,6 +190,12 @@ namespace _01.Scripts.PlayerControll
                 {
                     Fire(); // 사격
                 }
+            }
+            
+            // 스테미너 회복
+            if (Status.Stamina.Value < Status.Stamina.maxValue)
+            {
+                Status.Stamina.Value += staminaRegenAmount * Time.deltaTime;
             }
             
             // 각 상태 머신의 Update 로직 실행
@@ -341,7 +352,7 @@ namespace _01.Scripts.PlayerControll
         
         #endregion
         
-        # region 플레이어 조작관련 메서드(키보드)
+        # region 플레이어 조작관련 Rigidbody 메서드
 
         /// <summary>
         /// 플레이어가 바라보는 방향으로 이동을 적용하는 메서드
@@ -395,5 +406,22 @@ namespace _01.Scripts.PlayerControll
             
         }
         # endregion
+        
+        public void ApplyDamage(float damage)
+        {
+            if (Status.IsInvincible)
+            {
+                // TODO 무적상태에서 피격시 스타일리쉬액션 연동코드 작성
+                return;
+            }
+            Debug.Log("플레이어 피격당함");
+            Status.Hp.Value -= damage;
+
+            if (Status.Hp.Value <= 0f)
+            {
+                Debug.Log("## 플레이어 사망 ##");
+                // TODO 플레이어 사망로직 추가
+            }
+        }
     }
 }
