@@ -83,7 +83,7 @@ public class CutsceneController : MonoBehaviour
         }
 
         // ÄÆ¾À ³¡ ¡æ ´ÙÀ½ ¾À ÀÌµ¿
-        SceneManager.LoadScene(nextSceneName);
+        GameManager.SceneEx.LoadScene(nextSceneName, false);
     }
 
     IEnumerator FadeBoth(Graphic img, Graphic txt, float start, float end, float duration)

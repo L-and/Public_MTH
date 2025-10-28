@@ -23,7 +23,7 @@ public class ResourceManager : MonoBehaviour
   public Dictionary<string, GameObject> mapPrefabDict { get; private set; }   // 맵
   public Dictionary<string, GameObject> enemyPrefabDict { get; private set; } // 몬스터
   // 리소스 데이터를 가지고 있는 변수 (단일)
-  public GameObject playerPrefab; // 플레이어
+  public GameObject playerPrefab { get; private set; } // 플레이어
 
   private const string MAP_PROTOTYPE = "Map_Prototype";
   private const string ENEMY = "Enemy";

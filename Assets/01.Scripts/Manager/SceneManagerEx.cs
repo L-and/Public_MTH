@@ -20,30 +20,7 @@ public class SceneManagerEx : MonoBehaviour
   // 현재 씬이 로드중인지 확인하는 변수
   private bool isLoading = false;
 
-  private bool isUpdate;
-  private int count = 3;
-  private float cur = 0f;
-
   //TODO: 게임 메뉴에서 게임 씬으로 넘어갈때 층 +1 하기
- 
-  void Start()
-  {
-    SetupScene();
-  }
-
-  void Update()
-  {
-    if(!isUpdate && !isLoading)
-    {
-      cur += Time.deltaTime;
-
-      if (cur > count)
-      {
-        SetupScene();
-        cur = 0f;
-      }
-    }
-  }
 
   private void SetupScene()
   {
@@ -60,12 +37,12 @@ public class SceneManagerEx : MonoBehaviour
     }
 
     if (_elevatorPrefab != null)
-    {
       _startPoint = _elevatorPrefab.GetComponent<ElevatorController>().StartPoint;
-      isUpdate = true;
-    }
     else
-      isUpdate = false;
+    {
+      Debug.LogError("엘리베이터 프리팹 리소스를 제대로 불러오지 못해서 시작 포인트를 찾지 못했습니다.\n (0,0,0)으로 이동합니다.");
+      _startPoint.transform.position = new Vector3(0, 0, 0);
+    }
   }
 
   // 플레이어 스폰 관련 함수
@@ -76,6 +53,7 @@ public class SceneManagerEx : MonoBehaviour
     if (!isPlayerSpawn)
     {
       _curPlayer = Instantiate(_playerPrefab, _startPoint.transform.position, _startPoint.transform.rotation);
+      isPlayerSpawn = true;
     }
     else
     {
@@ -84,13 +62,16 @@ public class SceneManagerEx : MonoBehaviour
   }
 
   // 외부에서 Scene 로드를 위해 호출하는 함수
-  public void LoadScene(string sceneName)
+  public void LoadScene(string sceneName, bool isInitialSpawn)
   {
     if (isLoading)
     {
       Debug.LogWarning("이미 씬을 로드 중 입니다.");
       return;
     }
+
+    if (isInitialSpawn)
+      SetupScene();
 
     StartCoroutine(LoadSceneAsync(sceneName));
   }
