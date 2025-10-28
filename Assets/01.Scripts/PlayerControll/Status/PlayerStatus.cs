@@ -124,5 +124,11 @@ namespace _01.Scripts.PlayerControll.Status
         }
 
         # endregion
+
+        public void AddOverHeat(float amount)
+        {
+            overheat.Value += amount;
+            overheat.Value = Mathf.Clamp(overheat.Value, 0, overheat.maxValue);
+        }
     }
 }

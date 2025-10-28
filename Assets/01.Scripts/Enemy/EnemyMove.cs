@@ -4,55 +4,86 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyMove : MonoBehaviour
 {
-    [Header("Target")]
+    public enum Tactic {Default, Kite}
+
+    [Header("타겟")]
     [SerializeField] private Transform target;
     [SerializeField] private string playerTag = "Player";
 
-    [Header("Chase / Vision")]
+    [Header("전술")]
+    [SerializeField] private Tactic tactic = Tactic.Default;
+
+    [Header("카이팅 옵션")]
+    [SerializeField] private float kiteRetreatSpeedMul = 1.0f; // 카이팅 시 속도 배수
+    [SerializeField] private float kitePadding = 0.8f; // 사거리 밴드 안쪽 여유
+    [SerializeField] private float kiteStep = 3.0f;      // 한 번에 물러나는 가늠 거리
+
+    [Header("추적 / 시야")]
     [SerializeField] private float sightRange = 20f;
     [SerializeField] private float fovAngle = 80f;
     [SerializeField] private float stopDistance = 2.5f;
     [SerializeField] private LayerMask obstacleMask;
 
-    [Header("Roam (NavMesh 자유 순찰)")]
+    [Header("배회 (NavMesh 자유 순찰)")]
     [SerializeField] private bool useRoam = true;
     [SerializeField] private float roamRadius = 12f;
     [SerializeField] private Transform roamCenterOverride;
     [SerializeField] private float roamWaitMin = 0.8f;
     [SerializeField] private float roamWaitMax = 1.6f;
 
-    [Header("Pathing")]
+    [Header("길찾기")]
     [SerializeField] private float repathInterval = 0.15f;
 
-    [Header("Animation")]
+    [Header("애니메이션")]
     [SerializeField] private Animator animator;
     [SerializeField] private string speedParam = "moveSpeed";
     [SerializeField] private float speedDamp = 0.1f;
 
-    [Header("Attack")]
-    [SerializeField] private EnemyAttack enemyAttack;   // 공격 스크립트
-    [SerializeField] private float attackRange = 2.7f;
+    [Header("공격")]
+    // [SerializeField] private EnemyAttack enemyAttack;   // 공격 스크립트
+    [SerializeField] private MonoBehaviour[] attackBehaviours;   // IEnemyAttack 구현들 드래그
+    private IEnemyAttack[] _attacks;
+
+    [Header("공격 공통 옵션")]
     [SerializeField, Range(0f, 1f)] private float attackFacingDot = 0.6f;
 
-    [Header("Links (optional)")]
+    [Header("기타 링크 (필요하다면) 현시점 데미지 받는 기능 링크됨")]
     [SerializeField] private EnemyDamage enemyDamage;
-
+    #region 필드
     private NavMeshAgent agent;
     private int speedHash;
     private float repathTimer;
     private Vector3 roamCenter;
     private float roamWaitTimer;
     private float roamWaitTarget;
+    private IEnemyAttack _lastBest; // 마지막에 선택된 공격
 
+    #endregion
+
+    #region 상태변화(배회, 추적, 정지 등)
     private enum State { Roam, Chase, Stop }
     private State state = State.Roam;
-
+    #endregion
+    
+    
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         if (!animator) animator = GetComponentInChildren<Animator>();
         if (!enemyDamage) enemyDamage = GetComponent<EnemyDamage>();
-        if (!enemyAttack) enemyAttack = GetComponent<EnemyAttack>();
+
+        if(attackBehaviours != null && attackBehaviours.Length > 0)
+        {
+            _attacks = new IEnemyAttack[attackBehaviours.Length];
+            for(int i = 0; i <attackBehaviours.Length; i++)
+            {
+                _attacks[i] = attackBehaviours[i] as IEnemyAttack;
+            }
+        }
+        else
+        {
+            _attacks = System.Array.Empty<IEnemyAttack>();
+        }
         if (!target)
         {
             var p = GameObject.FindGameObjectWithTag(playerTag);
@@ -79,7 +110,7 @@ public class EnemyMove : MonoBehaviour
             agent.SetDestination(RandomPointOnNavmesh(roamCenter, roamRadius));
         }
     }
-
+    #region 상태변화 실행문
     private void Update()
     {
         if (enemyDamage && enemyDamage.IsDead) { SafeStopAgent(); SetSpeed(0f); return; }
@@ -99,35 +130,52 @@ public class EnemyMove : MonoBehaviour
 
         bool canSee = CanSeeTarget();
         float dist = DistanceToTarget();
+        var best = SelectBestAttack(canSee, dist);
+        _lastBest = best ?? _lastBest;
 
         // 상태 전이
         switch (state)
         {
             case State.Roam:
+                if (!useRoam)
+                {
+                    state = State.Stop;
+                    break;
+                }
                 if (canSee)
+                {
                     state = (dist > stopDistance) ? State.Chase : State.Stop;
+                }
                 break;
 
             case State.Chase:
-                if (!canSee)
-                    state = useRoam ? State.Roam : State.Stop;
-                else if (dist <= stopDistance)
+                if (TryExecute(best))
+                {
                     state = State.Stop;
+                    break;
+                }
+                if (!canSee)
+                {
+                    state = useRoam ? State.Roam : State.Stop;
+                }
+                else if (dist <= stopDistance)
+                {
+                    state = State.Stop;
+                }
                 break;
 
             case State.Stop:
-                SafeStopAgent();
-                if (target) FaceTarget(target.position);
-                SetSpeed(0f);
-
-                if (target && canSee &&
-                    InAttackRange(target, attackRange) &&
-                    IsFacingTarget(target, attackFacingDot) &&
-                    enemyAttack != null &&
-                    enemyAttack.CanAttack(target, attackRange))
+                // 제자리에서 공격을 시도, 불가능하다면 상태 복귀
+                if (!TryExecute(best))
                 {
-                    // 너의 EnemyAttack API에 맞춰 사용 (매개변수 없는 버전 사용 중)
-                    enemyAttack.Attack();
+                    if (canSee)
+                    {
+                        state = (dist > stopDistance) ? State.Chase : State.Stop;
+                    }
+                    else
+                    {
+                        state = useRoam ? State.Roam : State.Stop;
+                    }
                 }
                 break;
         }
@@ -141,40 +189,92 @@ public class EnemyMove : MonoBehaviour
                 break;
 
             case State.Chase:
-                // 공격 중이면 이동 멈춤
-                if (enemyAttack && enemyAttack.IsAttacking)
+                // 사정권 공격이 가능해졌다면 멈추고 공격으로 전환(근접/원거리 모두 해당)
+                if (tactic == Tactic.Kite && _lastBest != null && target)
                 {
-                    if (!agent.isStopped) agent.isStopped = true;
-                    SetSpeed(0f);
-                    break;
+                    KiteMove(dist, _lastBest);
+                    SetSpeed(agent.velocity.magnitude);
+                    if (TryExecute(best)) { state = State.Stop; }
                 }
-
-                repathTimer -= Time.deltaTime;
-                if (repathTimer <= 0f && target)
+                else
                 {
-                    agent.isStopped = false;
-                    agent.SetDestination(target.position);
-                    repathTimer = repathInterval;
+                    repathTimer -= Time.deltaTime;
+                    if (repathTimer <= 0f && target)
+                    {
+                        agent.isStopped = false;
+                        agent.SetDestination(target.position);
+                        repathTimer = repathInterval;
+                    }
+                    SetSpeed(agent.velocity.magnitude);
                 }
-                SetSpeed(agent.velocity.magnitude);
                 break;
 
             case State.Stop:
-                SafeStopAgent();
-                if (target) FaceTarget(target.position);
-                SetSpeed(0f);
-
-                if (target && canSee &&
-                    InAttackRange(target, attackRange) &&
-                    IsFacingTarget(target, attackFacingDot) &&
-                    enemyAttack != null &&
-                    enemyAttack.CanAttack(target, attackRange))
+                // 제자리 공격 실패 시 상태 복귀 로직은 동일
+                if (!TryExecute(best))
                 {
-                    enemyAttack.Attack();
+                    if (canSee)
+                    {
+                        state = (dist > stopDistance) ? State.Chase : State.Stop;
+                    }
+                    else
+                    {
+                        state = useRoam ? State.Roam : State.Stop;
+                    }
+                }
+                else
+                {
+                    SafeStopAgent();
+                    if (target) FaceTarget(target.position);
+                    SetSpeed(0f);
                 }
                 break;
         }
     }
+    #endregion
+
+    #region 카이팅 관련 스크립트
+    private void KiteMove(float dist, IEnemyAttack atk)
+    {
+        if (!agent || !target) return;
+
+        float min = atk.MinRange + kitePadding;
+        float max = atk.MaxRange - kitePadding;
+
+        // 밴드 밖이면 조정
+        if (dist < min)
+        {
+            // 너무 가까움 → 뒤로 빠지기
+            Vector3 away = (transform.position - target.position).normalized;
+            Vector3 goal = transform.position + away * Mathf.Max(kiteStep, (min - dist) * 0.6f);
+
+            if (NavMesh.SamplePosition(goal, out var hit, 2.0f, agent.areaMask))
+            {
+                agent.speed *= kiteRetreatSpeedMul;           // 선택
+                agent.isStopped = false;
+                agent.SetDestination(hit.position);
+            }
+        }
+        else if (dist > max)
+        {
+            // 너무 멈 → 다가가기
+            Vector3 to = (target.position - transform.position).normalized;
+            Vector3 goal = target.position - to * ((min + max) * 0.5f); // 밴드 중간점 쪽
+
+            if (NavMesh.SamplePosition(goal, out var hit, 2.0f, agent.areaMask))
+            {
+                agent.isStopped = false;
+                agent.SetDestination(hit.position);
+            }
+        }
+        else
+        {
+            // 밴드 안 → 정지하고 사격
+            SafeStopAgent();
+            FaceTarget(target.position);
+        }
+    }
+    #endregion
 
     // ─ Vision ─
     private bool CanSeeTarget()
@@ -182,9 +282,11 @@ public class EnemyMove : MonoBehaviour
         if (!target) return false;
         Vector3 to = target.position - transform.position;
         if (to.sqrMagnitude > sightRange * sightRange) return false;
+
         Vector3 flat = new Vector3(to.x, 0, to.z);
         if (Vector3.Angle(transform.forward, flat) > fovAngle) return false;
 
+        // 장애물에 걸리면 시야 차단
         Vector3 eye = transform.position + Vector3.up * 1.6f;
         if (Physics.Raycast(eye, to.normalized, out var hit, sightRange, ~0))
         {
@@ -199,7 +301,6 @@ public class EnemyMove : MonoBehaviour
     {
         if (!useRoam) { SafeStopAgent(); return; }
         if (!agent || !agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
-
         if (agent.pathPending) return;
 
         if (agent.remainingDistance != Mathf.Infinity &&
@@ -298,5 +399,56 @@ public class EnemyMove : MonoBehaviour
         if (dir.sqrMagnitude < 0.0001f) return true;
         dir.Normalize();
         return Vector3.Dot(transform.forward, dir) >= minDot;
+    }
+
+    /// <summary>
+    /// 현재 상황에서 가장 적절한 공격 선택 (IEnemyAttack기준)
+    /// </summary>
+    /// <param name="canSee"></param>
+    /// <param name="dist"></param>
+    /// <returns></returns>
+    private IEnemyAttack SelectBestAttack(bool canSee, float dist)
+    {
+        if (_attacks == null || _attacks.Length == 0 || !target)
+        {
+            return null;
+        }
+
+        IEnemyAttack best = null;
+        float bestScore = float.NegativeInfinity;
+
+        foreach (var atk in _attacks)
+        {
+            if (atk == null) continue;
+            if (atk.IsAttacking || atk.IsOnCooldown) continue;
+            if (dist < atk.MinRange || dist > atk.MaxRange) continue;
+            if (atk.RequireLOS && !canSee) continue;
+
+            // 사거리 중앙에 가까울수록 가점
+            float center = (atk.MinRange + atk.MaxRange) * 0.5f;
+            float span = Mathf.Max(0.01f, atk.MaxRange - atk.MinRange);
+            float score = 1f - (Mathf.Abs(dist - center) / (span * 0.5f)); // -1~1 근사
+            if (atk.Kind == AttackKind.Ranged) score += 0.2f;           // 원거리 약간 선호
+
+            if (score > bestScore) { bestScore = score; best = atk; }
+        }
+        return best;
+    }
+
+    ///<summary> 공격 실행 시도(정면 체크 + 정지 + Attack 호출). 성공 시 true </summary>
+    private bool TryExecute(IEnemyAttack best)
+    {
+        if (best == null || target == null)
+        {
+            return false;
+        }
+        if (!IsFacingTarget(target, attackFacingDot)) return false;
+        if (!best.CanAttack(target)) return false;
+
+        SafeStopAgent();
+        FaceTarget(target.position);
+        SetSpeed(0f);
+        best.Attack(target);
+        return true;
     }
 }

@@ -58,7 +58,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
     // 피격 위치 저장(사망 시 사용할 수 있음)
     lastHitPoint = hitPoint;
 
-    if (zone == HitZones.Head)
+    if (zone == HitZones.Weak)
     {
       OnHeadShotDead();
       Kill();
