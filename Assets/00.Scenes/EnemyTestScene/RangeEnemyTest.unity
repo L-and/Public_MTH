@@ -119,18 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &314070514 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 504396387986192192, guid: 10f4117826db1bb488ef9d0b51b65fdc,
-    type: 3}
-  m_PrefabInstance: {fileID: 335794524}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdc8bdc90da478e48811d3dfce1bb406, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MeleeAttack
 --- !u!1001 &335794524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -201,9 +189,14 @@ PrefabInstance:
       objectReference: {fileID: 2390684736045005668}
     - target: {fileID: 2515480674471281911, guid: 10f4117826db1bb488ef9d0b51b65fdc,
         type: 3}
+      propertyPath: attackBehaviours.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515480674471281911, guid: 10f4117826db1bb488ef9d0b51b65fdc,
+        type: 3}
       propertyPath: 'attackBehaviours.Array.data[0]'
       value: 
-      objectReference: {fileID: 314070514}
+      objectReference: {fileID: 1260515750}
     - target: {fileID: 4405648293308548250, guid: 10f4117826db1bb488ef9d0b51b65fdc,
         type: 3}
       propertyPath: m_Enabled
@@ -225,7 +218,15 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1124174171}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7990270000511032144, guid: 10f4117826db1bb488ef9d0b51b65fdc,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1260515751}
+    - targetCorrespondingSourceObject: {fileID: 7990270000511032144, guid: 10f4117826db1bb488ef9d0b51b65fdc,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1260515750}
   m_SourcePrefab: {fileID: 100100000, guid: 10f4117826db1bb488ef9d0b51b65fdc, type: 3}
 --- !u!1 &392333768
 GameObject:
@@ -600,6 +601,68 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 335794524}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1260515744 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7990270000511032144, guid: 10f4117826db1bb488ef9d0b51b65fdc,
+    type: 3}
+  m_PrefabInstance: {fileID: 335794524}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1260515748 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8082212057579781445, guid: 10f4117826db1bb488ef9d0b51b65fdc,
+    type: 3}
+  m_PrefabInstance: {fileID: 335794524}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1260515750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260515744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdc8bdc90da478e48811d3dfce1bb406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeleeAttack
+  _minRange: 0
+  _maxRange: 2.7
+  _coolDown: 1
+  _requireLOS: 0
+  animator: {fileID: 1260515748}
+  attackTrigger: Attack
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  PlayerTag: Player
+  addHeatOnHit: 10
+--- !u!54 &1260515751
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260515744}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!4 &1326546125 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8997910373448156026, guid: 10f4117826db1bb488ef9d0b51b65fdc,
