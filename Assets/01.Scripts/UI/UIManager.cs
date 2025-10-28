@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour
 
     public GameObject hud;
     public GameObject gameover;
-    public Image gameoverBackground;
     public Slider hpBar;
     public Slider ohBar;
     public TextMeshProUGUI ohBarText;
@@ -40,8 +39,11 @@ public class UIManager : MonoBehaviour
         ohBarFillColor = ohBarFill.color;
         stmBarFillColor = stmBarFill.color;
         StartCoroutine(ShowLevelInfoCoroutine());
-        if (GameObject.FindWithTag("Player") != null) playerStatus = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
-        UpdateStatus();
+        if (GameObject.FindWithTag("Player") != null)
+        {
+            playerStatus = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
+            UpdateStatus();
+        }
     }
 
     // Update is called once per frame
@@ -54,11 +56,6 @@ public class UIManager : MonoBehaviour
                 SetStm(playerStatus.stamina.Value - 1);
             }
         }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Restart();
-        }
-        if (playerStatus.stamina.Value < playerStatus.stamina.maxValue) SetStm(playerStatus.stamina.Value + 0.5f * Time.deltaTime);
 
         if (Input.GetKeyDown(KeyCode.G) && !isGameover)
         {
@@ -69,9 +66,12 @@ public class UIManager : MonoBehaviour
             Pause();
         }
 
-        UpdateStatus();
+        if (playerStatus != null)
+        {   
+            if (playerStatus.stamina.Value < playerStatus.stamina.maxValue) SetStm(playerStatus.stamina.Value + 0.5f * Time.deltaTime);
+            UpdateStatus();
+        }
     }
-
     #region METHOD
     public void SetHp(float value)
     {
@@ -126,9 +126,6 @@ public class UIManager : MonoBehaviour
         isGameover = true;
         hud.SetActive(false);
         gameover.SetActive(true);
-        gameoverBackground.DOFade(0.2f, 0f);
-        gameoverBackground.DOFade(1f, 8f);
-        GlobalMethod.Fade(gameObject, 5f);
     }
 
     void Restart()
