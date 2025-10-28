@@ -26,7 +26,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
     [Header("Corpse / Collision")]
     [SerializeField] private bool changeLayerOnDeath = true;
-    [SerializeField] private string corpseLayer = "Corpse";    // Projectile과 충돌하지 않는 레이어
+    [SerializeField] private string corpseLayer = "Dead";    // Projectile과 충돌하지 않는 레이어
     [SerializeField] private float corpseDisableDelay = 1.2f;  // 튕긴 뒤 래그돌 정리까지 지연
 
     private int bodyHitCount;
@@ -35,6 +35,19 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
     // 마지막 피격 정보(튕김 방향/위치)
     private Vector3 lastHitPoint;
     private Vector3 lastHitDir = Vector3.forward;
+
+    // ────────────────────────────────────────────────────────────────────────────
+  #region 몬스터 스폰 관련
+  private RoomController myRoom;  // 내가 스폰된 방
+    private EnemySpawner mySpawner; // 내가 스폰된 스포너
+
+    public void MySpawnerAndRoomInfo(EnemySpawner spawner, RoomController room)
+    {
+        // 내가 스폰된 방과 스포너 값을 초기화
+        mySpawner = spawner;
+        myRoom = room;
+    }
+    #endregion
 
     // ────────────────────────────────────────────────────────────────────────────
     #region Damage Entry
@@ -81,6 +94,17 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
     {
         if (IsDead) return;
         IsDead = true;
+
+        /// 사망시 스포너에게 알리는 구문
+        // 현재 방을 가르키는 변수 null 체크
+        if (myRoom != null)
+            // 1) 몬스터가 죽었음을 알리는 함수 호출
+            myRoom.NotifyEnemyDied();
+
+        // 현재 스포너를 가르키는 변수 null 체크
+        if (mySpawner != null)
+            // 2) 몬스터가 죽었음을 알리는 함수 호출 (비교를 위해 현재 Object 반환)
+            mySpawner.NotifyEnemyDied(this.gameObject);
 
         // 이동/행동 차단
         if (agent) agent.enabled = false;
