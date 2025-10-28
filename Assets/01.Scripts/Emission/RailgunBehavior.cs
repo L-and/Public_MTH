@@ -36,14 +36,15 @@ namespace _01.Scripts.Emission
                     Debug.LogWarning($"[{hit.collider.name}]충돌된 히트박스에 BodyPart가 없음");
                     continue;
                 }
-                
-                // 몬스터의 root에서 IDamageableZone 컴포넌트를 가져옴
-                if (!hit.collider.gameObject.transform.root.TryGetComponent<IDamageableZone>(out var damageableZone))
+
+
+                IDamageableZone damageableZone = bodyPart.GetOwner();
+                if (damageableZone == null)
                 {
-                    Debug.LogWarning($"[{hit.collider.name}]충돌된 히트박스에 IDamageableZone가 없음");
+                    Debug.LogWarning($"[{hit.collider.name}]충돌된 적에게 IDamageableZone가 없음");
                     continue;
                 }
-                
+
                 // 데미지 중복적용 방지를 위해 공격한 적인지 검색
                 if (damagedTarget.Contains(damageableZone))
                 {
