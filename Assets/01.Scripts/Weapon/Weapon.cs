@@ -102,6 +102,8 @@ namespace _01.Scripts.Weapon
         private MuzzleBehaviour _muzzleBehaviour;
             
         #endregion
+
+        private Transform _playerCameraTransform;
         
         #endregion
         
@@ -114,6 +116,9 @@ namespace _01.Scripts.Weapon
             _audioSource = GetComponent<AudioSource>();
             _attachmentManager = GetComponent<WeaponAttachmentManagerBehaviour>();
             _recoilScript = transform.root.GetComponentInChildren<Recoil>();
+            
+            // 플레이어카메라의 위치를 캐싱
+            _playerCameraTransform = Camera.main.transform; // TODO 카메라를 어떻게 관리할지 정해지면 수정
         }
         protected override void Start()
         {
@@ -191,13 +196,10 @@ namespace _01.Scripts.Weapon
             // 탄피 배출
             EjectCasing();
             
-            // TODO MainCamera대신 플레이어 카메라로 변경 필요
-            var playerCamera = Camera.main.transform;
-            
             //Determine the rotation that we want to shoot our projectile in.
-            Quaternion rotation = Quaternion.LookRotation(playerCamera.position + playerCamera.forward * 1000.0f - muzzleSocket.position);
+            Quaternion rotation = Quaternion.LookRotation(_playerCameraTransform.position + _playerCameraTransform.forward * 1000.0f - muzzleSocket.position);
 
-            if (Physics.Raycast(new Ray(playerCamera.position, playerCamera.forward),
+            if (Physics.Raycast(new Ray(_playerCameraTransform.position, _playerCameraTransform.forward),
                     out RaycastHit hit, maximumDistance, mask))
             {
                 rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);

@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using _01.Scripts.Emission;
 using _01.Scripts.PlayerControll.Animation;
 using _01.Scripts.PlayerControll.Status;
 using UnityEngine;
@@ -85,6 +86,13 @@ namespace _01.Scripts.PlayerControll
         /// 현재무기 스크립트
         /// </summary>
         public WeaponBehaviour equippedWeapon;
+        
+        # endregion
+        
+        # region 방출관련 필드
+
+        [SerializeField] public PlayerEmission emission;
+        [SerializeField] public EmissionAbilityData emissiondata;
         
         # endregion
         
@@ -235,14 +243,14 @@ namespace _01.Scripts.PlayerControll
             {
                 case {phase: InputActionPhase.Started}:
                     _holdingFire = true;
-                    Debug.Log("마우스 버튼 클릭");
+                    // Debug.Log("마우스 버튼 클릭");
                     break;
                 case {phase: InputActionPhase.Performed}:
-                    Debug.Log("마우스 홀드");
+                    // Debug.Log("마우스 홀드");
                     break;
                 case {phase: InputActionPhase.Canceled}:
                     _holdingFire = false;
-                    Debug.Log("마우스 뗌");
+                    // Debug.Log("마우스 뗌");
                     break;
             }
         }
@@ -259,6 +267,23 @@ namespace _01.Scripts.PlayerControll
                     break;
             }
         }
+
+        /// <summary>
+        /// 방출키 입력
+        /// </summary>
+        public void OnTryEmission(InputAction.CallbackContext context)
+        {
+            switch (context)
+            {
+                case {phase: InputActionPhase.Started}:
+                    // TODO
+                    // EmissionFSM의 EmissionUsingState.Enter에서
+                    // 애니메이션과 동작이 실행되도록 수정해야 함
+                    emission.ExecuteEmission(emissiondata);
+                    break;
+            }
+        }
+        
         
         # endregion
 

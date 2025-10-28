@@ -16,6 +16,11 @@ namespace _01.Scripts.PlayerControll.Status
         [SerializeField] private Stat stamina;
         [SerializeField] private Stat overheat;
         
+        public Stat Hp => hp;
+        public Stat Stamina => stamina;
+        public Stat Overheat => overheat;
+        
+
         [Header("최대속도")] 
         [SerializeField] private float maxSpeed = 10f;
         [SerializeField] private float dashMaxSpeed = 15f;
