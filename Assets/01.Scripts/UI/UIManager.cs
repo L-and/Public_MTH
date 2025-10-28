@@ -95,13 +95,19 @@ public class UIManager : MonoBehaviour
         ColorUtility.TryParseHtmlString("#FF8D00", out color2);
         ohBarFill.color = Color.Lerp(ohBarFillColor, color2, playerStatus.overheat.Value / 100);
 
-        if (playerStatus.overheat.Value < playerStatus.overheat.maxValue) ohFulled = false;
+        if (playerStatus.overheat.Value < playerStatus.overheat.maxValue)
+        { 
+            ohFulled = false;
+            DOTween.Kill(ohBarText.rectTransform);
+            ohBarText.rectTransform.localScale = Vector3.one;
+        }
         if (!ohFulled && playerStatus.overheat.Value >= playerStatus.overheat.maxValue)
         {
             ohFulled = true;
             DOTween.Kill(ohBarFill);
             ohBarFill.color = color2;
             ohBarFill.DOColor(Color.white, 0.8f).SetLoops(2, LoopType.Yoyo);
+            ohBarText.rectTransform.DOScale( new Vector3(1.2f,1.2f,1), 0.4f).SetLoops(-1, LoopType.Yoyo);
         }
     }
     public void SetStm(float value)
