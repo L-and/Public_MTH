@@ -12,13 +12,9 @@ namespace _01.Scripts.PlayerControll.Status
         private PlayerController _pc;
 
         [Header("체력/스테미너/과열")] 
-        [SerializeField] private Stat hp;
-        [SerializeField] private Stat stamina;
-        [SerializeField] private Stat overheat;
-        
-        public Stat Hp => hp;
-        public Stat Stamina => stamina;
-        public Stat Overheat => overheat;
+        [SerializeField] public Stat hp;
+        [SerializeField] public Stat stamina;
+        [SerializeField] public Stat overheat;
         
 
         [Header("최대속도")] 
@@ -79,7 +75,7 @@ namespace _01.Scripts.PlayerControll.Status
             private set => dashDurationTime = value;
         }
 
-        // 무적상태인지 판단하는 프로퍼티 TODO 무적의 지속시간을 어떤식으로 판별할지 정의 후 수정해야 함
+        // 무적상태인지 판단하는 프로퍼티
         public bool IsInvincible
         {
             get
