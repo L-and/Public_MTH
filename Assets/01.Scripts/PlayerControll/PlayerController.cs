@@ -194,9 +194,9 @@ namespace _01.Scripts.PlayerControll
             }
             
             // 스테미너 회복
-            if (Status.Stamina.Value < Status.Stamina.maxValue)
+            if (Status.stamina.Value < Status.stamina.maxValue)
             {
-                Status.Stamina.Value += staminaRegenAmount * Time.deltaTime;
+                Status.stamina.Value += staminaRegenAmount * Time.deltaTime;
             }
             
             // 각 상태 머신의 Update 로직 실행
@@ -441,9 +441,9 @@ namespace _01.Scripts.PlayerControll
                 return;
             }
             Debug.Log("플레이어 피격당함");
-            Status.Hp.Value -= damage;
+            Status.hp.Value -= damage;
 
-            if (Status.Hp.Value <= 0f)
+            if (Status.hp.Value <= 0f)
             {
                 Debug.Log("## 플레이어 사망 ##");
                 // TODO 플레이어 사망로직 추가
