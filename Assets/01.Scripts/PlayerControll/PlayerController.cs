@@ -18,7 +18,7 @@ namespace _01.Scripts.PlayerControll
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(PlayerStatus))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IDamageableZone
     {
         
         # region 컴포넌트/클래스 참조 프로퍼티
@@ -129,6 +129,7 @@ namespace _01.Scripts.PlayerControll
         
         # region MovementState 상태전환 무시 기능
         public bool isMovementStateLocked; // MovementState의 상태전환을 강제로 무시하는 플래그 변수
+        private IDamageableZone _damageableZoneImplementation;
 
         /// <summary>
         /// MovementState의 상태변경을 일정시간 잠금하는 함수
@@ -447,6 +448,19 @@ namespace _01.Scripts.PlayerControll
             {
                 Debug.Log("## 플레이어 사망 ##");
                 // TODO 플레이어 사망로직 추가
+            }
+        }
+
+        public bool IsDead => Status.hp.Value <= 0f;
+        public void ApplyHit(float rawDamage, Vector3 hitPoint, HitZones zone)
+        {
+            Debug.Log("공격당함!");
+            Status.hp.Value -= rawDamage;
+
+            if (IsDead)
+            {
+                // TODO: 플레이어 사망처리 코드 작성
+                Debug.Log("## 플레이어 사망 ##");
             }
         }
     }
