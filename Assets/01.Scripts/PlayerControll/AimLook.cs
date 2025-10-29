@@ -39,6 +39,19 @@ namespace _01.Scripts.PlayerControll
             xTransform.localRotation = Quaternion.Euler(_xRotValue, 0f, 0f);
             // 좌우 회전적용
             yTransform.localRotation = Quaternion.Euler(0f, _yRotValue, 0f);
+
+
+        }
+
+        /// <summary>
+        /// 외부에서 플레이어의 카메라회전 조작 후 회전값을 갱신하는 메서드
+        /// </summary>
+        /// <param name="newXRotation">새로운 X회전값</param>
+        /// <param name="newYRotation">새로운 Y회전값</param>
+        public void UpdateRotation(Quaternion newXRotation, Quaternion newYRotation)
+        {
+            xTransform.localRotation = newXRotation;
+            yTransform.localRotation = newYRotation;
         }
     }
 }

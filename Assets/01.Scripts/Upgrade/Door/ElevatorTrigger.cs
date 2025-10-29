@@ -9,7 +9,7 @@ public class ElevatorTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player In");
-            door.CloseDoors();
+            door.OpenDoors();
         }
     }
 }

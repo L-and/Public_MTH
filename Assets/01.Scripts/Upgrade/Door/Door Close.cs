@@ -22,18 +22,18 @@ public class DoorClose : MonoBehaviour
     void Start()
     {
         // 처음 위치 저장
-        leftDoorOpenPos = leftDoor.localPosition;
-        rightDoorOpenPos = rightDoor.localPosition;
+        leftDoorClosedPos = leftDoor.localPosition;
+        rightDoorClosedPos = rightDoor.localPosition;
 
-        // 닫힌 위치 계산
-        leftDoorClosedPos = leftDoorOpenPos + Vector3.forward * moveDistance;
-        rightDoorClosedPos = rightDoorOpenPos + Vector3.back * moveDistance;
+        // 열림 위치 계산 (닫힌 위치에서 반대)
+        leftDoorOpenPos = leftDoorClosedPos + Vector3.forward * moveDistance;
+        rightDoorOpenPos = rightDoorClosedPos + Vector3.back * moveDistance;
 
         // 시작 시 문 닫힌 상태 유지
         leftDoor.localPosition = leftDoorClosedPos;
         rightDoor.localPosition = rightDoorClosedPos;
     }
-
+     
     public void OpenDoors()
     {
         if (currentRoutine != null) StopCoroutine(currentRoutine);
@@ -47,22 +47,22 @@ public class DoorClose : MonoBehaviour
     }
 
     IEnumerator DoorRoutine(bool open)
-    {
+    { 
         float t = 0f;
 
         // 현재 문 위치 기준으로 열림닫힘
         Vector3 leftStart = leftDoor.localPosition;
         Vector3 rightStart = rightDoor.localPosition;
 
-        // 열기닫힘 방향에 따라 목표 위치 선택
+        // open이 true, false에 따라 open,closed 쓰기
         Vector3 leftTarget = open ? leftDoorOpenPos : leftDoorClosedPos;
         Vector3 rightTarget = open ? rightDoorOpenPos : rightDoorClosedPos;
 
         while (t < 1f)
         {
             t += Time.deltaTime * closeSpeed;
-            leftDoor.localPosition = Vector3.Lerp(leftDoorOpenPos, leftDoorClosedPos, t);
-            rightDoor.localPosition = Vector3.Lerp(rightDoorOpenPos, rightDoorClosedPos, t);
+            leftDoor.localPosition = Vector3.Lerp(leftStart, leftTarget, t);
+            rightDoor.localPosition = Vector3.Lerp(rightStart,rightTarget, t);
             
             yield return null;
         }
