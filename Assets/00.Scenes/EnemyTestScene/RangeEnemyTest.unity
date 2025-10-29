@@ -153,13 +153,14 @@ MonoBehaviour:
   _maxRange: 2.7
   _coolDown: 1
   _requireLOS: 0
-  hitbox: {fileID: 145078840}
   hitOrigin: {fileID: 145078839}
   targetMask:
     serializedVersion: 2
     m_Bits: 0
   PlayerTag: Player
   damage: 10
+  ownerRoot: {fileID: 0}
+  hitbox: {fileID: 145078840}
 --- !u!54 &145078844
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -561,13 +562,14 @@ MonoBehaviour:
   _maxRange: 2.7
   _coolDown: 1
   _requireLOS: 0
-  hitbox: {fileID: 1486800239}
   hitOrigin: {fileID: 1486800238}
   targetMask:
     serializedVersion: 2
     m_Bits: 0
   PlayerTag: Player
   damage: 10
+  ownerRoot: {fileID: 0}
+  hitbox: {fileID: 1486800239}
 --- !u!54 &1486800243
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -845,7 +847,7 @@ PrefabInstance:
     - target: {fileID: 606348631001171818, guid: b92a7cc661e89b54da14e1a623eb2a3e,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1134377031315798796, guid: b92a7cc661e89b54da14e1a623eb2a3e,
         type: 3}
