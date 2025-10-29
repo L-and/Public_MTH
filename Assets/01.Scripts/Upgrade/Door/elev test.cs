@@ -19,6 +19,10 @@ public class elevtest : MonoBehaviour
     public float moveSpeed = 3f;
     public float rotateSpeed = 3f;
 
+    [Header("UI ＆ Blur 설정")]
+    public GameObject upgradeUI;
+    private CameraBlurController blur;
+    
     private bool isMoving = false;
     private bool controlLocked = true; // 조작 잠금 유지
 
@@ -29,6 +33,7 @@ public class elevtest : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("현재 메인 카메라 이름: " + Camera.main.name);
+       
         if (other.CompareTag(playerTag) && !isMoving)
         {
             StartCoroutine(MovePlayerToCenter(other.gameObject));
@@ -78,6 +83,11 @@ public class elevtest : MonoBehaviour
         Camera mainCam = Camera.main;
         if (mainCam != null)
         {
+            //1초간 부드럽게 블러처리
+            blur = mainCam.GetComponent<CameraBlurController>();
+            if (blur == null)
+                Debug.LogWarning("CameraBlurController를 Main Camera에서 찾지 못했습니다.");
+
             // 도착 후 180도로 플레이어 몸 회전
             Debug.Log("플레이어 회전");
 
@@ -102,16 +112,44 @@ public class elevtest : MonoBehaviour
             // player.transform.rotation = endRotTurn;
             // mainCam.transform.rotation = endRotTurn;
             Debug.Log("플레이어가 문 방향으로 180도 회전 완료");
-
             aimLook.UpdateRotation(endRotTurn, endRotTurn); // 완료 후 회전값을 aimLook에 적용
-        }
-        else
-        {
-            Debug.LogWarning("main cam 못 찾음");
+
+            // 블러 시작
+            if (blur != null)
+                StartCoroutine(FadeInBlur(blur, 1f));
         }
         
         isMoving = false;
     }
 
-    
+    // 블러 적용
+    private IEnumerator FadeInBlur(CameraBlurController blur, float duration)
+    {
+        float time = 0f;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = Mathf.Clamp01(time / duration);
+            blur.SetBlurIntensity(t);
+            yield return null;
+        }
+
+        Debug.Log("블러 적용됨");
+    }
+
+    // 블러 해제
+    public IEnumerator FadeOutBlur(CameraBlurController blur, float duration)
+    {
+        float time = 0f;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = 1f - Mathf.Clamp01(time / duration);
+            blur.SetBlurIntensity(t);
+            yield return null;
+        }
+
+        blur.DisableBlur();
+        Debug.Log("블러 해제 완료");
+    }
 }
