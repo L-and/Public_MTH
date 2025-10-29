@@ -13,6 +13,7 @@ namespace _01.Scripts.PlayerControll
         [SerializeField] private Transform xTransform;
         [SerializeField] private Transform yTransform;
 
+        // 가로,세로의 현재 플레이어의 회전값
         private float _xRotValue;
         private float _yRotValue;
 
@@ -50,8 +51,8 @@ namespace _01.Scripts.PlayerControll
         /// <param name="newYRotation">새로운 Y회전값</param>
         public void UpdateRotation(Quaternion newXRotation, Quaternion newYRotation)
         {
-            xTransform.localRotation = newXRotation;
-            yTransform.localRotation = newYRotation;
+            _xRotValue = newXRotation.eulerAngles.x;
+            _yRotValue = newYRotation.eulerAngles.y;
         }
     }
 }

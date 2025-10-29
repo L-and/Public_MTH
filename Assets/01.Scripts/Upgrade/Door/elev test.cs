@@ -99,11 +99,11 @@ public class elevtest : MonoBehaviour
                 yield return null;
             }
 
-            player.transform.rotation = endRotTurn;
-            mainCam.transform.rotation = endRotTurn;
+            // player.transform.rotation = endRotTurn;
+            // mainCam.transform.rotation = endRotTurn;
             Debug.Log("플레이어가 문 방향으로 180도 회전 완료");
 
-            //aimLook.UpdateRotation(endRotTurn, endRotTurn);
+            aimLook.UpdateRotation(endRotTurn, endRotTurn); // 완료 후 회전값을 aimLook에 적용
         }
         else
         {
