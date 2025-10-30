@@ -135,6 +135,7 @@ public class elevtest : MonoBehaviour
         }
 
         Debug.Log("블러 적용됨");
+        upgradeUI.SetActive(true);
     }
 
     // 블러 해제

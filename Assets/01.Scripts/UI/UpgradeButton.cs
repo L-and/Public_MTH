@@ -23,6 +23,9 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         upgradeUiCanvasGroup = upgradeUi.GetComponent<CanvasGroup>();
         upgradeUiManager = upgradeUi.GetComponent<UpgradeUIManager>();
         button = GetComponent<Button>();
+    }
+    void OnEnable()
+    {
         dataId = Random.Range(0, 21);
         UpgradeOn();
     }
@@ -50,7 +53,8 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             GlobalMethod.Fade(upgradeUi,0.4f);
             transform.DOLocalMoveX(0, 0.5f).OnComplete(() =>
             {
-                upgradeUiCanvasGroup.DOFade(1, 1.2f).OnComplete(() => upgradeUiCanvasGroup.DOFade(0, 1));
+                upgradeUiCanvasGroup.DOFade(1, 1.2f).OnComplete(() => upgradeUiCanvasGroup.DOFade(0, 1)).OnComplete(()
+                => OnObjectDisable());
             });
 
             for (int i = 0; i < 3; i++)
@@ -65,11 +69,16 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     void UpgradeOn()
     {
-        transform.DOLocalMoveY(650, 0);
-        transform.DOLocalMoveY(0, 0.6f).OnComplete(() => SetIstouchable(true));
+        transform.DOLocalMoveY(0, 1).OnComplete(() => SetIstouchable(true));
     }
     void SetIstouchable(bool value) 
     { 
         isTouchable = value;
     }
+
+    void OnObjectDisable()
+    {
+        transform.parent.parent.gameObject.SetActive(false);
+    }
+
 }
