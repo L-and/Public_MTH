@@ -15,17 +15,18 @@ public class BossSummon : MonoBehaviour, ISummonAttacker
         public float windup;              // 소환 전 딜레이(애니/이펙트)
         public float cooldown;
 
-        public GameObject minionPrefab;
+        [Header("기존 근접형 Enemy 프리팹 그대로 사용")]
+        public GameObject enemyPrefab;
         public int count;
         public float spawnRadius;         // 보스 주변 원형 반경
         public float navSampleMaxDist;    // NavMesh.SamplePosition 반경
 
-        public string animTrigger;        // 소환 모션 트리거
-        public bool facePlayerOnCast;     // 시전 중 플레이어 바라보기
+        [Header("소환 후 타깃 주입 옵션")]
+        public bool setPlayerAsTarget;
+        public string targetFieldOrProperty; // 예: "target" / "player" 등
 
-        // 소환 직후 세팅(선택)
-        public bool assignPlayerAsTarget; // 소환수 AI에 플레이어 바로 박아두기
-        public string aiTargetFieldName;  // 예: "target" 혹은 "player"
+        public string animTrigger;
+        
     }
 
     [SerializeField] private Animator animator;
@@ -86,36 +87,18 @@ public class BossSummon : MonoBehaviour, ISummonAttacker
         // 소환 실행
         for (int i = 0; i < p.count; i++)
         {
-            Vector3 pos = PickSpawnPointOnNav(transform.position, p.spawnRadius, p.navSampleMaxDist);
-            Quaternion rot = p.facePlayerOnCast && target
-                ? Quaternion.LookRotation((target.position - pos).normalized, Vector3.up)
-                : Quaternion.identity;
+            Vector3 pos = PickSpawnOnNav(transform.position, p.spawnRadius, p.navSampleMaxDist);
+            Quaternion rot = target ? Quaternion.LookRotation((target.position - pos).normalized, Vector3.up) : Quaternion.identity;
 
-            if (p.minionPrefab)
+            if (p.enemyPrefab)
             {
-                GameObject m = Instantiate(p.minionPrefab, pos, rot);
+                GameObject m = Instantiate(p.enemyPrefab, pos, rot);
 
-                if (p.assignPlayerAsTarget && target)
-                {
-                    // 매우 범용적인 리플렉션 세팅 (네 팀 AI 스크립트 이름/필드명에 맞게 바꿔도 됨)
-                    var comp = m.GetComponent<MonoBehaviour>();
-                    if (comp != null && !string.IsNullOrEmpty(p.aiTargetFieldName))
-                    {
-                        var field = comp.GetType().GetField(p.aiTargetFieldName);
-                        if (field != null && field.FieldType == typeof(Transform))
-                            field.SetValue(comp, target);
-                        else
-                        {
-                            var prop = comp.GetType().GetProperty(p.aiTargetFieldName);
-                            if (prop != null && prop.PropertyType == typeof(Transform) && prop.CanWrite)
-                                prop.SetValue(comp, target);
-                        }
-                    }
-                }
+                if (p.setPlayerAsTarget && target)
+                    TryAssignTarget(m, p.targetFieldOrProperty, target);
             }
 
-            // 살짝 지연을 두면 “한꺼번에 툭”이 아니라 “툭툭” 느낌 가능
-            yield return null;
+            yield return null; // 살짝 텀 주기(툭툭 소환)
         }
 
         _nextReady[idx] = Time.time + p.cooldown;
@@ -123,7 +106,7 @@ public class BossSummon : MonoBehaviour, ISummonAttacker
     }
 
     // NavMesh 위 스폰 포인트 샘플
-    private static Vector3 PickSpawnPointOnNav(Vector3 center, float radius, float sampleMaxDist)
+    private static Vector3 PickSpawnOnNav(Vector3 center, float radius, float sampleMaxDist)
     {
         for (int tries = 0; tries < 8; tries++)
         {
@@ -132,7 +115,25 @@ public class BossSummon : MonoBehaviour, ISummonAttacker
             if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, sampleMaxDist, NavMesh.AllAreas))
                 return hit.position;
         }
-        // 실패 시 보스 발밑
         return center;
+    }
+
+     // 가장 범용적인 타깃 주입(필드나 프로퍼티에 Transform 할당 시도)
+    private static void TryAssignTarget(GameObject go, string fieldOrProp, Transform target)
+    {
+        if (string.IsNullOrEmpty(fieldOrProp)) return;
+
+        // 프리팹의 첫 번째 MonoBehaviour를 대상으로 시도
+        var mb = go.GetComponent<MonoBehaviour>();
+        if (!mb) return;
+
+        var t = mb.GetType();
+        var f = t.GetField(fieldOrProp);
+        if (f != null && f.FieldType == typeof(Transform)) { f.SetValue(mb, target); return; }
+
+        var p = t.GetProperty(fieldOrProp);
+        if (p != null && p.PropertyType == typeof(Transform) && p.CanWrite) { p.SetValue(mb, target); return; }
+
+        // 실패해도 무시(프리팹 AI가 자체적으로 타깃을 찾게 둘 수도 있음)
     }
 }
