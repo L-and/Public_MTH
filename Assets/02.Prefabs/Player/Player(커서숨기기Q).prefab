@@ -8986,6 +8986,7 @@ GameObject:
   - component: {fileID: 4614945885310112252}
   - component: {fileID: 3480116336662205770}
   - component: {fileID: 5773869435880367155}
+  - component: {fileID: 2656473752753778966}
   m_Layer: 10
   m_Name: "Player(\uCEE4\uC11C\uC228\uAE30\uAE30Q)"
   m_TagString: Player
@@ -9115,6 +9116,8 @@ MonoBehaviour:
   equippedWeapon: {fileID: 656111986900820474}
   emission: {fileID: 5773869435880367155}
   emissiondata: {fileID: 11400000, guid: 4a1a315af265b8a469a5a1d5e147e47f, type: 2}
+  subWeapon: {fileID: 0}
+  subWeaponData: {fileID: 0}
   speedText: {fileID: 0}
   stateText: {fileID: 0}
   isMovementStateLocked: 0
@@ -9310,6 +9313,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.Emission.PlayerEmission
   firePosition: {fileID: 5861530949906420216}
+--- !u!114 &2656473752753778966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8545972391412665673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9977ef8e93fc462690cc66b0a71fe327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.SubWeapon.PlayerSubWeapon
+  data: {fileID: 11400000, guid: 288e0b24bd5c99b48b94fb893a4e6709, type: 2}
 --- !u!1 &8727809896765627129
 GameObject:
   m_ObjectHideFlags: 0

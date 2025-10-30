@@ -5,6 +5,7 @@ using System.Globalization;
 using _01.Scripts.Emission;
 using _01.Scripts.PlayerControll.Animation;
 using _01.Scripts.PlayerControll.Status;
+using _01.Scripts.SubWeapon;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -104,11 +105,19 @@ namespace _01.Scripts.PlayerControll
         # endregion
         
         # region 방출관련 필드
-
+        // TODO 어디서 데이터를 관리할지 고민 후 수정해야 함 (현재 테스트용 코드)
         [SerializeField] public PlayerEmission emission;
         [SerializeField] public EmissionAbilityData emissiondata;
         
         # endregion
+        
+        
+        // TODO 어디서 데이터를 관리할지 고민 후 수정해야 함 (현재 테스트용 코드)
+        # region 보조무기 관련 필드
+
+        [SerializeField] public PlayerSubWeapon subWeapon;
+        
+        #endregion
         
         # region 디버그용 필드/프로퍼티
         
@@ -174,6 +183,9 @@ namespace _01.Scripts.PlayerControll
         #region Unity Functions
         private void Start()
         {
+            // 보조무기 참조필드 할당
+            subWeapon.playerCamera = PlayerCamera;
+            
             // 각 상태 머신의 초기 상태 설정
             MovementFSM.Initialize(MovementFSM.IdleState);
             SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
@@ -199,6 +211,26 @@ namespace _01.Scripts.PlayerControll
             {
                 Status.stamina.Value += staminaRegenAmount * Time.deltaTime;
             }
+            
+            // TODO 추후 수정
+            // 보조무기 동작 테스트
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                CharacterAnimController.SubWeaponAnimation();
+            }
+
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                CharacterAnimController.OnShieldImpact();
+            }
+            
+            // 보조무기 장착 테스트
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                subWeapon.InstantiateSubWeapon();
+            }
+            
+            
             
             // 각 상태 머신의 Update 로직 실행
             MovementFSM.CurrentState?.OnUpdate();
