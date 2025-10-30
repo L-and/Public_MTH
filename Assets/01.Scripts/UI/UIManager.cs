@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
     public Image stmBarFill;
     public TextMeshProUGUI levelInfo;
     public GameObject pauseMenu;
+    public TextMeshProUGUI statText;
 
     Color hpBarFillColor;
     Color ohBarFillColor;
@@ -164,6 +165,13 @@ public class UIManager : MonoBehaviour
         SetHp(playerStatus.hp.Value);
         SetOh(playerStatus.overheat.Value);
         SetStm(playerStatus.stamina.Value);
+        SetStatText();
+    }
+
+    void SetStatText()
+    {
+        statText.text = "HP : " + playerStatus.hp.Value + "\nMaxHP : " + playerStatus.hp.maxValue + "\nOverheat : " + playerStatus.overheat.Value +
+            "\nMaxOverheat : " + playerStatus.overheat.maxValue + "\nStemina : " + playerStatus.stamina.Value + "\nMaxStemina : " + playerStatus.stamina.maxValue;
     }
 
     #endregion
