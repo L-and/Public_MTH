@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,7 +8,11 @@ public class PauseMenuManager : MonoBehaviour
     
     public GameObject buttons;
     public GameObject options;
-
+    private void OnEnable()
+    {
+        buttons.transform.DOScaleY(0.8f, 0).SetUpdate(true);
+        buttons.transform.DOScaleY(1, 0.2f).SetUpdate(true);
+    }
     private void OnDisable()
     {
         Time.timeScale = 1.0f;

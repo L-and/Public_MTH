@@ -1,3 +1,4 @@
+using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
 using DG.Tweening;
 using System.Collections;
@@ -26,6 +27,7 @@ public class UIManager : MonoBehaviour
     Color ohBarFillColor;
     Color stmBarFillColor;
     PlayerStatus playerStatus;
+    PlayerController playerController;
     bool ohFulled = false;
     bool stmFulled = false;
     bool isGameover = false;
@@ -42,6 +44,7 @@ public class UIManager : MonoBehaviour
         if (GameObject.FindWithTag("Player") != null)
         {
             playerStatus = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
+            playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
             UpdateStatus();
         }
     }
@@ -132,6 +135,7 @@ public class UIManager : MonoBehaviour
         isGameover = true;
         hud.SetActive(false);
         gameover.SetActive(true);
+        playerController.DeactivePlayerInput();
     }
 
     void Restart()
@@ -141,8 +145,8 @@ public class UIManager : MonoBehaviour
 
     IEnumerator ShowLevelInfoCoroutine()
     {
-        levelInfo.DOFade(0, 0);
-        levelInfo.DOFade(1, 1);
+        levelInfo.rectTransform.DOLocalMoveY(250, 0);
+        levelInfo.rectTransform.DOLocalMoveY(-45, 1);
         yield return new WaitForSeconds(5);
         levelInfo.DOFade(0, 1);
     }
@@ -152,12 +156,14 @@ public class UIManager : MonoBehaviour
         if (!isPause)
         {
             pauseMenu.SetActive(true);
+            playerController.DeactivePlayerInput();
             Time.timeScale = 0;
             isPause = true;
             return;
         }
         else
         {
+            playerController.ActivePlayerInput();
             pauseMenu.SetActive(false);
             Time.timeScale = 1;
             isPause = false;
