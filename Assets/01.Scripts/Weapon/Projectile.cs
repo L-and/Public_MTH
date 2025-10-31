@@ -4,10 +4,9 @@ using System.Collections;
 using Random = UnityEngine.Random;
 
 namespace _01.Scripts.Weapon
-{
+{	
 	public class Projectile : MonoBehaviour
 	{
-
 		[Range(5, 100)] [Tooltip("After how long time should the bullet prefab be destroyed?")]
 		public float destroyAfter;
 
@@ -20,11 +19,12 @@ namespace _01.Scripts.Weapon
 		[Tooltip("Maximum time after impact that the bullet is destroyed")]
 		public float maxDestroyTime;
 
-		[Header("Impact Effect Prefabs")] public Transform[] bloodImpactPrefabs;
+		[Header("Impact Effect Prefabs")]
+		public Transform[] bloodImpactPrefabs;
 		public Transform[] metalImpactPrefabs;
 		public Transform[] dirtImpactPrefabs;
 		public Transform[] concreteImpactPrefabs;
-
+		
 		private void Start()
 		{
 			// //Grab the game mode service, we need it to access the player character!
@@ -39,7 +39,7 @@ namespace _01.Scripts.Weapon
 
 		//If the bullet collides with anything
 		private void OnCollisionEnter(Collision collision)
-		{
+		{			
 			//Ignore collisions with other projectiles.
 			if (collision.gameObject.GetComponent<Projectile>() != null)
 				return;

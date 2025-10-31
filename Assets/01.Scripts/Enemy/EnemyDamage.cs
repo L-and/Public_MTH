@@ -2,12 +2,11 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyDamage : MonoBehaviour, IDamageableZone
-{
-    [Header("Rules")]
-    [Tooltip("몸통이 맞아야 하는 횟수")]
-    [SerializeField] private int EnemyHealth = 30;
+{    
+    [Tooltip("최대 체력")]
+    [SerializeField] private float EnemyHealth = 30;
 
-    [Header("Animator")]
+    [Header("애니메이터")]
     [SerializeField] private Animator animator;
     [SerializeField] private string deathTrigger = "Die";
 
@@ -29,7 +28,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
     [SerializeField] private string corpseLayer = "Dead";    // Projectile과 충돌하지 않는 레이어
     [SerializeField] private float corpseDisableDelay = 1.2f;  // 튕긴 뒤 래그돌 정리까지 지연
 
-    private int bodyHitCount;
+    private float health;         // 현재 체력
     public bool IsDead { get; private set; }
 
     // 마지막 피격 정보(튕김 방향/위치)
@@ -56,10 +55,12 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
     {
         var parts = GetComponentsInChildren<BodyPart>(includeInactive: true);
 
-        foreach(var part in parts)
+        foreach (var part in parts)
         {
             part.Initialize(this);
         }
+
+        health = EnemyHealth;
     }
     public void ApplyHit(float rawDamage, Vector3 hitPoint, HitZones zone)
     {
@@ -70,10 +71,15 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
         if (zone == HitZones.Weak)
         {
-            Kill();
-            return;
+            Debug.Log("Bullseye!");
+            health -= 3*(Mathf.Max(0f, rawDamage));
         }
 
+        health -= Mathf.Max(0f, rawDamage);
+        if(health <= 0)
+        {
+            Kill();
+        }
         //EnemyHealth -= rawDamage;
         // if (bodyHitCount >= bodyHitsToDie)
         //     Kill();
