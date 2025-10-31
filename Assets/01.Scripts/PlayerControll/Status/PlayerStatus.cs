@@ -15,6 +15,9 @@ namespace _01.Scripts.PlayerControll.Status
         [SerializeField] public Stat hp;
         [SerializeField] public Stat stamina;
         [SerializeField] public Stat overheat;
+
+        [Header("공격력")] 
+        [SerializeField] public float bulletDamage = 10f;
         
 
         [Header("최대속도")] 

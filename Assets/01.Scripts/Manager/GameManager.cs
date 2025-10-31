@@ -1,3 +1,5 @@
+using _01.Scripts.Manager;
+
 public class GameManager : Singleton<GameManager>
 {
   //////////////////////////////////////////////////////////////////////////////
@@ -10,10 +12,12 @@ public class GameManager : Singleton<GameManager>
   SceneManagerEx _sceneManagerEx;
   ResourceManager _resourceManager;
   DataManager _dataManager;
+  PlayerManager _playerManager;
   
   public static SceneManagerEx SceneEx { get { return Instance._sceneManagerEx; } }
   public static ResourceManager ResourceEx { get { return Instance._resourceManager; } }
   public static DataManager GameData { get { return Instance._dataManager; } }
+  public static PlayerManager PlayerManager { get { return Instance._playerManager; } }
   #endregion  
 
   protected override void Awake()
@@ -43,6 +47,7 @@ public class GameManager : Singleton<GameManager>
     _sceneManagerEx = gameObject.GetComponent<SceneManagerEx>();
     _resourceManager = gameObject.GetComponent<ResourceManager>();
     _dataManager = gameObject.GetComponent<DataManager>();
+    _playerManager = gameObject.AddComponent<PlayerManager>();
     #endregion
   }
 }

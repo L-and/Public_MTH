@@ -193,6 +193,11 @@ namespace _01.Scripts.PlayerControll
                     Fire(); // 사격
                 }
             }
+
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                GameManager.PlayerManager.PlayerStatus.bulletDamage = 20;
+            }
             
             // 스테미너 회복
             if (Status.stamina.Value < Status.stamina.maxValue)
