@@ -19,8 +19,8 @@ public class RangeProjectile: MonoBehaviour
     [SerializeField] private float damage = 1f;
     [SerializeField] private LayerMask hitMask = ~0;   // 맞출 대상 레이어
 
-    [Header("플레이어 설정")]
-    [SerializeField] private PlayerStatus ps;
+    [Header("플레이어 IDamageableZone")]
+    [SerializeField] private IDamageableZone playerDamageableZone;
 
     private Rigidbody rb;
     private Vector3 initialDir = Vector3.forward;
@@ -94,14 +94,14 @@ public class RangeProjectile: MonoBehaviour
     {
         if(other.collider.CompareTag("Player"))
         {
-            ps = other.collider.GetComponentInParent<PlayerStatus>();
-            if(ps == null)
+            playerDamageableZone = other.collider.GetComponentInParent<IDamageableZone>();
+            if(playerDamageableZone == null)
             {
                 return;
             }
             Debug.Log("Player got hit");
             Debug.Log("Player add 10 Heat");            
-            ps.AddOverHeat(10);         // 임시적으로 적의 공격 적중시 player의 과열치 10 상승하게 적용
+            playerDamageableZone.ApplyHit(10, other.GetContact(0).point, HitZones.Body);
         }
         HandleHit(other.collider, other.GetContact(0).point);
     }
@@ -119,8 +119,9 @@ public class RangeProjectile: MonoBehaviour
         // 맞출 대상만 반응
         if ((hitMask.value & (1 << hitCol.gameObject.layer)) == 0) return;
 
-        if (hitCol.TryGetComponent<IDamageableZone>(out var dmg))
-            dmg.ApplyHit(damage, hitPoint, HitZones.Body);
+        // TODO 김민서: 이부분은 튕겨난 투사체가 적에게 적중했을 때 과열게이지를 충전하는식으로 변경하면 될듯함
+        //if (hitCol.TryGetComponent<IDamageableZone>(out var dmg))
+        //    dmg.ApplyHit(damage, hitPoint, HitZones.Body);
 
         Destroy(gameObject);
     }
