@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class BossMove : MonoBehaviour
 {
     [Tooltip("보스 상태 ")]
@@ -20,7 +21,7 @@ public class BossMove : MonoBehaviour
 
     [Header("보스 시야")]
     [SerializeField] private float sightRange = 40f;
-    [SerializeField] private float fovDeg = 120f;
+    [SerializeField] private float fovDeg = 120f;    
 
     [Header("보스 카이팅 관련")]
     [Tooltip("이 아래로 들어오면 급히 후퇴")]

@@ -5,7 +5,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 {
     [Header("Rules")]
     [Tooltip("몸통이 맞아야 하는 횟수")]
-    [SerializeField] private int bodyHitsToDie = 3;
+    [SerializeField] private int EnemyHealth = 30;
 
     [Header("Animator")]
     [SerializeField] private Animator animator;
@@ -74,9 +74,9 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
             return;
         }
 
-        bodyHitCount++;
-        if (bodyHitCount >= bodyHitsToDie)
-            Kill();
+        //EnemyHealth -= rawDamage;
+        // if (bodyHitCount >= bodyHitsToDie)
+        //     Kill();
     }
 
     /// <summary>Projectile에서 충돌 직전에 호출. 총알 진행 방향을 넘겨줘야 자연스러운 튕김.</summary>
