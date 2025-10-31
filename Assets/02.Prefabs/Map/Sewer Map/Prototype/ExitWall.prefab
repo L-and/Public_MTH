@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 2454178836788435173}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: -2.4, y: -2, z: 0.6}
+  m_LocalPosition: {x: -2.4, y: -2.05, z: 0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1785,7 +1785,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1748
+  m_VersionIndex: 1769
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1911,6 +1911,7 @@ GameObject:
   - component: {fileID: 6936348972698808872}
   - component: {fileID: 7892904496366961260}
   - component: {fileID: 400895725550385529}
+  - component: {fileID: 2572686837000498936}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -2011,6 +2012,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300052, guid: 6f16ebc1bf474eb4d8458d0470203d46, type: 3}
+--- !u!114 &2572686837000498936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2645757851533698247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf17d90ea253064fbfd8ce616920b9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwingDoorController
+  doorMoveSpeed: 1
+  maxAngle: 180
 --- !u!1 &2799016435561750643
 GameObject:
   m_ObjectHideFlags: 0
@@ -2268,7 +2283,7 @@ Transform:
   m_GameObject: {fileID: 3209710464205995042}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: -2.4, y: -2, z: 0.6}
+  m_LocalPosition: {x: -2.4, y: -2.05, z: 0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4023,7 +4038,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1748
+  m_VersionIndex: 1763
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4150,7 +4165,7 @@ GameObject:
   - component: {fileID: 6471968042830041031}
   - component: {fileID: 4697145971904410804}
   m_Layer: 0
-  m_Name: InnerWallWall
+  m_Name: Out Dir
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4263,7 +4278,7 @@ GameObject:
   - component: {fileID: 2278699100846353020}
   - component: {fileID: 2289384086873404654}
   m_Layer: 0
-  m_Name: Exit
+  m_Name: In Dir
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
