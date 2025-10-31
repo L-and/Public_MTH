@@ -1,47 +1,47 @@
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
+[RequireComponent(typeof(Collider))]
 public class BossPhase : MonoBehaviour
 {
-    [Header("보스 체력 관련")]
-    [SerializeField] public int[] phaseMaxHp = { 50, 80, 100 };   // 보스 체력 변수. 1페 2페 3페 순        
+    [Header("보스 체력 (페이즈 순서대로)")]
+    [SerializeField] public int[] phaseMaxHp = { 50, 80, 100 };
 
-    [Header("플레이어 공격 처리용")]
-    [SerializeField] private LayerMask playerProjectile = 15;
+    [Header("플레이어 탄 레이어(들)")]
+    [Tooltip("플레이어 총알이 속한 레이어를 인스펙터에서 체크하세요.")]
+    [SerializeField] private LayerMask playerProjectile;
 
-    [Header("페이즈 전환")]
-    public UnityEvent<int> onPhaseStarted;      // 페이즈 시작체크용. 0=1페이즈 시작, 1=2페 , 2=3페
-    public UnityEvent<float, float> onDamage;   // UI갱신용
+    [Header("이벤트")]
+    public UnityEvent<int> onPhaseStarted;       // 0=1페, 1=2페, 2=3페
+    public UnityEvent<float, float> onDamage;    // (current, max) UI 갱신용
     public UnityEvent onBossDead;
+    public BossMove _bossMove;
 
+    // ─ 상태 ─
     private int _phaseIndex;
-    private float _currentHp;   // 현시점 페이즈 체력
-    private float _currentMax;  // 현시점 페이즈 최대 체력
+    private float _currentHp;
+    private float _currentMax;
     private bool _isDead;
 
+    // ─ UI/외부 접근 편의 ─
+    public int CurrentPhaseIndex => _isDead ? phaseMaxHp.Length - 1 : _phaseIndex;
+    public float CurrentHp => _currentHp;
+    public float CurrentMax => _currentMax;
+    public bool IsDead => _isDead;
 
-    void Start()
+    private void Start()
     {
         BeginPhase(0);
     }
 
     public void ApplyDamage(float dmg, Vector3 hitPoint, Component source = null)
     {
-        if (_isDead || dmg <= 0)
-        {
-            return;
-        }
+        if (_isDead || dmg <= 0f) return;
 
-        _currentHp -= dmg;
-        if (_currentHp < 0f)
-        {
-            _currentHp = 0f;
-        }
+        _currentHp = Mathf.Max(0f, _currentHp - dmg);
         onDamage?.Invoke(_currentHp, _currentMax);
+        // Debug.Log($"[BossPhase] Damage {dmg} → {_currentHp}/{_currentMax}");
 
-        //페이즈 종료 -> 다음 페이즈로 진입
         if (_currentHp <= 0f)
         {
             if (_phaseIndex + 1 < phaseMaxHp.Length)
@@ -59,56 +59,56 @@ public class BossPhase : MonoBehaviour
     {
         _phaseIndex = Mathf.Clamp(nextIndex, 0, phaseMaxHp.Length - 1);
         _currentMax = Mathf.Max(1, phaseMaxHp[_phaseIndex]);
-        _currentHp = _currentMax;
+        _currentHp  = _currentMax;
+
         onPhaseStarted?.Invoke(_phaseIndex);
         onDamage?.Invoke(_currentHp, _currentMax);
-        Debug.Log($"Boss Phase: {_phaseIndex}");
+        Debug.Log($"[BossPhase] Phase start → {(_phaseIndex + 1)} ({_currentHp}/{_currentMax})");
     }
 
     private void Die()
     {
-        if (_isDead)
-        {
-            return;
-        }
+        if (_isDead) return;
         _isDead = true;
+        Debug.Log("[BossPhase] Boss dead");
         onBossDead?.Invoke();
-        // 연출 후 없애고 싶다면 Destroy(gameObject)도 괜찮을지도..?
+        // 필요하면 여기서 Destroy(gameObject) 등 연출 처리
+        _bossMove.enabled = false;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    // ─ 충돌/트리거 양쪽 지원 ─
+    private void OnCollisionEnter(Collision c)
     {
-        
+        // 충돌체에서 첫 접점 사용
+        TryDealDamageFrom(c.collider, c.GetContact(0).point);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // 트리거일 땐 위치가 없으니 대략 중심 사용
+        TryDealDamageFrom(other, transform.position);
     }
 
     private void TryDealDamageFrom(Collider col, Vector3 hitPoint)
     {
         if (_isDead) return;
 
+        // 레이어 필터: 플레이어 총알 레이어만 통과
         if ((playerProjectile.value & (1 << col.gameObject.layer)) == 0)
-        {
             return;
-        }
 
+        // 탄에서 데미지 꺼내기 (HitSource가 탄/부모 어디에 붙어 있어도 커버)
         float damage = 0f;
         if (col.TryGetComponent<HitSource>(out var hs))
-        {
             damage = Mathf.Max(0f, hs.damage);
-        }
-        else
-        {
-            hs = col.GetComponentInParent<HitSource>();
-            if (hs != null)
-            {
-                damage = Mathf.Max(0f, hs.damage);
-            }
-        }
-        if (damage <= 0f)
-        {
-            return;
-        }
+        else if (col.GetComponentInParent<HitSource>() is HitSource hs2)
+            damage = Mathf.Max(0f, hs2.damage);
+
+        if (damage <= 0f) return;
+
         ApplyDamage(damage, hitPoint, col);
+
+        // 탄 파괴는 탄 스크립트(Projectile.cs)가 맡고 있다면 여기서 굳이 제거 안 해도 됨.
+        // 즉시 지우고 싶다면: Destroy(col.gameObject);
     }
-
-
 }
