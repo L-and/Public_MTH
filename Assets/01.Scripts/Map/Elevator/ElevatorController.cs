@@ -11,8 +11,6 @@ public class ElevatorController : MonoBehaviour
 
   private bool hasBeenTriggered = false;  // Trigger 작동 했는지 체크하는 함수
 
-  private const string GAMESCENE = "Game Scene";
-
   public GameObject StartPoint
   {
     get { return _startPoint; }
@@ -50,10 +48,10 @@ public class ElevatorController : MonoBehaviour
       _doorBlocker.SetActive(true);
       // 엘리베이터 문이 닫히는 함수 호출
       CloseElevatorDoor();
-      // 문이 다 닫히면 씬 로드 실행
-      GameManager.SceneEx.LoadScene(GAMESCENE, false);
       // 현재 층 수 올라감.
       GameManager.GameData.currentFloor++;
+      // 문이 다 닫히면 씬 로드 실행
+      GameManager.SceneEx.LoadScene(Constants.GAMESCENE, false);
     }
   }
 

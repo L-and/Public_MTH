@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 8568e984fca90b348b212f393286dc43
   m_currentHash:
     serializedVersion: 2
-    Hash: 5a3ea7c2dcb9eb6b13b47e569af93de2
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -103,8 +103,10 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - Map_Prototype
+    - Map_Sewer
     - Player
     - Enemy
+    - Elevator
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 40336b3589b6f7c4997e3287706c0a50, type: 2}

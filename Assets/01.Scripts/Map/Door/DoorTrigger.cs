@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class DoorTrigger : MonoBehaviour
 {
-  [SerializeField] DoorController doorController;
+  [Header("이 Collider에 Trigger 될 시 열릴 문 Object")]
+  [SerializeField] GameObject doorController;
 
   private bool isOpen = false;
 
@@ -12,7 +13,7 @@ public class DoorTrigger : MonoBehaviour
     {
       isOpen = true;
 
-      doorController.OpenDoor();
+      doorController.GetComponent<Door>().Open();
     }
   }
 
