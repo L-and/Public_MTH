@@ -14,33 +14,41 @@ public class MapManager : MonoBehaviour
   private GameObject _elevatorPrefab;
 
   private TextMeshProUGUI floorCountText; // 현재 층 표시하는 TextUI
-  private Transform _mapRoot;            // 맵 생성 부모
+  private Transform _mapRoot;             // 맵 생성 부모
   private Transform _attachPoint;         // 현재 진행 Anchor
 
-  private const string BOSS_ROOM = "Boss Room";
-  private const string NORMAL_ROOM = "Normal Room";
-  private const string ROOM = "Room_";
-  private const string CONNECTOR = "Connector_";
-  private const string ELEVATOR = "Elevator_";
+  private bool _isCheck;
+  private bool _isCount;
 
-  void Start()
+  async void Start()
   {
-    // 테스트용
-    StartCoroutine(Init());
+    if (!_isCount)
+    {
+      GameManager.GameData.currentFloor++;
+      _isCount = true;
+    }
+    
+    var curFloor = GameManager.GameData.currentFloor;
+    var thisFloor = GameManager.GameData.SewerMapMaxFloor();
+
+    // 현재층이 해당 컨셉 최대 층 보다 높을 경우
+    if (curFloor > thisFloor)
+      await GameManager.ResourceEx.LoadMapPrefabs(Constants.MAP_PROTOTYPE);
+
+    StartCoroutine(SetupMap());
   }
 
-  IEnumerator Init()
+  private IEnumerator SetupMap()
   {
-    // 테스트용
+    // GameScene에서 시작하기 위해 테스트용
     yield return new WaitForSeconds(3f);
 
-     // 1) 씬이 시작되면 맵 리소스 데이터 전체를 가져옴.
+    // 1) 씬이 시작되면 맵 리소스 데이터 전체를 가져옴.
     _mapPrefabs = GameManager.ResourceEx.mapPrefabDict;
-
-    // 2) 프리팹 초기화
+    // 2) 프리팹 초기화 
     _normalRoomPrefabs = new List<GameObject>();
     _connectorPrefab = null;
-    _elevatorPrefab = null;
+    _elevatorPrefab = GameManager.ResourceEx.elevatorPrefab;
     _mapRoot = new GameObject("Map").transform;
 
     // 3) 맵 리소스 데이터를 전체 순회 하면서 프리팹별로 나눔.
@@ -49,12 +57,10 @@ public class MapManager : MonoBehaviour
       string key = pair.Key;
       GameObject prefab = pair.Value;
 
-      if (key.StartsWith(ROOM))
+      if (key.StartsWith(Constants.ROOM))
         _normalRoomPrefabs.Add(prefab);
-      else if (key.StartsWith(CONNECTOR))
+      else if (key.StartsWith(Constants.CONNECTOR))
         _connectorPrefab = prefab;
-      else if (key.StartsWith(ELEVATOR))
-        _elevatorPrefab = prefab;
     }
 
     // 방 생성 함수 호출
@@ -68,7 +74,7 @@ public class MapManager : MonoBehaviour
   public void CreateFloor()
   {
     //TODO: 현재층이 보스층인지 아니면 일반층인지 구분
-    var thisFloorInfo = NORMAL_ROOM;
+    var thisFloorInfo = Constants.NORMAL_ROOM;
 
     // 2) 시작 엘리베이터 생성 (플레이어 시작 위치)
     var startElevator = Instantiate(_elevatorPrefab, _mapRoot);
@@ -80,10 +86,10 @@ public class MapManager : MonoBehaviour
 
     switch (thisFloorInfo)
     {
-      case NORMAL_ROOM:
+      case Constants.NORMAL_ROOM:
         NormalMapSetting();
         break;
-      case BOSS_ROOM:
+      case Constants.BOSS_ROOM:
         BossMapSetting();
         break;
     }
@@ -94,12 +100,19 @@ public class MapManager : MonoBehaviour
   {
     // 방 목록 섞기
     var candidates = new List<GameObject>(_normalRoomPrefabs);
+    var roomCount = GameManager.GameData.RoomCount();
     Shuffle(candidates);
 
     // 2) 방과 복도 생성
     int placed = 0;
-    while (placed < candidates.Count)
+    while (placed < roomCount)
     {
+      if (placed > candidates.Count && !_isCheck)
+      {
+        _isCheck = true;
+        Shuffle(candidates);
+      }
+        
       var nextPrefab = candidates[placed % candidates.Count];
       PlaceConnectorAndRoom(nextPrefab);
       placed++;
@@ -188,11 +201,27 @@ public class MapManager : MonoBehaviour
   // Anchor A가 속한 루트(rootToMove)를 움직여, Anchor A를 Anchor B에 정렬
   private void AlignAtoB(Transform rootToMove, Transform anchorToMove, Transform anchorTarget)
   {
-    // 위치 정렬
-    // anchorToMove의 월드 좌표를 기준으로 위치 오프셋 계산
+    // 1) 회전 정렬
+    // anchorToMove(예: 새 방의 입구)가 anchorTarget(예: 복도의 출구)을
+    // 정확히 마주보도록(즉, 180도 반대 방향) 목표 회전값을 계산합니다.
+    // (anchorTarget.forward의 반대 방향을 바라보도록 설정)
+    Quaternion targetRotation = Quaternion.LookRotation(-anchorTarget.forward, anchorTarget.up);
+
+    // rootToMove에 적용해야 할 '회전 차이값(delta)'을 계산합니다.
+    // (목표 회전값 * 현재 회전값의 역)
+    Quaternion rotationDelta = targetRotation * Quaternion.Inverse(anchorToMove.rotation);
+
+    // rootToMove(맵/복도 루트)를 회전시킵니다.
+    // (자식 객체인 anchorToMove도 따라서 회전합니다)
+    rootToMove.rotation = rotationDelta * rootToMove.rotation;
+
+    // 2) 위치 정렬
+    
+    // 이제 rootToMove가 올바른 방향을 바라보고 있으므로, 위치 오프셋을 계산합니다.
+    // (이 부분은 기존 코드가 맞습니다)
     Vector3 positionOffset = anchorTarget.position - anchorToMove.position;
 
-    // rootToMove 자체의 위치를 변경
+    // rootToMove 자체의 위치를 변경합니다.
     rootToMove.position += positionOffset;
   }
 
