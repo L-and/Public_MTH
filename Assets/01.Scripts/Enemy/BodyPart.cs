@@ -55,7 +55,8 @@ public class BodyPart : MonoBehaviour
             {
                 Debug.LogWarning($"⚠️ No contact point for {name}, fallback to transform.position");
             }
-            target.ApplyHit(src.damage, hitPoint, zone);
+            //target.ApplyHit(src.damage, hitPoint, zone);
+            target.ApplyHit(src.GetDamage(), hitPoint, zone);
             // Vector3 hitPoint = collision.contacts.Length > 0 ?
             //     collision.contacts[0].point : transform.position;
             // target.ApplyHit(src.damage, hitPoint, zone);

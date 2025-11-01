@@ -84,7 +84,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1134377031315798796
 Transform:
   m_ObjectHideFlags: 0
@@ -248,6 +248,7 @@ MonoBehaviour:
   animator: {fileID: 123129990713458841}
   speedParam: moveSpeed
   speedDamp: 0.1
+  meleeTrigger: Attack
   attackBehaviours:
   - {fileID: 3313090653099956408}
   attackFacingDot: 0.6
