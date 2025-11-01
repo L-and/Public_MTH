@@ -1,8 +1,10 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class StartOptionButton : MonoBehaviour
 {
     private StartOptionManager startOption;
+    public GameObject arrow;
     public enum Type { Weapon, Side, Emission };
 
     [SerializeField] private string textName = "";
@@ -19,6 +21,7 @@ public class StartOptionButton : MonoBehaviour
     public void OnPressed()
     {
         startOption.SetText(textName, textFeature);
+        arrow.transform.DOMoveX(transform.position.x, 0.3f);
         switch(type)
         {
             case Type.Weapon:

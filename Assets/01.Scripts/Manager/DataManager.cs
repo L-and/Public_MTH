@@ -42,6 +42,8 @@ public class DataManager : MonoBehaviour
   public int RoomCount() { return _roomCount; } 
   public int BossFloor() { return _bossFloor; }
   public int CurrentWeaponID() { return _currentWeaponId; }
+  public int CurrentSideWeaponID() { return _currentSideWeaponId; }
+  public int CurrentEmissionID() { return _currentEmissionId; }
   public void SetCurrentWeaponID(int value) { _currentWeaponId = value; }
   public void SetCurrentSideWeaponID(int value) { _currentSideWeaponId = value; }
   public void SetCurrentEmissionID(int value) { _currentEmissionId = value; }
