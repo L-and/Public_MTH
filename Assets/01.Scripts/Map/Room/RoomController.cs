@@ -6,11 +6,8 @@ using UnityEngine;
 public class RoomController : MonoBehaviour
 {
   [Header("방에 있는 문")]
-  [SerializeField] private DoorController entryDoor;
-  [SerializeField] private DoorController exitDoor;
-
-  [Header("방 안에 들어왔는지 체크하는 Collider")]
-  [SerializeField] private Collider entryTrigger;
+  [SerializeField] private GameObject entryDoor;
+  [SerializeField] private GameObject exitDoor;
 
   [Header("방에 있는 스포너 리스트")]
   [SerializeField] private List<EnemySpawner> Spawners;
@@ -25,10 +22,10 @@ public class RoomController : MonoBehaviour
     if (!isCleared && other.CompareTag("Player"))
     {
       // 문이 있으면 닫음.
-      if (entryDoor != null) entryDoor.CloseDoor();
+      CloseAllDoor();
 
-      // 한번 들어왔으니 더이상 방 안에 Trigger는 필요 없으므로 비활성화
-      entryTrigger.enabled = false;
+      // 한번 들어왔으니 더이상 방 안 Trigger는 필요 없으므로 비활성화
+      GetComponent<BoxCollider>().enabled = false;
 
       // 몬스터 스포너 활성화 함수 호출
       ActivateSpawners();
@@ -56,7 +53,7 @@ public class RoomController : MonoBehaviour
       spawner.TrySpawnEnemy();
     }
   }
-  
+
   // 몬스터가 죽으면 해당 함수 호출 (EnemyDamage)
   public void NotifyEnemyDied()
   {
@@ -69,9 +66,19 @@ public class RoomController : MonoBehaviour
     Debug.Log($"[{gameObject.name}] 몬스터 처치. ({killedEnemysCount} / {totalEnemysToSpawn})");
 
     // 모든 몬스터 처치했는지 체크
-    if(killedEnemysCount >= totalEnemysToSpawn)
+    if (killedEnemysCount >= totalEnemysToSpawn)
     {
       OpenAllDoor();
+    }
+  }
+  
+  // 모든 문이 닫히는 함수
+  private void CloseAllDoor()
+  {
+    if (entryDoor != null && exitDoor != null)
+    {
+      entryDoor.GetComponent<Door>().Close();
+      exitDoor.GetComponent<Door>().Close();
     }
   }
   
@@ -81,8 +88,8 @@ public class RoomController : MonoBehaviour
     // 현재 방이 클리어 되었으니 true
     isCleared = true;
 
-    entryDoor.OpenDoor();
-    exitDoor.OpenDoor();
+    entryDoor.GetComponent<Door>().Open();
+    exitDoor.GetComponent<Door>().Open();
 
     Debug.Log($"[{gameObject.name}] 방 클리어! 문이 열립니다.");
   }
