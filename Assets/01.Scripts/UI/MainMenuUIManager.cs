@@ -9,6 +9,7 @@ public class MainMenuUIManager : MonoBehaviour
   public TextMeshProUGUI title;
   public RectTransform buttons;
   public GameObject options;
+    public GameObject startOption;
   // Start is called once before the first execution of Update after the MonoBehaviour is created
 
   private void OnEnable()
@@ -38,8 +39,20 @@ public class MainMenuUIManager : MonoBehaviour
     ButtonsOn();
     options.SetActive(false);
   }
+    public void OpenStartOption()
+    {
+        ButtonsOff();
+        startOption.SetActive(true);
+    }
+    public void CloseStartOption()
+    {
+        ButtonsOn();
+        startOption.SetActive(false);
+    }
 
-  public void Quit()
+
+
+    public void Quit()
   {
     Application.Quit();
   }

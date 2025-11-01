@@ -24,12 +24,25 @@ public class DataManager : MonoBehaviour
   [Header("보스(미제작)가 나오는 층")]
   [SerializeField] private int _bossFloor = 4;
 
-  // 현재 층 컨셉 체크 변수
-  public string thisMapConcept;
+  [Header("현재 주무기")]
+  [SerializeField] private int _currentWeaponId = 0;
+
+  [Header("현재 보조무기")]
+  [SerializeField] private int _currentSideWeaponId = 0;
+
+  [Header("현재 방출")]
+  [SerializeField] private int _currentEmissionId = 0;
+
+    // 현재 층 컨셉 체크 변수
+    public string thisMapConcept;
 
   // 프로퍼티
   public int SewerMapMaxFloor() { return _sewerMapMaxFloor; }
   public int PrototypeMapMaxFloor() { return _prototypeMapMaxFloor; }
   public int RoomCount() { return _roomCount; } 
   public int BossFloor() { return _bossFloor; }
+  public int CurrentWeaponID() { return _currentWeaponId; }
+  public void SetCurrentWeaponID(int value) { _currentWeaponId = value; }
+  public void SetCurrentSideWeaponID(int value) { _currentSideWeaponId = value; }
+  public void SetCurrentEmissionID(int value) { _currentEmissionId = value; }
 }
