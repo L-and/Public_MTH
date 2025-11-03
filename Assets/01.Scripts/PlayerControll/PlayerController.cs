@@ -143,9 +143,16 @@ namespace _01.Scripts.PlayerControll
         
         # region 방출/보조무기 관련 필드
 
-        [SerializeField] public PlayerEmission emission;
-        public EmissionAbilityData CurrentEmission { get; private set; }
-        
+        [SerializeField] public PlayerEmission playerEmission;
+
+        public EmissionAbilityData CurrentEmission
+        {
+            get
+            {
+                return playerEmission.data;
+            }
+        }
+
         [SerializeField] public PlayerSubWeapon playerSubWeapon;
         
         # endregion
@@ -211,7 +218,8 @@ namespace _01.Scripts.PlayerControll
         {
             Stat = stat;
 
-            // 컴포넌트 캐싱
+            // 보조무기, 방출 컴포넌트 캐싱
+            playerEmission = GetComponent<PlayerEmission>();
             playerSubWeapon = GetComponent<PlayerSubWeapon>();
             
             // 무기, 보조무기, 방출 초기설정 진행
@@ -248,7 +256,7 @@ namespace _01.Scripts.PlayerControll
             playerSubWeapon.SubWeaponData = subWeaponData;
             Debug.Log($"[보조무기] {subWeaponData.name} 장착됨");
             
-            playerSubWeapon.InstantiateSubWeapon(this);
+            playerSubWeapon.InitializeSubWeapon(this);
         }
 
         private void SetupEmission(EmissionAbilityData emissionData)
@@ -258,8 +266,10 @@ namespace _01.Scripts.PlayerControll
                 Debug.LogWarning("방출이 선택되지 않았습니다!");
                 return;
             }
-            CurrentEmission = emissionData;
-            Debug.Log($"Emission {emissionData.abilityName} equipped.");
+            playerEmission.data = emissionData;
+            Debug.Log($"[방출] {emissionData.abilityName} 장착됨");
+
+            playerEmission.InitializeEmission(this);
         }
 
 

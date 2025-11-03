@@ -15,5 +15,8 @@ namespace _01.Scripts.Emission
         [Header("동작방식 정의")]
         [Tooltip("능력이 동작하는 방식을 정의하는 EmissionBehavior 에셋을 연결")]
         public EmissionBehavior behavior;
+        
+        [Header("프리팹")] 
+        public GameObject prefab;
     }
 }

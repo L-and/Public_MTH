@@ -30,18 +30,25 @@ namespace _01.Scripts.SubWeapon
         [SerializeField] private bool isCooldown;
 
         /// <summary>
-        /// 선택된 보조무기SO의 프리팹 게임오브젝트를 생성하는 메서드
+        /// 선택된 보조무기SO를 사용해 초기설정을 진행하는 메서드
         /// 게임실행 후 1회만 호출해야 함
         /// </summary>
-        public void InstantiateSubWeapon(PlayerController playerController)
+        public void InitializeSubWeapon(PlayerController playerController)
         {
             this.playerController = playerController;
             playerCamera = playerController.PlayerCamera;
+
+            // 보조무기 모델 장착위치 설정
+            if (equipPosition == null)
+            {
+                equipPosition = GameObject.FindGameObjectWithTag("LeftHand Position").transform;
+            }
             
-            // 게임오브젝트 생성, 부모설정
+            // 보조무기 모델 생성 및 비활성화 (사용할때만 활성화하는 식으로 사용)
             _subWeaponGO = Instantiate(data.prefab, equipPosition.position, equipPosition.rotation);
             _subWeaponGO.transform.parent = equipPosition;
-
+            _subWeaponGO.SetActive(false);
+            
             // Collider이벤트처리가 필요한 보조무기라면 이벤트를 받기위해 PlayerSubWeapon 을 참조하도록 할당
             if (_subWeaponGO.TryGetComponent<SubWeaponColliderHandler>(out var colliderHandler))
             {
