@@ -4,6 +4,12 @@ using UnityEngine;
 [Serializable]
 public class Stat
 {
+    public Stat(Stat other)
+    {
+        this.maxValue = other.maxValue;
+        this.value = other.value;
+    }
+
     [SerializeField] public float maxValue;
     [SerializeField] private float value;
 

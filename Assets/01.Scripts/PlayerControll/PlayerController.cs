@@ -17,7 +17,6 @@ namespace _01.Scripts.PlayerControll
     /// 컴포넌트에 직접적인 처리를 총괄하는 스크립트
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(PlayerStatus))]
     public class PlayerController : MonoBehaviour, IDamageableZone
     {
         
@@ -26,7 +25,7 @@ namespace _01.Scripts.PlayerControll
         /// <summary>
         /// 플레이어의 속성정보 컴포넌트 프로퍼티
         /// </summary>
-        public PlayerStatus Status { get; private set; }
+        public PlayerStat Stat { get; private set; }
         
         // 상태 머신 참조
         public MovementStateMachine MovementFSM { get; private set; }
@@ -157,7 +156,6 @@ namespace _01.Scripts.PlayerControll
         
         private void Awake()
         {
-            Status = GetComponent<PlayerStatus>();
             // 컴포넌트 초기화
             CapsuleCollider = GetComponent<CapsuleCollider>();
             PlayerInput = GetComponent<PlayerInput>();
@@ -174,6 +172,9 @@ namespace _01.Scripts.PlayerControll
         #region Unity Functions
         private void Start()
         {
+            Debug.Log($"{GameManager.PlayerManager.PlayerStat}");
+            Stat = GameManager.PlayerManager.PlayerStat;
+            
             // 각 상태 머신의 초기 상태 설정
             MovementFSM.Initialize(MovementFSM.IdleState);
             SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
@@ -196,13 +197,13 @@ namespace _01.Scripts.PlayerControll
 
             if (Input.GetKeyDown(KeyCode.P))
             {
-                GameManager.PlayerManager.PlayerStatus.bulletDamage = 20;
+                GameManager.PlayerManager.PlayerStat.bulletDamage = 20;
             }
             
             // 스테미너 회복
-            if (Status.stamina.Value < Status.stamina.maxValue)
+            if (Stat.stamina.Value < Stat.stamina.maxValue)
             {
-                Status.stamina.Value += staminaRegenAmount * Time.deltaTime;
+                Stat.stamina.Value += staminaRegenAmount * Time.deltaTime;
             }
             
             // 각 상태 머신의 Update 로직 실행
@@ -396,9 +397,9 @@ namespace _01.Scripts.PlayerControll
             Vector3 flatVel = new Vector3(Rb.linearVelocity.x, 0f, Rb.linearVelocity.z);
             
             // 속도제한 적용
-            if (flatVel.magnitude > Status.CurrentMaxSpeed)
+            if (flatVel.magnitude > Stat.CurrentMaxSpeed)
             {
-                Vector3 limitedVel = flatVel.normalized * Status.CurrentMaxSpeed;
+                Vector3 limitedVel = flatVel.normalized * Stat.CurrentMaxSpeed;
                 Rb.linearVelocity = new Vector3(limitedVel.x, Rb.linearVelocity.y, limitedVel.z);
             }
         }
@@ -408,7 +409,7 @@ namespace _01.Scripts.PlayerControll
             if (!IsGrounded) return;
             
             Debug.Log("점프성공!");
-            Rb.AddForce(transform.up * Status.CurrentJumpForce, ForceMode.Impulse);
+            Rb.AddForce(transform.up * Stat.CurrentJumpForce, ForceMode.Impulse);
         }
 
         public void Dash()
@@ -418,13 +419,13 @@ namespace _01.Scripts.PlayerControll
                 transform.forward : 
                 MoveDirection;
         
-            var velocity = dir * Status.dashPower;
+            var velocity = dir * Stat.dashPower;
             Rb.AddForce(velocity, ForceMode.Impulse);
         }
 
         public void Sliding()
         {
-            var slidingForce = Status.slidingPower;
+            var slidingForce = Stat.slidingPower;
             var velocity = MoveDirection * slidingForce; 
             Rb.AddForce(velocity, ForceMode.Force);
             
@@ -441,26 +442,26 @@ namespace _01.Scripts.PlayerControll
         
         public void ApplyDamage(float damage)
         {
-            if (Status.IsInvincible)
+            if (Stat.IsInvincible)
             {
                 // TODO 무적상태에서 피격시 스타일리쉬액션 연동코드 작성
                 return;
             }
             Debug.Log("플레이어 피격당함");
-            Status.hp.Value -= damage;
+            Stat.hp.Value -= damage;
 
-            if (Status.hp.Value <= 0f)
+            if (Stat.hp.Value <= 0f)
             {
                 Debug.Log("## 플레이어 사망 ##");
                 // TODO 플레이어 사망로직 추가
             }
         }
 
-        public bool IsDead => Status.hp.Value <= 0f;
+        public bool IsDead => Stat.hp.Value <= 0f;
         public void ApplyHit(float rawDamage, Vector3 hitPoint, HitZones zone)
         {
             Debug.Log("공격당함!");
-            Status.hp.Value -= rawDamage;
+            Stat.hp.Value -= rawDamage;
 
             if (IsDead)
             {

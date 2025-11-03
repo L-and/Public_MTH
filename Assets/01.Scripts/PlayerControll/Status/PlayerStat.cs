@@ -4,12 +4,34 @@ using UnityEngine;
 namespace _01.Scripts.PlayerControll.Status
 {
     /// <summary>
-    /// 플레이어의 모든 스탯데이터와 관련 로직을 처리하는 스크립트입니다.
+    /// 플레이어의 스탯데이터를 저장하고 값을 조작하는 스크립트입니다.
     /// </summary>
-    public class PlayerStatus : MonoBehaviour
+    [Serializable]
+    public class PlayerStat
     {
+        // 복사 생성자
+        public PlayerStat(PlayerStat other)
+        {
+            this.hp = new Stat(other.hp);
+            this.stamina = new Stat(other.stamina);
+            this.overheat = new Stat(other.overheat);
+            this.bulletDamage = other.bulletDamage;
+            this.maxSpeed = other.maxSpeed;
+            this.dashMaxSpeed = other.dashMaxSpeed;
+            this.slidingMaxSpeed = other.slidingMaxSpeed;
+            this.jumpMaxSpeed = other.jumpMaxSpeed;
+            this.baseAcc = other.baseAcc;
+            this.airAcc = other.airAcc;
+            this.slidingAcc = other.slidingAcc;
+            this.dashPower = other.dashPower;
+            this.slidingPower = other.slidingPower;
+            this.dashDurationTime = other.dashDurationTime;
+            this.mouseSensitivity = other.mouseSensitivity;
+            this.jumpForce = other.jumpForce;
+        }
+        
         // PlayerController 참조
-        private PlayerController _pc;
+        public PlayerController pc;
 
         [Header("체력/스테미너/과열")] 
         [SerializeField] public Stat hp;
@@ -30,15 +52,15 @@ namespace _01.Scripts.PlayerControll.Status
                 {
                     get
                     {
-                        if (_pc.MovementFSM.CurrentState ==
-                            _pc.MovementFSM.DashState)
+                        if (pc.MovementFSM.CurrentState ==
+                            pc.MovementFSM.DashState)
                             return dashMaxSpeed;
                         else if (
-                            _pc.MovementFSM.CurrentState == 
-                            _pc.MovementFSM.SlidingState)
+                            pc.MovementFSM.CurrentState == 
+                            pc.MovementFSM.SlidingState)
                             return slidingMaxSpeed;
-                        else if (_pc.MovementFSM.CurrentState ==
-                                 _pc.MovementFSM.JumpState)
+                        else if (pc.MovementFSM.CurrentState ==
+                                 pc.MovementFSM.JumpState)
                             return jumpMaxSpeed;
                         else
                             return maxSpeed;
@@ -46,7 +68,7 @@ namespace _01.Scripts.PlayerControll.Status
                 }
         
         [Header("가속도(이동조작 반응성)")]
-        [SerializeField] private float baseAcc = 10f;
+        [SerializeField] private float baseAcc = 100f;
         [SerializeField] private float airAcc = 5f;
         [SerializeField] private float slidingAcc = 5f;
 
@@ -59,9 +81,9 @@ namespace _01.Scripts.PlayerControll.Status
         {
             get
             {
-                if (_pc.MovementFSM.CurrentState == _pc.MovementFSM.JumpState)
+                if (pc.MovementFSM.CurrentState == pc.MovementFSM.JumpState)
                     return airAcc;
-                if (_pc.MovementFSM.CurrentState == _pc.MovementFSM.SlidingState)
+                if (pc.MovementFSM.CurrentState == pc.MovementFSM.SlidingState)
                     return slidingAcc;
 
                 return baseAcc;
@@ -83,8 +105,8 @@ namespace _01.Scripts.PlayerControll.Status
         {
             get
             {
-                return (_pc.MovementFSM.CurrentState
-                        == _pc.MovementFSM.DashState);
+                return (pc.MovementFSM.CurrentState
+                        == pc.MovementFSM.DashState);
             }
         }
 
@@ -102,25 +124,28 @@ namespace _01.Scripts.PlayerControll.Status
 
         public float CurrentJumpForce => jumpForce;
 
-        # region Unity Methods
+        # region Methods
 
-        private void Awake()
+        /// <summary>
+        /// 필드 초기화 메서드
+        /// </summary>
+        private void Initialize()
         {
-            _pc = GetComponent<PlayerController>();
-            
             // 상태값 초기화
             hp.Initialize();
             stamina.Initialize(1);
             overheat.Initialize();
             overheat.Value = 0;
         }
-
-        # endregion
-
+        
+        
         public void AddOverHeat(float amount)
         {
             overheat.Value += amount;
             overheat.Value = Mathf.Clamp(overheat.Value, 0, overheat.maxValue);
         }
+        
+        # endregion
+        
     }
 }

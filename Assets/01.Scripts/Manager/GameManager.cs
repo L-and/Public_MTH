@@ -47,7 +47,7 @@ public class GameManager : Singleton<GameManager>
     _sceneManagerEx = gameObject.GetComponent<SceneManagerEx>();
     _resourceManager = gameObject.GetComponent<ResourceManager>();
     _dataManager = gameObject.GetComponent<DataManager>();
-    _playerManager = gameObject.AddComponent<PlayerManager>();
+    _playerManager = gameObject.GetComponent<PlayerManager>();
     #endregion
   }
 }

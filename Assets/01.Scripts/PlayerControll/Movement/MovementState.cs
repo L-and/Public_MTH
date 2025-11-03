@@ -15,7 +15,7 @@ public abstract class MovementState : IState
     protected bool CanIdle => controller.MoveInput.magnitude <= 0.1f && controller.IsGrounded;
     protected bool CanMove => controller.MoveInput.magnitude > 0.1f && controller.IsGrounded;
     protected bool CanJump => controller.PlayerInput.actions["Jump"].WasPressedThisFrame() && controller.IsGrounded;
-    protected bool CanDash => controller.PlayerInput.actions["Dash"].WasPressedThisFrame() && controller.Status.stamina.TryDecrease(controller.DashCost);
+    protected bool CanDash => controller.PlayerInput.actions["Dash"].WasPressedThisFrame() && controller.Stat.stamina.TryDecrease(controller.DashCost);
     protected bool CanSlide => controller.PlayerInput.actions["Sliding"].IsPressed() && controller.IsGrounded;
     
     # endregion
@@ -32,7 +32,7 @@ public abstract class MovementState : IState
 
     public virtual void OnFixedUpdate()
     {
-        controller.MovePlayer(controller.Status.CurrentAcceleration);
+        controller.MovePlayer(controller.Stat.CurrentAcceleration);
         controller.LimitSpeed();
     }
     public virtual void OnLateUpdate() { }

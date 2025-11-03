@@ -112,7 +112,7 @@ public class MeleeAttack : MonoBehaviour, IEnemyAttack
             return;
         }
 
-        var ps = other.GetComponentInParent<PlayerStatus>();
+        var ps = other.GetComponentInParent<PlayerStat>();
         if (ps == null)
         {
             return;

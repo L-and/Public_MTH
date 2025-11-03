@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec89183edb3643d9bc5138f68bcd1042, type: 3}
+  m_Name: Default PlayerStat
+  m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.PlayerControll.PlayerStatusSO
+  playerStatus:
+    pc: {fileID: 0}
+    hp:
+      maxValue: 0
+      value: 0
+    stamina:
+      maxValue: 0
+      value: 0
+    overheat:
+      maxValue: 0
+      value: 0
+    bulletDamage: 10
+    maxSpeed: 10
+    dashMaxSpeed: 15
+    slidingMaxSpeed: 13
+    jumpMaxSpeed: 15
+    baseAcc: 100
+    airAcc: 5
+    slidingAcc: 5
+    dashPower: 30
+    slidingPower: 100
+    dashDurationTime: 0.5
+    mouseSensitivity: 0.5
+    jumpForce: 10
