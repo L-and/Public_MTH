@@ -4,18 +4,21 @@ using UnityEngine;
 
 namespace _01.Scripts.Emission
 {
-    [RequireComponent(typeof(PlayerStatus)), Serializable]
     public class PlayerEmission : MonoBehaviour
     {
         [Header("방출공격 위치")] public Transform firePosition;
         
-        public PlayerStatus Status { get; private set; }
+        public PlayerStat Stat { get; private set; }
         public Transform PlayerCamera { get; private set; }
         
         private void Awake()
         {
-            Status = GetComponent<PlayerStatus>();
             PlayerCamera = Camera.main.transform;
+        }
+
+        private void Start()
+        {
+            Stat = GameManager.PlayerManager.PlayerStat;
         }
 
         /// <summary>

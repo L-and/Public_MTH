@@ -33,9 +33,11 @@ namespace _01.Scripts.SubWeapon
         /// 선택된 보조무기SO의 프리팹 게임오브젝트를 생성하는 메서드
         /// 게임실행 후 1회만 호출해야 함
         /// </summary>
-        public void InstantiateSubWeapon()
+        public void InstantiateSubWeapon(PlayerController playerController)
         {
-            playerController = GetComponent<PlayerController>();
+            this.playerController = playerController;
+            playerCamera = playerController.PlayerCamera;
+            
             // 게임오브젝트 생성, 부모설정
             _subWeaponGO = Instantiate(data.prefab, equipPosition.position, equipPosition.rotation);
             _subWeaponGO.transform.parent = equipPosition;
@@ -54,8 +56,11 @@ namespace _01.Scripts.SubWeapon
         /// </summary>
         public void ExecuteSubWeapon()
         {
+            // 쿨타임 검사
             if (isCooldown) return;
             
+            // 보조무기 사용 애니메이션 실행
+            playerController.CharacterAnimController.SubWeaponAnimation();
             _subWeaponGO.SetActive(true);
             
             Invoke(nameof(EndUsingSubweapon), data.useDuration);

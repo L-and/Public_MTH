@@ -5,6 +5,7 @@ using System.Globalization;
 using _01.Scripts.Emission;
 using _01.Scripts.PlayerControll.Animation;
 using _01.Scripts.PlayerControll.Status;
+using _01.Scripts.ScriptableObjects.Loadout;
 using _01.Scripts.SubWeapon;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,16 +19,52 @@ namespace _01.Scripts.PlayerControll
     /// 컴포넌트에 직접적인 처리를 총괄하는 스크립트
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(PlayerStatus))]
     public class PlayerController : MonoBehaviour, IDamageableZone
     {
         
-        # region 컴포넌트/클래스 참조 프로퍼티
+        # region 플레이어 스탯 필드/프로퍼티
         
         /// <summary>
         /// 플레이어의 속성정보 컴포넌트 프로퍼티
         /// </summary>
-        public PlayerStatus Status { get; private set; }
+        public PlayerStat Stat { get; private set; }
+
+        public float CurrentMaxSpeed
+        {
+            get
+            {
+                if (MovementFSM.CurrentState is DashState)
+                    return Stat.dashMaxSpeed;
+                if (MovementFSM.CurrentState is SlidingState)
+                    return Stat.slidingMaxSpeed;
+                if (MovementFSM.CurrentState is JumpState)
+                    return Stat.jumpMaxSpeed;
+                
+                return Stat.maxSpeed;
+            }
+        }
+
+        public float CurrentAcceleration
+        {
+            get
+            {
+                if (MovementFSM.CurrentState is JumpState)
+                    return Stat.AirAcc;
+                if (MovementFSM.CurrentState is SlidingState)
+                    return Stat.SlidingAcc;
+
+                return Stat.BaseAcc;
+            }
+        }
+        
+        /// <summary>
+        /// 무적상태를 판별하는 프로퍼티
+        /// </summary>
+        public bool IsInvincible => MovementFSM.CurrentState is DashState;
+        
+        # endregion
+        
+        # region 컴포넌트/클래스 참조 프로퍼티
         
         // 상태 머신 참조
         public MovementStateMachine MovementFSM { get; private set; }
@@ -104,20 +141,14 @@ namespace _01.Scripts.PlayerControll
         
         # endregion
         
-        # region 방출관련 필드
-        // TODO 어디서 데이터를 관리할지 고민 후 수정해야 함 (현재 테스트용 코드)
+        # region 방출/보조무기 관련 필드
+
         [SerializeField] public PlayerEmission emission;
-        [SerializeField] public EmissionAbilityData emissiondata;
+        public EmissionAbilityData CurrentEmission { get; private set; }
+        
+        [SerializeField] public PlayerSubWeapon playerSubWeapon;
         
         # endregion
-        
-        
-        // TODO 어디서 데이터를 관리할지 고민 후 수정해야 함 (현재 테스트용 코드)
-        # region 보조무기 관련 필드
-
-        [SerializeField] public PlayerSubWeapon subWeapon;
-        
-        #endregion
         
         # region 디버그용 필드/프로퍼티
         
@@ -129,8 +160,7 @@ namespace _01.Scripts.PlayerControll
         {
             get
             {
-                string currState;
-                return MovementFSM.CurrentState.ToString();
+                return MovementFSM.CurrentState?.ToString();
             }
         }
         
@@ -166,34 +196,74 @@ namespace _01.Scripts.PlayerControll
         
         private void Awake()
         {
-            Status = GetComponent<PlayerStatus>();
             // 컴포넌트 초기화
             CapsuleCollider = GetComponent<CapsuleCollider>();
             PlayerInput = GetComponent<PlayerInput>();
             Rb = GetComponent<Rigidbody>();
             PlayerCamera = Camera.main.transform;
             CharacterAnimController = transform.GetComponentInChildren<CharacterAnimationController>();
+        }
 
+        /// <summary>
+        /// PlayerManager에 의해 호출되어 플레이어의 스탯과 장비를 설정합니다.
+        /// </summary>
+        public void Initialize(PlayerStat stat, PlayerLoadoutSO loadout) // Overload for PlayerManager
+        {
+            Stat = stat;
+
+            // 컴포넌트 캐싱
+            playerSubWeapon = GetComponent<PlayerSubWeapon>();
+            
+            // 무기, 보조무기, 방출 초기설정 진행
+            
+            // Removed: SetupWeapon(loadout.SelectedWeapon);
+            SetupEmission(loadout.selectedEmission);
+            SetupSubWeapon(loadout.selectedSubWeapon);
+                
             // 상태 머신 생성
             MovementFSM = new MovementStateMachine(this);
             SubWeaponFSM = new SubWeaponStateMachine(this);
             EmissionFSM = new EmissionStateMachine(this);
-        }
-
-        #region Unity Functions
-        private void Start()
-        {
-            // 보조무기 참조필드 할당
-            subWeapon.playerCamera = PlayerCamera;
             
             // 각 상태 머신의 초기 상태 설정
             MovementFSM.Initialize(MovementFSM.IdleState);
             SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
             EmissionFSM.Initialize(EmissionFSM.ReadyState);
-            
-            // 보조무기 초기설정(생성, 쿨타임 설정)
-            subWeapon.InstantiateSubWeapon();
         }
+
+        // Removed: private void SetupWeapon(WeaponDataSO weaponData) { ... }
+        
+        /// <summary>
+        /// 보조무기 초기설정 메서드
+        /// </summary>
+        /// <param name="subWeaponData"></param>
+        private void SetupSubWeapon(SubWeaponData subWeaponData)
+        {
+            if (subWeaponData == null)
+            {
+                Debug.LogWarning("보조무기가 선택되지 않았습니다!");
+                return;
+            }
+
+            playerSubWeapon.SubWeaponData = subWeaponData;
+            Debug.Log($"[보조무기] {subWeaponData.name} 장착됨");
+            
+            playerSubWeapon.InstantiateSubWeapon(this);
+        }
+
+        private void SetupEmission(EmissionAbilityData emissionData)
+        {
+            if (emissionData == null)
+            {
+                Debug.LogWarning("방출이 선택되지 않았습니다!");
+                return;
+            }
+            CurrentEmission = emissionData;
+            Debug.Log($"Emission {emissionData.abilityName} equipped.");
+        }
+
+
+        #region Unity Functions
 
         private void Update()
         {
@@ -208,19 +278,23 @@ namespace _01.Scripts.PlayerControll
                     Fire(); // 사격
                 }
             }
-            
-            // 스테미너 회복
-            if (Status.stamina.Value < Status.stamina.maxValue)
-            {
-                Status.stamina.Value += staminaRegenAmount * Time.deltaTime;
-            }
-            
-            // TODO 추후 수정
-            // 보조무기 동작 테스트
+
+            // TODO 제거필요 (보조무기 사용 테스트코드)
             if (Input.GetKeyDown(KeyCode.F))
             {
-                subWeapon.ExecuteSubWeapon();
-                CharacterAnimController.SubWeaponAnimation();
+                playerSubWeapon.ExecuteSubWeapon();
+            }
+            
+            // TODO 제거필요 (무기데미지 변경 테스트코드)
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                GameManager.PlayerManager.PlayerStat.bulletDamage = 20;
+            }
+            
+            // 스테미너 회복
+            if (Stat.stamina.Value < Stat.stamina.maxValue)
+            {
+                Stat.stamina.Value += staminaRegenAmount * Time.deltaTime;
             }
             
             // 각 상태 머신의 Update 로직 실행
@@ -414,9 +488,9 @@ namespace _01.Scripts.PlayerControll
             Vector3 flatVel = new Vector3(Rb.linearVelocity.x, 0f, Rb.linearVelocity.z);
             
             // 속도제한 적용
-            if (flatVel.magnitude > Status.CurrentMaxSpeed)
+            if (flatVel.magnitude > CurrentMaxSpeed)
             {
-                Vector3 limitedVel = flatVel.normalized * Status.CurrentMaxSpeed;
+                Vector3 limitedVel = flatVel.normalized * CurrentMaxSpeed;
                 Rb.linearVelocity = new Vector3(limitedVel.x, Rb.linearVelocity.y, limitedVel.z);
             }
         }
@@ -425,7 +499,8 @@ namespace _01.Scripts.PlayerControll
         {
             if (!IsGrounded) return;
             
-            Rb.AddForce(transform.up * Status.CurrentJumpForce, ForceMode.Impulse);
+            Debug.Log("점프성공!");
+            Rb.AddForce(transform.up * Stat.CurrentJumpForce, ForceMode.Impulse);
         }
 
         public void Dash()
@@ -435,13 +510,13 @@ namespace _01.Scripts.PlayerControll
                 transform.forward : 
                 MoveDirection;
         
-            var velocity = dir * Status.dashPower;
+            var velocity = dir * Stat.dashPower;
             Rb.AddForce(velocity, ForceMode.Impulse);
         }
 
         public void Sliding()
         {
-            var slidingForce = Status.slidingPower;
+            var slidingForce = Stat.slidingPower;
             var velocity = MoveDirection * slidingForce; 
             Rb.AddForce(velocity, ForceMode.Force);
             
@@ -453,31 +528,32 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         public void FireEmission()
         {
-            emission.ExecuteEmission(emissiondata);
+            // emission.ExecuteEmission(CurrentEmission);
+            // TODO: PlayerEmission.ExecuteEmission(EmissionAbilityData data)를 호출하도록 수정 필요
         }
         
         public void ApplyDamage(float damage)
         {
-            if (Status.IsInvincible)
+            if (IsInvincible)
             {
                 // TODO 무적상태에서 피격시 스타일리쉬액션 연동코드 작성
                 return;
             }
             Debug.Log("플레이어 피격당함");
-            Status.hp.Value -= damage;
+            Stat.hp.Value -= damage;
 
-            if (Status.hp.Value <= 0f)
+            if (Stat.hp.Value <= 0f)
             {
                 Debug.Log("## 플레이어 사망 ##");
                 // TODO 플레이어 사망로직 추가
             }
         }
 
-        public bool IsDead => Status.hp.Value <= 0f;
+        public bool IsDead => Stat.hp.Value <= 0f;
         public void ApplyHit(float rawDamage, Vector3 hitPoint, HitZones zone)
         {
             Debug.Log("공격당함!");
-            Status.hp.Value -= rawDamage;
+            Stat.hp.Value -= rawDamage;
 
             if (IsDead)
             {

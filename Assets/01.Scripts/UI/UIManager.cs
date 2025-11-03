@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
     Color hpBarFillColor;
     Color ohBarFillColor;
     Color stmBarFillColor;
-    PlayerStatus playerStatus;
+    PlayerStat _playerStat;
     bool ohFulled = false;
     bool stmFulled = false;
     bool isGameover = false;
@@ -41,7 +41,7 @@ public class UIManager : MonoBehaviour
         StartCoroutine(ShowLevelInfoCoroutine());
         if (GameObject.FindWithTag("Player") != null)
         {
-            playerStatus = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
+            _playerStat = GameObject.FindWithTag("Player").GetComponent<PlayerStat>();
             UpdateStatus();
         }
     }
@@ -51,9 +51,9 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            if (playerStatus.stamina.Value >= 1)
+            if (_playerStat.stamina.Value >= 1)
             {
-                SetStm(playerStatus.stamina.Value - 1);
+                SetStm(_playerStat.stamina.Value - 1);
             }
         }
 
@@ -66,42 +66,42 @@ public class UIManager : MonoBehaviour
             Pause();
         }
 
-        if (playerStatus != null)
+        if (_playerStat != null)
         {   
-            if (playerStatus.stamina.Value < playerStatus.stamina.maxValue) SetStm(playerStatus.stamina.Value + 0.5f * Time.deltaTime);
+            if (_playerStat.stamina.Value < _playerStat.stamina.maxValue) SetStm(_playerStat.stamina.Value + 0.5f * Time.deltaTime);
             UpdateStatus();
         }
     }
     #region METHOD
     public void SetHp(float value)
     {
-        if (value > playerStatus.hp.Value)
+        if (value > _playerStat.hp.Value)
         {
             DOTween.Kill(hpBarFill);
             hpBarFill.color = hpBarFillColor;
             hpBarFill.DOColor(Color.green, 0.2f).SetLoops(2, LoopType.Yoyo);
         }
-        playerStatus.hp.Value = Mathf.Clamp(value, 0, playerStatus.hp.maxValue);
-        hpBar.maxValue = playerStatus.hp.maxValue;
-        hpBar.value = playerStatus.hp.Value;
+        _playerStat.hp.Value = Mathf.Clamp(value, 0, _playerStat.hp.maxValue);
+        hpBar.maxValue = _playerStat.hp.maxValue;
+        hpBar.value = _playerStat.hp.Value;
     }
     public void SetOh(float value)
     {
-        playerStatus.overheat.Value = playerStatus.overheat.maxValue;
-        ohBar.maxValue = playerStatus.overheat.maxValue;
-        ohBarText.text = playerStatus.overheat.Value + "%";
-        ohBar.value = playerStatus.overheat.Value;
+        _playerStat.overheat.Value = _playerStat.overheat.maxValue;
+        ohBar.maxValue = _playerStat.overheat.maxValue;
+        ohBarText.text = _playerStat.overheat.Value + "%";
+        ohBar.value = _playerStat.overheat.Value;
         Color color2;
         ColorUtility.TryParseHtmlString("#FF8D00", out color2);
-        ohBarFill.color = Color.Lerp(ohBarFillColor, color2, playerStatus.overheat.Value / 100);
+        ohBarFill.color = Color.Lerp(ohBarFillColor, color2, _playerStat.overheat.Value / 100);
 
-        if (playerStatus.overheat.Value < playerStatus.overheat.maxValue)
+        if (_playerStat.overheat.Value < _playerStat.overheat.maxValue)
         { 
             ohFulled = false;
             DOTween.Kill(ohBarText.rectTransform);
             ohBarText.rectTransform.localScale = Vector3.one;
         }
-        if (!ohFulled && playerStatus.overheat.Value >= playerStatus.overheat.maxValue)
+        if (!ohFulled && _playerStat.overheat.Value >= _playerStat.overheat.maxValue)
         {
             ohFulled = true;
             DOTween.Kill(ohBarFill);
@@ -112,12 +112,12 @@ public class UIManager : MonoBehaviour
     }
     public void SetStm(float value)
     {
-        playerStatus.stamina.Value = value;
-        stmBar.maxValue = playerStatus.stamina.maxValue;
-        stmBar.value = playerStatus.stamina.Value;
+        _playerStat.stamina.Value = value;
+        stmBar.maxValue = _playerStat.stamina.maxValue;
+        stmBar.value = _playerStat.stamina.Value;
 
-        if (playerStatus.stamina.Value < playerStatus.stamina.maxValue) stmFulled = false;
-        if (!stmFulled && playerStatus.stamina.Value >= playerStatus.stamina.maxValue)
+        if (_playerStat.stamina.Value < _playerStat.stamina.maxValue) stmFulled = false;
+        if (!stmFulled && _playerStat.stamina.Value >= _playerStat.stamina.maxValue)
         {
             stmFulled = true;
             DOTween.Kill(stmBarFill);
@@ -167,9 +167,9 @@ public class UIManager : MonoBehaviour
 
     void UpdateStatus()
     {
-        SetHp(playerStatus.hp.Value);
-        SetOh(playerStatus.overheat.Value);
-        SetStm(playerStatus.stamina.Value);
+        SetHp(_playerStat.hp.Value);
+        SetOh(_playerStat.overheat.Value);
+        SetStm(_playerStat.stamina.Value);
     }
 
     #endregion

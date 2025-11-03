@@ -13,7 +13,6 @@ namespace _01.Scripts.SubWeapon.Shield
         
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log(handler);
             // 적과 보조무기(방패, 그랩)이 충돌 시 SubWeaponData.behavior의 정의사항을 실행
             handler?.SubWeaponData.behavior.ExecuteOnTrigger(other, handler, handler.playerCamera, handler.SubWeaponData);
         }
