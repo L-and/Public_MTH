@@ -4,12 +4,22 @@ using UnityEngine;
 
 namespace _01.Scripts.ScriptableObjects.Loadout
 {
+    /// <summary>
+    /// 무기,보조무기,방출의 Data SO들을 저장하는 SO
+    /// </summary>
     [CreateAssetMenu(fileName = "PlayerLoadout", menuName = "Player/Loadout/PlayerLoadout", order = 1)]
-    public class PlayerLoadoutSO : ScriptableObject
+    public class PlayerLoadoutsSO : ScriptableObject
     {
-        // TODO: WeaponDataSO SelectedWeapon; // 다른 브랜치에서 작업 중
-        // TODO: SubWeaponDataSO SelectedSubWeapon; // 다른 브랜치에서 작업 중
-        public EmissionAbilityData selectedEmission;
-        public SubWeaponData selectedSubWeapon;
+        // TODO 배열이 아니라 id:SO 형식의 딕셔너리로 변경해야 함
+        // public WeaponData[] weapons;
+        public SubWeaponData[] subWeapons;
+        public EmissionAbilityData[] emissions;
+    }
+
+    public class PlayerLoadout
+    {
+        // public WeaponData Weapon;
+        public SubWeaponData SubWeapon;
+        public EmissionAbilityData Emission;
     }
 }

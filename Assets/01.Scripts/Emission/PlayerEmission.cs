@@ -48,11 +48,10 @@ namespace _01.Scripts.Emission
         }
 
         /// <summary>
-        /// GameManager에 설정된 방출을 실행합니다 // TODO 임시 data
+        /// GameManager에 설정된 방출을 실행합니다
         /// </summary>
         public void ExecuteEmission(EmissionAbilityData data)
         {
-            // TODO GameManager에서 EmissionAbilityData 가져오는것 추가
 
             EmissionAbilityData emissionData = data;
             if (emissionData.behavior != null)

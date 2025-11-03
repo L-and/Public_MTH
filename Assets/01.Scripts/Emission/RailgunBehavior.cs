@@ -13,6 +13,7 @@ namespace _01.Scripts.Emission
         
         public override void Execute(PlayerEmission handler, Transform playerCamera, EmissionAbilityData data)
         {
+            Debug.Log("레일건 발사");
             Transform fireTransform = handler.firePosition; // 레일건 발사위치
             
             // RaycastAll을 사용해 레일건을 발사하여 적중된 적들의 히트박스 Collider를 가져옴

@@ -125,7 +125,7 @@ namespace _01.Scripts.PlayerControll
         
         # endregion
         
-        # region 주무기관련 필드/컴포넌트
+        # region 무기/보조무기/방출 관련 필드/컴포넌트
         
         private bool _holdingFire;
         
@@ -134,24 +134,15 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         private float _lastShotTime;
         
+        [Header("주무기/보조무기/방출 컴포넌트")]
         /// <summary>
-        /// 현재무기 스크립트
+        /// 현재무기 스크립트 TODO WeaponSO를 사용하도록 수정필요
         /// </summary>
         public WeaponBehaviour equippedWeapon;
         
-        # endregion
-        
-        # region 방출/보조무기 관련 필드
-
         [SerializeField] public PlayerEmission playerEmission;
 
-        public EmissionAbilityData CurrentEmission
-        {
-            get
-            {
-                return playerEmission.data;
-            }
-        }
+        public EmissionAbilityData CurrentEmission => playerEmission.data;
 
         [SerializeField] public PlayerSubWeapon playerSubWeapon;
         
@@ -214,7 +205,7 @@ namespace _01.Scripts.PlayerControll
         /// <summary>
         /// PlayerManager에 의해 호출되어 플레이어의 스탯과 장비를 설정합니다.
         /// </summary>
-        public void Initialize(PlayerStat stat, PlayerLoadoutSO loadout) // Overload for PlayerManager
+        public void Initialize(PlayerStat stat, PlayerLoadout loadout) // Overload for PlayerManager
         {
             Stat = stat;
 
@@ -225,8 +216,8 @@ namespace _01.Scripts.PlayerControll
             // 무기, 보조무기, 방출 초기설정 진행
             
             // Removed: SetupWeapon(loadout.SelectedWeapon);
-            SetupEmission(loadout.selectedEmission);
-            SetupSubWeapon(loadout.selectedSubWeapon);
+            SetupEmission(loadout.Emission);
+            SetupSubWeapon(loadout.SubWeapon);
                 
             // 상태 머신 생성
             MovementFSM = new MovementStateMachine(this);
@@ -538,8 +529,7 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         public void FireEmission()
         {
-            // emission.ExecuteEmission(CurrentEmission);
-            // TODO: PlayerEmission.ExecuteEmission(EmissionAbilityData data)를 호출하도록 수정 필요
+            playerEmission.ExecuteEmission(CurrentEmission);
         }
         
         public void ApplyDamage(float damage)
