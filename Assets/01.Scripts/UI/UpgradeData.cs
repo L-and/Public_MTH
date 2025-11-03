@@ -5,7 +5,7 @@ using UnityEngine;
 public class UpgradeData : ScriptableObject
 {
     [SerializedDictionary("ID", "Info")]
-    public SerializedDictionary<int, Info> Upgrade;
+    public AYellowpaper.SerializedCollections.SerializedDictionary<int, Info> Upgrade;
 
     [System.Serializable]
     public class Info
