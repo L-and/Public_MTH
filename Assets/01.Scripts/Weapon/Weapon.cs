@@ -131,8 +131,23 @@ namespace _01.Scripts.Weapon
 
             #endregion
 
+            // PlayerController에서 직접 관리하므로 주석처리
             //Max Out Ammo.
-            _ammunitionCurrent = _magazineBehaviour.GetAmmunitionTotal();
+            // _ammunitionCurrent = _magazineBehaviour.GetAmmunitionTotal();
+        }
+        
+        #endregion
+        
+        #region SETTERS
+
+        public override void SetRateOfFire(int rpm)
+        {
+            roundsPerMinutes = rpm;
+        }
+
+        public override void SetMagazineSize(int amount)
+        {
+            _magazineBehaviour.SetMaxAmount(amount);
         }
         
         #endregion
@@ -152,6 +167,7 @@ namespace _01.Scripts.Weapon
         public override int GetAmmunitionTotal() => _magazineBehaviour.GetAmmunitionTotal();
 
         public override bool IsAutomatic()  => automatic;
+        
         public override float GetRateOfFire() => roundsPerMinutes;
 
         public override bool IsFull() => _ammunitionCurrent == _magazineBehaviour.GetAmmunitionTotal();
@@ -238,5 +254,16 @@ namespace _01.Scripts.Weapon
         }
         
         #endregion
+
+        public override void Initialize()
+        {
+            //Get Magazine.
+            _magazineBehaviour = _attachmentManager.GetEquippedMagazine();
+            //Get Muzzle.
+            _muzzleBehaviour = _attachmentManager.GetEquippedMuzzle();
+            
+            // 탄약설정
+            _ammunitionCurrent = _magazineBehaviour.GetAmmunitionTotal();
+        }
     }
 }

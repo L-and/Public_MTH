@@ -424,7 +424,7 @@ MonoBehaviour:
     dashDurationTime: 0.5
     mouseSensitivity: 0.5
     jumpForce: 10
-  playerLoadout: {fileID: 11400000, guid: 125e38be2021bcb41a0d05aca6acfd4b, type: 2}
+  loadoutsSo: {fileID: 11400000, guid: 125e38be2021bcb41a0d05aca6acfd4b, type: 2}
 --- !u!1 &380857623
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,16 +1118,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2656473752753778966, guid: 928c9debda3e2eb43b91256b04f99023,
-        type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2656473752753778966, guid: 928c9debda3e2eb43b91256b04f99023,
-        type: 3}
-      propertyPath: equipPosition
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4614945885310112252, guid: 928c9debda3e2eb43b91256b04f99023,
         type: 3}
