@@ -12,6 +12,7 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private CanvasGroup upgradeUiCanvasGroup;
     public GameObject upgradeUi;
     private Button button;
+    private Vector2 originPosition;
 
     [SerializeField] private int order;
     private bool isTouchable = false;
@@ -19,17 +20,21 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private Tween scaleTween;
     private int dataId;
 
-    void Start()
+    void Awake()
     {
+        originPosition = transform.localPosition;
         upgradeUiCanvasGroup = upgradeUi.GetComponent<CanvasGroup>();
         upgradeUiManager = upgradeUi.GetComponent<UpgradeUIManager>();
         button = GetComponent<Button>();
     }
     void OnEnable()
     {
+        transform.localPosition = originPosition;
+
         SetDataIDRandomly();
         if (order == 0) CompareDuplicate();
         UpgradeOn();
+        GetComponent<Image>().DOFade(1, 0);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -92,14 +97,18 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     void OnObjectDisable()
     {
-        StartCoroutine(ReActive());
+        if (CheckEVHacker() && upgradeUiManager.upgradeChance > 0)
+        {   
+            upgradeUiManager.upgradeChance--;
+            upgradeUiManager.UpgradesReActive();
+        }
+        else upgradeUi.SetActive(false);
     }
 
-    IEnumerator ReActive()
+    bool CheckEVHacker()
     {
-        transform.parent.parent.gameObject.SetActive(false);
-        yield return new WaitForSeconds(0.1f);
-        transform.parent.parent.gameObject.SetActive(true);
+        //Todo 업그레이드 슬롯에 엘리베이터 해커 확인
+        return true;
     }
 
     void SetDataIDRandomly()
