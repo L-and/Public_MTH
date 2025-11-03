@@ -19,6 +19,11 @@ public class RangeProjectile: MonoBehaviour
     [SerializeField] private float damage = 1f;
     [SerializeField] private LayerMask hitMask = ~0;   // 맞출 대상 레이어
 
+    public LayerMask HitMask
+    {
+        set { hitMask = value; }
+    }
+    
     [Header("플레이어 IDamageableZone")]
     [SerializeField] private IDamageableZone playerDamageableZone;
 
@@ -38,10 +43,7 @@ public class RangeProjectile: MonoBehaviour
 
         initialDir = dir.sqrMagnitude > 0.0001f ? dir.normalized : transform.forward;
         initialized = true;
-
-        if (ignoreThese != null && TryGetComponent<Collider>(out var myCol))
-            foreach (var c in ignoreThese) if (c && c.enabled) Physics.IgnoreCollision(myCol, c, true);
-
+        
         ApplyVelocity(initialDir);
     }
 
@@ -90,6 +92,15 @@ public class RangeProjectile: MonoBehaviour
         rb.angularVelocity = Vector3.zero;
     }
 
+    /// <summary>
+    /// 투사체의 방향을 변경하는 메서드
+    /// </summary>
+    /// <param name="dir">이동방향</param>
+    public void ChangeDirection(Vector3 dir)
+    {
+        ApplyVelocity(dir);
+    }
+    
     private void OnCollisionEnter(Collision other)
     {
         if(other.collider.CompareTag("Player"))
@@ -108,7 +119,7 @@ public class RangeProjectile: MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        HandleHit(other, transform.position);
+        // HandleHit(other, transform.position);
     }
 
     private void HandleHit(Collider hitCol, Vector3 hitPoint)
@@ -117,6 +128,7 @@ public class RangeProjectile: MonoBehaviour
         if (owner && hitCol.transform.IsChildOf(owner)) return;
 
         // 맞출 대상만 반응
+        Debug.LogWarning((hitMask.value & (1 << hitCol.gameObject.layer)) == 0);
         if ((hitMask.value & (1 << hitCol.gameObject.layer)) == 0) return;
 
         // TODO 김민서: 이부분은 튕겨난 투사체가 적에게 적중했을 때 과열게이지를 충전하는식으로 변경하면 될듯함

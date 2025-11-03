@@ -1,4 +1,5 @@
-﻿using _01.Scripts.PlayerControll;
+﻿using System.Collections;
+using _01.Scripts.PlayerControll;
 using _01.Scripts.SubWeapon.Shield;
 using UnityEngine;
 
@@ -21,8 +22,12 @@ namespace _01.Scripts.SubWeapon
             set => data = value;
         }
 
-        private PlayerController _playerController;
+        public PlayerController playerController;
         public Transform playerCamera;
+
+        // 보조무기 오브젝트
+        private GameObject _subWeaponGO;
+        [SerializeField] private bool isCooldown;
 
         /// <summary>
         /// 선택된 보조무기SO의 프리팹 게임오브젝트를 생성하는 메서드
@@ -30,27 +35,46 @@ namespace _01.Scripts.SubWeapon
         /// </summary>
         public void InstantiateSubWeapon()
         {
+            playerController = GetComponent<PlayerController>();
             // 게임오브젝트 생성, 부모설정
-            var swGo = Instantiate(data.prefab, equipPosition.position, equipPosition.rotation);
-            swGo.transform.parent = equipPosition;
+            _subWeaponGO = Instantiate(data.prefab, equipPosition.position, equipPosition.rotation);
+            _subWeaponGO.transform.parent = equipPosition;
 
             // Collider이벤트처리가 필요한 보조무기라면 이벤트를 받기위해 PlayerSubWeapon 을 참조하도록 할당
-            if (swGo.TryGetComponent<SubWeaponColliderHandler>(out var colliderHandler))
+            if (_subWeaponGO.TryGetComponent<SubWeaponColliderHandler>(out var colliderHandler))
             {
                 colliderHandler.handler = this;
             }
+
+            isCooldown = false;
         }
         
+        /// <summary>
+        /// 보조무기 사용
+        /// </summary>
         public void ExecuteSubWeapon()
         {
-            if (data.behavior)
-            {
-                data.behavior.Execute(this, _playerController.PlayerCamera, data);
-            }
-            else
-            {
-                Debug.Log($"{data.name}에 Behavior이 할당되지 않았습니다.");
-            }
+            if (isCooldown) return;
+            
+            _subWeaponGO.SetActive(true);
+            
+            Invoke(nameof(EndUsingSubweapon), data.useDuration);
+        }
+
+        private void EndUsingSubweapon()
+        {
+            // 쉴드 사용종료 애니메이션 트리거
+            playerController.CharacterAnimController.OnShieldUsingDone();
+            _subWeaponGO.SetActive(false);
+            isCooldown = true;
+
+            StartCoroutine(CoolDownRoutine());
+        }
+        
+        IEnumerator CoolDownRoutine()
+        {
+            yield return new WaitForSeconds(data.coolDown);
+            isCooldown = false;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace _01.Scripts.SubWeapon
     {
         [Header("기본정보")] 
         public string subWeaponName;
+        public float useDuration; // 사용 지속시간
         public float coolDown;
         [TextArea] public string description;
         public SubWeaponBehavior behavior;

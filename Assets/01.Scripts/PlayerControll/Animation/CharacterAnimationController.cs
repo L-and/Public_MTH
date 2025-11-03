@@ -75,9 +75,20 @@ namespace _01.Scripts.PlayerControll.Animation
             _playerController.FireEmission();
         }
 
+        /// <summary>
+        /// 쉴드 튕겨내기 애니메이션 트리거
+        /// </summary>
         public void OnShieldImpact()
         {
             _characterAnim.SetTrigger("Shield Impact");
+        }
+
+        /// <summary>
+        /// 쉴드 사용종료 애니메이션 트리거
+        /// </summary>
+        public void OnShieldUsingDone()
+        {
+            _characterAnim.SetTrigger("Shield Using Done");
         }
     }
 }

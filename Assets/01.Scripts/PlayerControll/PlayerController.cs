@@ -190,6 +190,9 @@ namespace _01.Scripts.PlayerControll
             MovementFSM.Initialize(MovementFSM.IdleState);
             SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
             EmissionFSM.Initialize(EmissionFSM.ReadyState);
+            
+            // 보조무기 초기설정(생성, 쿨타임 설정)
+            subWeapon.InstantiateSubWeapon();
         }
 
         private void Update()
@@ -216,21 +219,9 @@ namespace _01.Scripts.PlayerControll
             // 보조무기 동작 테스트
             if (Input.GetKeyDown(KeyCode.F))
             {
+                subWeapon.ExecuteSubWeapon();
                 CharacterAnimController.SubWeaponAnimation();
             }
-
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                CharacterAnimController.OnShieldImpact();
-            }
-            
-            // 보조무기 장착 테스트
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                subWeapon.InstantiateSubWeapon();
-            }
-            
-            
             
             // 각 상태 머신의 Update 로직 실행
             MovementFSM.CurrentState?.OnUpdate();
@@ -434,7 +425,6 @@ namespace _01.Scripts.PlayerControll
         {
             if (!IsGrounded) return;
             
-            Debug.Log("점프성공!");
             Rb.AddForce(transform.up * Status.CurrentJumpForce, ForceMode.Impulse);
         }
 
