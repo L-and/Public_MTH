@@ -752,6 +752,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3313090653099956408, guid: b92a7cc661e89b54da14e1a623eb2a3e,
+        type: 3}
+      propertyPath: _maxRange
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773497461664912109, guid: b92a7cc661e89b54da14e1a623eb2a3e,
+        type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -819,6 +829,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TankerDummy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7847404740231101995, guid: 7c3dc780f08661e4fa64e8da3f5eec1a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -155,16 +155,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f7a2a4aae62da041b7036acb601edac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RangeProjectile
-  speed: 1
+  speed: 8
   useGravity: 0
   faceVelocity: 1
   homing: 0
   turnRateDegPerSec: 360
-  lifeTime: 5
+  lifeTime: 20
   damage: 1
   hitMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  ps: {fileID: 0}
 --- !u!1001 &7408283924600796325
 PrefabInstance:
   m_ObjectHideFlags: 0

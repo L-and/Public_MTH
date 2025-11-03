@@ -50,6 +50,11 @@ public class OptionsManager : MonoBehaviour
         audio.SetActive(false);
     }
 
+    public void Disable()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void OnFullscreenToggleClicked(bool value)
     {
         Screen.fullScreen = value;
