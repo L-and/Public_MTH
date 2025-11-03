@@ -11,6 +11,12 @@ namespace _01.Scripts.PlayerControll.Status
         // PlayerController 참조
         private PlayerController _pc;
 
+        [Header("업그레이드 슬롯")] // 0~20까지의 ID 값, -1은 null을 의미
+        public int UpgradeSlot1ID = -1;
+        public int UpgradeSlot2ID = -1;
+        public int UpgradeSlot3ID = -1;
+        public int UpgradeNumber = 0;
+
         [Header("체력/스테미너/과열")]
         public Stat hp;
         public Stat stamina;

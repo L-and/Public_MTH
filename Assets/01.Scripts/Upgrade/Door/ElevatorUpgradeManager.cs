@@ -43,6 +43,12 @@ public class ElevatorUpgradeManager : MonoBehaviour
     {
         Debug.Log($"[DEBUG] 업그레이드 버튼 클릭됨 — ID: {id}");
 
+        //PlayerStatus의 UpgradeSlotID에 id 값 할당
+        int[] upgradeSlots = new int[3] { playerStatus.UpgradeSlot1ID, playerStatus.UpgradeSlot2ID, playerStatus.UpgradeSlot3ID };
+        upgradeSlots[playerStatus.UpgradeNumber] = id;
+        playerStatus.UpgradeNumber++;
+        Debug.Log(playerStatus.UpgradeSlot1ID);
+
         //아직 효과가 로드 안되면 즉시 다시 시도
         if (!effectsLoaded || allEffects == null || allEffects.Length == 0)
         {

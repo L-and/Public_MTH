@@ -22,6 +22,10 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI levelInfo;
     public GameObject pauseMenu;
     public TextMeshProUGUI statText;
+    public Image upgradeSlot1;
+    public Image upgradeSlot2;
+    public Image upgradeSlot3;
+
 
     Color hpBarFillColor;
     Color ohBarFillColor;
@@ -121,6 +125,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void SetUpgradeSlot()
+    {
+        Image[] upgradeSlots = new Image[3] { upgradeSlot1, upgradeSlot2, upgradeSlot3 };
+
+        for (int i = 0; i < upgradeSlots.Length; i++)
+        { 
+            if (i <= playerStatus.UpgradeNumber - 1) upgradeSlots[i].gameObject.SetActive(true);
+            else upgradeSlots[i].gameObject.SetActive(false);
+        }
+
+
+    }
+
 
     void GameOver()
     {
@@ -166,6 +183,7 @@ public class UIManager : MonoBehaviour
         SetOh(playerStatus.overheat.Value);
         SetStm(playerStatus.stamina.Value);
         SetStatText();
+        SetUpgradeSlot();
     }
 
     void SetStatText()
