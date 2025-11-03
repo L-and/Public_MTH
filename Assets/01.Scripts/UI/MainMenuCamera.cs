@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public class MainMenuCamera : MonoBehaviour
 {
@@ -25,7 +26,14 @@ public class MainMenuCamera : MonoBehaviour
   {
     diveStarted = true;
     mainCamera.transform.DOLocalRotate(new Vector3(90, 0, 0), 1.5f);
-    mainCamera.transform.DOMove(Vector3.zero, 1.75f).OnComplete(() => GameManager.SceneEx.LoadScene("Game Scene", true));
+    mainCamera.transform.DOMove(Vector3.zero, 1.75f);
     GlobalMethod.Fade(canvas, 1.75f, false, false);
+    StartCoroutine(SceneMove());
   }
+
+    IEnumerator SceneMove()
+    {
+        yield return new WaitForSeconds(1.75f);
+        GameManager.SceneEx.LoadScene("Game Scene", true);
+    }
 }
