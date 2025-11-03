@@ -41,7 +41,7 @@ namespace _01.Scripts.Manager
         public void SetLoadout(int weaponId, int subWeaponId, int emissionId)
         {
             
-            // currentLoadout.Weapon = loadoutsSo.weapons[weaponId];
+            currentLoadout.Weapon = loadoutsSo.weapons[weaponId];
             currentLoadout.SubWeapon = loadoutsSo.subWeapons[subWeaponId];
             currentLoadout.Emission = loadoutsSo.emissions[emissionId];
         }

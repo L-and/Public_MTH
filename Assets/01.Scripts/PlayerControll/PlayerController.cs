@@ -7,6 +7,7 @@ using _01.Scripts.PlayerControll.Status;
 using _01.Scripts.Weapons_ScriptableObjects.Emission;
 using _01.Scripts.Weapons_ScriptableObjects.Loadout;
 using _01.Scripts.Weapons_ScriptableObjects.SubWeapon;
+using _01.Scripts.Weapons_ScriptableObjects.Weapon;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -133,13 +134,12 @@ namespace _01.Scripts.PlayerControll
         /// 마지막 발사시간
         /// </summary>
         private float _lastShotTime;
+
         
         [Header("주무기/보조무기/방출 컴포넌트")]
-        /// <summary>
-        /// 현재무기 스크립트 TODO WeaponSO를 사용하도록 수정필요
-        /// </summary>
-        public WeaponBehaviour equippedWeapon;
+        [SerializeField] private Transform mainWeaponPosition; // 주무기 장착위치
         
+        public WeaponBehaviour equippedWeapon;
         [SerializeField] public PlayerEmission playerEmission;
 
         public EmissionAbilityData CurrentEmission => playerEmission.data;
@@ -215,7 +215,7 @@ namespace _01.Scripts.PlayerControll
             
             // 무기, 보조무기, 방출 초기설정 진행
             
-            // Removed: SetupWeapon(loadout.SelectedWeapon);
+            SetupMainWeapon(loadout.Weapon);
             SetupEmission(loadout.Emission);
             SetupSubWeapon(loadout.SubWeapon);
                 
@@ -230,7 +230,50 @@ namespace _01.Scripts.PlayerControll
             EmissionFSM.Initialize(EmissionFSM.ReadyState);
         }
 
-        // Removed: private void SetupWeapon(WeaponDataSO weaponData) { ... }
+        private void SetupMainWeapon(WeaponData weaponData)
+        {
+            if (!weaponData)
+            {
+                Debug.LogWarning("주무기가 선택되지 않았습니다!");
+                return;
+            }
+
+            if (!mainWeaponPosition)
+            {
+                Debug.LogWarning("주무기 장착위치가 할당되지 않았습니다!");
+                return;
+            }
+
+            var weaponGO = Instantiate(weaponData.prefab, mainWeaponPosition);
+
+            if (!weaponGO.TryGetComponent<WeaponBehaviour>(out equippedWeapon))
+            {
+                Debug.LogWarning($"[총기: {weaponData.name}] WeaponBehaviour이 없습니다!");
+                return;
+            }
+            
+            // 데미지 설정 TODO 여기가 옳은 위치인가?
+            GameManager.PlayerManager.PlayerStat.bulletDamage = weaponData.damage;
+            
+            // 탄창/RPM 설정
+            equippedWeapon.Initialize();
+            equippedWeapon.SetMagazineSize(weaponData.magazineSize);
+            equippedWeapon.SetRateOfFire(weaponData.rpm);
+            
+            // 반동설정
+            Recoil recoil = transform.GetComponentInChildren<Recoil>();
+            if (!recoil)
+            {
+                Debug.LogWarning($"[플레이어 프리팹 {name}] Recoil 컴포넌트가 없습니다!");
+                return;
+            }
+            
+            recoil.RecoilX = weaponData.verticalRecoil;
+            recoil.RecoilY = weaponData.horizontalRecoil;
+            
+            
+            Debug.Log($"[총기설정 완료] 공격력: {weaponData.damage}, RPM: {weaponData.rpm}, 탄창크기: {weaponData.magazineSize}");
+        }
         
         /// <summary>
         /// 보조무기 초기설정 메서드
@@ -250,6 +293,10 @@ namespace _01.Scripts.PlayerControll
             playerSubWeapon.InitializeSubWeapon(this);
         }
 
+        /// <summary>
+        /// 방출 초기설정 메서드
+        /// </summary>
+        /// <param name="emissionData"></param>
         private void SetupEmission(EmissionAbilityData emissionData)
         {
             if (emissionData == null)
