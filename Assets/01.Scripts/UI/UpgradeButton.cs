@@ -26,6 +26,7 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
     void OnEnable()
     {
+        // 데이터 아이디 0~21 설정 ->  id를 UpgradeUI 에 가져가서 텍스트 변경 설정
         dataId = Random.Range(0, 21);
         UpgradeOn();
     }
@@ -36,7 +37,7 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             transform.DOScale(1, 0);
             scaleTween = transform.DOScale(1.2f, 0.2f);
-            upgradeUiManager.SetUpgradeText(dataId);
+            upgradeUiManager.SetUpgradeText(dataId); // UpgradeUI는 이쪽으로 표시됨
         }
     }
     public void OnPointerExit(PointerEventData eventData) 
@@ -62,6 +63,18 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 if (order == i) continue;
                 Transform child = transform.parent.GetChild(i);
                 child.GetComponent<Image>().DOFade(0, 0.2f).OnComplete(() => child.gameObject.SetActive(false));
+            }
+
+            // 연주 - ElevatorUpgradeManager로 연동
+            var manager =Object.FindFirstObjectByType<ElevatorUpgradeManager>();
+            if (manager != null)
+            {
+                manager.ApplyUpgrade(dataId);
+                Debug.Log($"[DEBUG] 업그레이드 적용 시도: ID {dataId}");
+            }
+            else
+            {
+                Debug.Log("ElevatorUpgradeManager를 찾을 수 없습니다!");
             }
         }
     }
