@@ -5,6 +5,7 @@ using System.Globalization;
 using _01.Scripts.Emission;
 using _01.Scripts.PlayerControll.Animation;
 using _01.Scripts.PlayerControll.Status;
+using _01.Scripts.ScriptableObjects.Loadout;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -20,12 +21,49 @@ namespace _01.Scripts.PlayerControll
     public class PlayerController : MonoBehaviour, IDamageableZone
     {
         
-        # region 컴포넌트/클래스 참조 프로퍼티
+        # region 플레이어 스탯 필드/프로퍼티
         
         /// <summary>
         /// 플레이어의 속성정보 컴포넌트 프로퍼티
         /// </summary>
         public PlayerStat Stat { get; private set; }
+
+        public float CurrentMaxSpeed
+        {
+            get
+            {
+                if (MovementFSM.CurrentState is DashState)
+                    return Stat.dashMaxSpeed;
+                if (MovementFSM.CurrentState is SlidingState)
+                    return Stat.slidingMaxSpeed;
+                if (MovementFSM.CurrentState is JumpState)
+                    return Stat.jumpMaxSpeed;
+                
+                return Stat.maxSpeed;
+            }
+        }
+
+        public float CurrentAcceleration
+        {
+            get
+            {
+                if (MovementFSM.CurrentState is JumpState)
+                    return Stat.AirAcc;
+                if (MovementFSM.CurrentState is SlidingState)
+                    return Stat.SlidingAcc;
+
+                return Stat.BaseAcc;
+            }
+        }
+        
+        /// <summary>
+        /// 무적상태를 판별하는 프로퍼티
+        /// </summary>
+        public bool IsInvincible => MovementFSM.CurrentState is DashState;
+        
+        # endregion
+        
+        # region 컴포넌트/클래스 참조 프로퍼티
         
         // 상태 머신 참조
         public MovementStateMachine MovementFSM { get; private set; }
@@ -102,10 +140,10 @@ namespace _01.Scripts.PlayerControll
         
         # endregion
         
-        # region 방출관련 필드
+        # region 방출/보조무기 관련 필드
 
         [SerializeField] public PlayerEmission emission;
-        [SerializeField] public EmissionAbilityData emissiondata;
+        public EmissionAbilityData CurrentEmission { get; private set; }
         
         # endregion
         
@@ -119,8 +157,7 @@ namespace _01.Scripts.PlayerControll
         {
             get
             {
-                string currState;
-                return MovementFSM.CurrentState.ToString();
+                return MovementFSM.CurrentState?.ToString();
             }
         }
         
@@ -162,24 +199,62 @@ namespace _01.Scripts.PlayerControll
             Rb = GetComponent<Rigidbody>();
             PlayerCamera = Camera.main.transform;
             CharacterAnimController = transform.GetComponentInChildren<CharacterAnimationController>();
+        }
 
+        /// <summary>
+        /// PlayerManager에 의해 호출되어 플레이어의 스탯과 장비를 설정합니다.
+        /// </summary>
+        public void Initialize(PlayerStat stat, PlayerLoadoutSO loadout) // Overload for PlayerManager
+        {
+            Stat = stat;
+            
+            // Removed: SetupWeapon(loadout.SelectedWeapon);
+            // Removed: SetupSubWeapon(loadout.SelectedSubWeapon);
+            SetupEmission(loadout.SelectedEmission);
+            
             // 상태 머신 생성
             MovementFSM = new MovementStateMachine(this);
             SubWeaponFSM = new SubWeaponStateMachine(this);
             EmissionFSM = new EmissionStateMachine(this);
-        }
-
-        #region Unity Functions
-        private void Start()
-        {
-            Debug.Log($"{GameManager.PlayerManager.PlayerStat}");
-            Stat = GameManager.PlayerManager.PlayerStat;
             
             // 각 상태 머신의 초기 상태 설정
             MovementFSM.Initialize(MovementFSM.IdleState);
             SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
             EmissionFSM.Initialize(EmissionFSM.ReadyState);
         }
+
+        // New overload for Initialize when only stat is passed
+        public void Initialize(PlayerStat stat)
+        {
+            Stat = stat;
+            
+            // 상태 머신 생성
+            MovementFSM = new MovementStateMachine(this);
+            SubWeaponFSM = new SubWeaponStateMachine(this);
+            EmissionFSM = new EmissionStateMachine(this);
+
+            // 각 상태 머신의 초기 상태 설정
+            MovementFSM.Initialize(MovementFSM.IdleState);
+            SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
+            EmissionFSM.Initialize(EmissionFSM.ReadyState);
+        }
+
+        // Removed: private void SetupWeapon(WeaponDataSO weaponData) { ... }
+        // Removed: private void SetupSubWeapon(SubWeaponDataSO subWeaponData) { ... }
+
+        private void SetupEmission(EmissionAbilityData emissionData)
+        {
+            if (emissionData == null)
+            {
+                Debug.LogWarning("No emission selected!");
+                return;
+            }
+            CurrentEmission = emissionData;
+            Debug.Log($"Emission {emissionData.abilityName} equipped.");
+        }
+
+
+        #region Unity Functions
 
         private void Update()
         {
@@ -384,6 +459,7 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         public void MovePlayer(float acceleration)
         {
+            Debug.Log($"{acceleration}");
             Rb.AddForce(MoveDirection * acceleration, ForceMode.Force);
 
             Debug.DrawRay(transform.position, MoveDirection, Color.yellow);
@@ -397,9 +473,9 @@ namespace _01.Scripts.PlayerControll
             Vector3 flatVel = new Vector3(Rb.linearVelocity.x, 0f, Rb.linearVelocity.z);
             
             // 속도제한 적용
-            if (flatVel.magnitude > Stat.CurrentMaxSpeed)
+            if (flatVel.magnitude > CurrentMaxSpeed)
             {
-                Vector3 limitedVel = flatVel.normalized * Stat.CurrentMaxSpeed;
+                Vector3 limitedVel = flatVel.normalized * CurrentMaxSpeed;
                 Rb.linearVelocity = new Vector3(limitedVel.x, Rb.linearVelocity.y, limitedVel.z);
             }
         }
@@ -437,12 +513,13 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         public void FireEmission()
         {
-            emission.ExecuteEmission(emissiondata);
+            // emission.ExecuteEmission(CurrentEmission);
+            // TODO: PlayerEmission.ExecuteEmission(EmissionAbilityData data)를 호출하도록 수정 필요
         }
         
         public void ApplyDamage(float damage)
         {
-            if (Stat.IsInvincible)
+            if (IsInvincible)
             {
                 // TODO 무적상태에서 피격시 스타일리쉬액션 연동코드 작성
                 return;

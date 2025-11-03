@@ -400,7 +400,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c3c37744515034cb619b1e263aa75c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.Manager.PlayerManager
-  playerStatus:
+  PlayerStatSO: {fileID: 11400000, guid: 6d3c04a636b54bc4680c341feb96a855, type: 2}
+  playerStat:
     hp:
       maxValue: 0
       value: 0
@@ -415,7 +416,7 @@ MonoBehaviour:
     dashMaxSpeed: 15
     slidingMaxSpeed: 13
     jumpMaxSpeed: 15
-    baseAcc: 10
+    baseAcc: 100
     airAcc: 5
     slidingAcc: 5
     dashPower: 30
@@ -423,6 +424,7 @@ MonoBehaviour:
     dashDurationTime: 0.5
     mouseSensitivity: 0.5
     jumpForce: 10
+  playerLoadout: {fileID: 0}
 --- !u!1 &380857623
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
+using _01.Scripts.ScriptableObjects.Loadout;
 using UnityEngine;
 
 namespace _01.Scripts.Manager
@@ -12,15 +13,22 @@ namespace _01.Scripts.Manager
         [SerializeField]
         public PlayerController PlayerController { get; private set; }
 
+        [Header("플레이어 스탯 (Scriptable Object)")]          
         [SerializeField] private PlayerStat playerStat;
         public PlayerStat PlayerStat => playerStat;
+        
+        [Header("플레이어 장비 (Scriptable Object)")]          
+        [SerializeField] private PlayerLoadoutSO playerLoadout; 
 
         private void Awake()
         {
+            PlayerController = FindObjectOfType<PlayerController>();
+
+            // PlayerStat 정보를 SO에서 가져오기
             InitializePlayerStat();
             
-            PlayerController = FindObjectOfType<PlayerController>();
-            playerStat.pc = PlayerController;
+            // PlayerController에 스탯 정보 전달
+            PlayerController.Initialize(playerStat);
         }
 
         /// <summary>

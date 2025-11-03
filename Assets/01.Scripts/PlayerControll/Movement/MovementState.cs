@@ -32,7 +32,7 @@ public abstract class MovementState : IState
 
     public virtual void OnFixedUpdate()
     {
-        controller.MovePlayer(controller.Stat.CurrentAcceleration);
+        controller.MovePlayer(controller.CurrentAcceleration);
         controller.LimitSpeed();
     }
     public virtual void OnLateUpdate() { }

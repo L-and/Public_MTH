@@ -30,9 +30,6 @@ namespace _01.Scripts.PlayerControll.Status
             this.jumpForce = other.jumpForce;
         }
         
-        // PlayerController 참조
-        public PlayerController pc;
-
         [Header("체력/스테미너/과열")] 
         [SerializeField] public Stat hp;
         [SerializeField] public Stat stamina;
@@ -43,29 +40,10 @@ namespace _01.Scripts.PlayerControll.Status
         
 
         [Header("최대속도")] 
-        [SerializeField] private float maxSpeed = 10f;
-        [SerializeField] private float dashMaxSpeed = 15f;
-        [SerializeField] private float slidingMaxSpeed = 13f;
-        [SerializeField] private float jumpMaxSpeed = 15f;
-        
-        public float CurrentMaxSpeed
-                {
-                    get
-                    {
-                        if (pc.MovementFSM.CurrentState ==
-                            pc.MovementFSM.DashState)
-                            return dashMaxSpeed;
-                        else if (
-                            pc.MovementFSM.CurrentState == 
-                            pc.MovementFSM.SlidingState)
-                            return slidingMaxSpeed;
-                        else if (pc.MovementFSM.CurrentState ==
-                                 pc.MovementFSM.JumpState)
-                            return jumpMaxSpeed;
-                        else
-                            return maxSpeed;
-                    }
-                }
+        [SerializeField] public float maxSpeed = 10f;
+        [SerializeField] public float dashMaxSpeed = 15f;
+        [SerializeField] public float slidingMaxSpeed = 13f;
+        [SerializeField] public float jumpMaxSpeed = 15f;
         
         [Header("가속도(이동조작 반응성)")]
         [SerializeField] private float baseAcc = 100f;
@@ -75,20 +53,10 @@ namespace _01.Scripts.PlayerControll.Status
         [Header("대쉬/슬라이딩 파워")] 
         [SerializeField] public float dashPower = 30f;
         [SerializeField] public float slidingPower = 100f;
-        
-        
-        public float CurrentAcceleration
-        {
-            get
-            {
-                if (pc.MovementFSM.CurrentState == pc.MovementFSM.JumpState)
-                    return airAcc;
-                if (pc.MovementFSM.CurrentState == pc.MovementFSM.SlidingState)
-                    return slidingAcc;
-
-                return baseAcc;
-            }
-        }
+  
+        public float BaseAcc => baseAcc;
+        public float AirAcc => airAcc;
+        public float SlidingAcc => slidingAcc;
         
 
         [Header("대쉬상태 관련변수")] 
@@ -99,21 +67,6 @@ namespace _01.Scripts.PlayerControll.Status
             get => dashDurationTime;
             private set => dashDurationTime = value;
         }
-
-        // 무적상태인지 판단하는 프로퍼티
-        public bool IsInvincible
-        {
-            get
-            {
-                return (pc.MovementFSM.CurrentState
-                        == pc.MovementFSM.DashState);
-            }
-        }
-
-        
-        public float BaseAcc => baseAcc;
-        public float AirAcc => airAcc;
-        
         
         [Header("마우스 감도")]
         [SerializeField] public float mouseSensitivity = 0.5f;
