@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _01.Scripts.SubWeapon
+namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon
 {
     // TODO 애니메이션의 시작/진행중/종료 실행시간을 SO에서 조작가능하도록 설계하면 좋을듯 함
     

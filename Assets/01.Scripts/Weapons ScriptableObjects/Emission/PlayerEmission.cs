@@ -1,9 +1,8 @@
-using System;
 using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
 using UnityEngine;
 
-namespace _01.Scripts.Emission
+namespace _01.Scripts.Weapons_ScriptableObjects.Emission
 {
     public class PlayerEmission : MonoBehaviour
     {

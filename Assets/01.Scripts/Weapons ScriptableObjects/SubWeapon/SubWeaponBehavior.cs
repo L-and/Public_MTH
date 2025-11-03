@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _01.Scripts.SubWeapon
+namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon
 {
     /// <summary>
     /// 보조무기의 동작기능을 정의하기위한 SO 추상클래스

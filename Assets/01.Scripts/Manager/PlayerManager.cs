@@ -1,8 +1,6 @@
-using _01.Scripts.Emission;
 using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
-using _01.Scripts.ScriptableObjects.Loadout;
-using _01.Scripts.SubWeapon;
+using _01.Scripts.Weapons_ScriptableObjects.Loadout;
 using UnityEngine;
 
 namespace _01.Scripts.Manager

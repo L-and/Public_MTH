@@ -1,7 +1,7 @@
 ﻿using _01.Scripts.Utils;
 using UnityEngine;
 
-namespace _01.Scripts.SubWeapon
+namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon.Shield
 {
     [CreateAssetMenu(fileName = "Shield Behavior", menuName = "SubWeapon/Behavior/Shield Behavior")]
     public class ShieldBehavior : SubWeaponBehavior

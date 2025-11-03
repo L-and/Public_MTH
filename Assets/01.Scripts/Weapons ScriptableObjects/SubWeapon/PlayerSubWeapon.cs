@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using _01.Scripts.PlayerControll;
-using _01.Scripts.SubWeapon.Shield;
+using _01.Scripts.Weapons_ScriptableObjects.SubWeapon.Shield;
 using UnityEngine;
 
-namespace _01.Scripts.SubWeapon
+namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon
 {
     /// <summary>
     /// 보조무기 동작에 필요한 필드와 실질적인 보조무기의 기능동작을 호출하는 클래스

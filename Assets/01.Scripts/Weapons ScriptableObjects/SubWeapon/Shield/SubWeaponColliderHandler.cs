@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace _01.Scripts.SubWeapon.Shield
+namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon.Shield
 {
     /// <summary>
     /// 보조무기의 Collider 이벤트호출을 감지하여

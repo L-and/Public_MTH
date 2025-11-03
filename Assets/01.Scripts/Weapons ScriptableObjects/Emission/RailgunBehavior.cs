@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace _01.Scripts.Emission
+namespace _01.Scripts.Weapons_ScriptableObjects.Emission
 {
     [CreateAssetMenu(fileName = "Railgun Behavior", menuName = "Emission/Behavior/Railgun Behavior")]
     public class RailgunBehavior : EmissionBehavior

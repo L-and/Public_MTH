@@ -1,8 +1,8 @@
-using _01.Scripts.Emission;
-using _01.Scripts.SubWeapon;
+using _01.Scripts.Weapons_ScriptableObjects.Emission;
+using _01.Scripts.Weapons_ScriptableObjects.SubWeapon;
 using UnityEngine;
 
-namespace _01.Scripts.ScriptableObjects.Loadout
+namespace _01.Scripts.Weapons_ScriptableObjects.Loadout
 {
     /// <summary>
     /// 무기,보조무기,방출의 Data SO들을 저장하는 SO

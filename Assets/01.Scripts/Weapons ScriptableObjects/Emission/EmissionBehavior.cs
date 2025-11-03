@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _01.Scripts.Emission
+namespace _01.Scripts.Weapons_ScriptableObjects.Emission
 {
     public abstract class EmissionBehavior : ScriptableObject
     {

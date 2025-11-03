@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _01.Scripts.Emission
+namespace _01.Scripts.Weapons_ScriptableObjects.Emission
 {
     [CreateAssetMenu(fileName = "New EmissionAbilityData", menuName = "Emission/Emission Ability Data")]
     public class EmissionAbilityData : ScriptableObject

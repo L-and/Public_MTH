@@ -2,11 +2,11 @@
 
 using System;
 using System.Globalization;
-using _01.Scripts.Emission;
 using _01.Scripts.PlayerControll.Animation;
 using _01.Scripts.PlayerControll.Status;
-using _01.Scripts.ScriptableObjects.Loadout;
-using _01.Scripts.SubWeapon;
+using _01.Scripts.Weapons_ScriptableObjects.Emission;
+using _01.Scripts.Weapons_ScriptableObjects.Loadout;
+using _01.Scripts.Weapons_ScriptableObjects.SubWeapon;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
