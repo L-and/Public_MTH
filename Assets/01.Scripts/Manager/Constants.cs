@@ -22,5 +22,7 @@ public static class Constants
   public const string ELEVATOR = "Elevator";
 
   // Scene 이름 구분
+  public const string CUTSCENE = "CutScene Test";
+  public const string MAINMENU = "MainMenu";
   public const string GAMESCENE = "Game Scene";
 }
