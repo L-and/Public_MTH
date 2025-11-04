@@ -99,10 +99,18 @@ public class BossPhase : MonoBehaviour
 
         // 탄에서 데미지 꺼내기 (HitSource가 탄/부모 어디에 붙어 있어도 커버)
         float damage = 0f;
-        if (col.TryGetComponent<HitSource>(out var hs))
-            damage = Mathf.Max(0f, hs.damage);
-        else if (col.GetComponentInParent<HitSource>() is HitSource hs2)
-            damage = Mathf.Max(0f, hs2.damage);
+
+        if (!GameManager.PlayerManager)
+        {
+            Debug.LogWarning("GameManager.PlayerManager 가 존재하지않습니다.");
+            return;
+        }
+        
+        damage = GameManager.PlayerManager.PlayerStat.bulletDamage;
+        // if (col.TryGetComponent<HitSource>(out var hs))
+        //     damage = Mathf.Max(0f, hs.damage);
+        // else if (col.GetComponentInParent<HitSource>() is HitSource hs2)
+        //     damage = Mathf.Max(0f, hs2.damage);
 
         if (damage <= 0f) return;
 

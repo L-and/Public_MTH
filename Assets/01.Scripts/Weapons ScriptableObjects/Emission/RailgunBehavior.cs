@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace _01.Scripts.Emission
+namespace _01.Scripts.Weapons_ScriptableObjects.Emission
 {
     [CreateAssetMenu(fileName = "Railgun Behavior", menuName = "Emission/Behavior/Railgun Behavior")]
     public class RailgunBehavior : EmissionBehavior
@@ -9,10 +10,11 @@ namespace _01.Scripts.Emission
         [Tooltip("사거리")] 
         public float range = 100f;
         [Tooltip("적 레이어마스크")]
-        public LayerMask enemyMask = LayerMask.GetMask("Enemy"); // TODO 하드코딩 수정
-        
+        public LayerMask enemyMask;
+
         public override void Execute(PlayerEmission handler, Transform playerCamera, EmissionAbilityData data)
         {
+            Debug.Log("레일건 발사");
             Transform fireTransform = handler.firePosition; // 레일건 발사위치
             
             // RaycastAll을 사용해 레일건을 발사하여 적중된 적들의 히트박스 Collider를 가져옴

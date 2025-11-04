@@ -16,7 +16,7 @@ namespace InfimaGames.LowPolyShooterPack
         [Tooltip("Total Ammunition.")]
         [SerializeField]
         private int ammunitionTotal = 10;
-
+        
         [Header("Interface")]
 
         [Tooltip("Interface Sprite.")]
@@ -37,5 +37,7 @@ namespace InfimaGames.LowPolyShooterPack
         public override Sprite GetSprite() => sprite;
 
         #endregion
+        
+        public override void SetMaxAmount(int amount) => ammunitionTotal = amount;
     }
 }

@@ -1,7 +1,7 @@
-using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
 using DG.Tweening;
 using System.Collections;
+using _01.Scripts.PlayerControll;
 using TMPro;
 using UnityEditor.Playables;
 using UnityEngine;
@@ -26,8 +26,10 @@ public class UIManager : MonoBehaviour
     Color hpBarFillColor;
     Color ohBarFillColor;
     Color stmBarFillColor;
-    PlayerStatus playerStatus;
-    PlayerController playerController;
+
+    private PlayerStat PlayerStat => GameManager.PlayerManager?.PlayerStat;
+    private PlayerController PlayerController => GameManager.PlayerManager?.PlayerController;
+    
     bool ohFulled = false;
     bool stmFulled = false;
     bool isGameover = false;
@@ -41,70 +43,62 @@ public class UIManager : MonoBehaviour
         ohBarFillColor = ohBarFill.color;
         stmBarFillColor = stmBarFill.color;
         StartCoroutine(ShowLevelInfoCoroutine());
-        if (GameObject.FindWithTag("Player") != null)
+        if (!GameManager.PlayerManager)
         {
-            playerStatus = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
-            playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-            UpdateStatus();
+            Debug.LogWarning("GameManager.PlayerManager가 정의되지 않았습니다!");
         }
+
+        UpdateStatus();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            if (playerStatus.stamina.Value >= 1)
-            {
-                SetStm(playerStatus.stamina.Value - 1);
-            }
-        }
 
+        // 플레이어 게임오버 처리 TODO 수정필요
         if (Input.GetKeyDown(KeyCode.G) && !isGameover)
         {
             GameOver();
         }
+        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Pause();
         }
 
-        if (playerStatus != null)
-        {   
-            if (playerStatus.stamina.Value < playerStatus.stamina.maxValue) SetStm(playerStatus.stamina.Value + 0.5f * Time.deltaTime);
-            UpdateStatus();
-        }
+        // PlayerStat값에 맞게 UI 업데이트
+        UpdateStatus();
     }
     #region METHOD
     public void SetHp(float value)
     {
-        if (value > playerStatus.hp.Value)
+        if (value > PlayerStat.hp.Value)
         {
             DOTween.Kill(hpBarFill);
             hpBarFill.color = hpBarFillColor;
             hpBarFill.DOColor(Color.green, 0.2f).SetLoops(2, LoopType.Yoyo);
         }
-        playerStatus.hp.Value = Mathf.Clamp(value, 0, playerStatus.hp.maxValue);
-        hpBar.maxValue = playerStatus.hp.maxValue;
-        hpBar.value = playerStatus.hp.Value;
+        PlayerStat.hp.Value = Mathf.Clamp(value, 0, PlayerStat.hp.maxValue);
+        hpBar.maxValue = PlayerStat.hp.maxValue;
+        hpBar.value = PlayerStat.hp.Value;
     }
     public void SetOh(float value)
     {
-        playerStatus.overheat.Value = playerStatus.overheat.maxValue;
-        ohBar.maxValue = playerStatus.overheat.maxValue;
-        ohBarText.text = playerStatus.overheat.Value + "%";
-        ohBar.value = playerStatus.overheat.Value;
+        PlayerStat.overheat.Value = value;
+        ohBar.maxValue = PlayerStat.overheat.maxValue;
+        ohBarText.text = PlayerStat.overheat.Value + "%";
+        ohBar.value = PlayerStat.overheat.Value;
         Color color2;
         ColorUtility.TryParseHtmlString("#FF8D00", out color2);
-        ohBarFill.color = Color.Lerp(ohBarFillColor, color2, playerStatus.overheat.Value / 100);
+        ohBarFill.color = Color.Lerp(ohBarFillColor, color2, PlayerStat.overheat.Value / 100);
 
-        if (playerStatus.overheat.Value < playerStatus.overheat.maxValue)
+        if (PlayerStat.overheat.Value < PlayerStat.overheat.maxValue)
         { 
             ohFulled = false;
             DOTween.Kill(ohBarText.rectTransform);
             ohBarText.rectTransform.localScale = Vector3.one;
         }
-        if (!ohFulled && playerStatus.overheat.Value >= playerStatus.overheat.maxValue)
+        if (!ohFulled && PlayerStat.overheat.Value >= PlayerStat.overheat.maxValue)
         {
             ohFulled = true;
             DOTween.Kill(ohBarFill);
@@ -115,12 +109,12 @@ public class UIManager : MonoBehaviour
     }
     public void SetStm(float value)
     {
-        playerStatus.stamina.Value = value;
-        stmBar.maxValue = playerStatus.stamina.maxValue;
-        stmBar.value = playerStatus.stamina.Value;
+        PlayerStat.stamina.Value = value;
+        stmBar.maxValue = PlayerStat.stamina.maxValue;
+        stmBar.value = PlayerStat.stamina.Value;
 
-        if (playerStatus.stamina.Value < playerStatus.stamina.maxValue) stmFulled = false;
-        if (!stmFulled && playerStatus.stamina.Value >= playerStatus.stamina.maxValue)
+        if (PlayerStat.stamina.Value < PlayerStat.stamina.maxValue) stmFulled = false;
+        if (!stmFulled && PlayerStat.stamina.Value >= PlayerStat.stamina.maxValue)
         {
             stmFulled = true;
             DOTween.Kill(stmBarFill);
@@ -135,7 +129,6 @@ public class UIManager : MonoBehaviour
         isGameover = true;
         hud.SetActive(false);
         gameover.SetActive(true);
-        playerController.DeactivePlayerInput();
     }
 
     void Restart()
@@ -145,8 +138,8 @@ public class UIManager : MonoBehaviour
 
     IEnumerator ShowLevelInfoCoroutine()
     {
-        levelInfo.rectTransform.DOLocalMoveY(250, 0);
-        levelInfo.rectTransform.DOLocalMoveY(-45, 1);
+        levelInfo.DOFade(0, 0);
+        levelInfo.DOFade(1, 1);
         yield return new WaitForSeconds(5);
         levelInfo.DOFade(0, 1);
     }
@@ -156,14 +149,14 @@ public class UIManager : MonoBehaviour
         if (!isPause)
         {
             pauseMenu.SetActive(true);
-            playerController.DeactivePlayerInput();
+            PlayerController.DeactivePlayerInput();
             Time.timeScale = 0;
             isPause = true;
             return;
         }
         else
         {
-            playerController.ActivePlayerInput();
+            PlayerController.ActivePlayerInput();
             pauseMenu.SetActive(false);
             Time.timeScale = 1;
             isPause = false;
@@ -173,9 +166,9 @@ public class UIManager : MonoBehaviour
 
     void UpdateStatus()
     {
-        SetHp(playerStatus.hp.Value);
-        SetOh(playerStatus.overheat.Value);
-        SetStm(playerStatus.stamina.Value);
+        SetHp(PlayerStat.hp.Value);
+        SetOh(PlayerStat.overheat.Value);
+        SetStm(PlayerStat.stamina.Value);
     }
 
     #endregion

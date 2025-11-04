@@ -116,5 +116,15 @@ namespace _01.Scripts.Weapon
         public abstract void EjectCasing();
 
         #endregion
+        
+        #region Custom 메서드
+
+        public abstract void Initialize();
+        
+        public abstract void SetRateOfFire(int rpm);
+
+        public abstract void SetMagazineSize(int amount);
+
+        #endregion
     }
 }

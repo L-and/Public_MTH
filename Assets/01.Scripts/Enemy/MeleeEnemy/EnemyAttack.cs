@@ -190,7 +190,7 @@ public class EnemyAttack : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             col.SendMessageUpwards("ApplyDamage", damage, SendMessageOptions.DontRequireReceiver);
-            var ps = col.GetComponentInParent<_01.Scripts.PlayerControll.Status.PlayerStatus>();
+            var ps = col.GetComponentInParent<_01.Scripts.PlayerControll.Status.PlayerStat>();
             if (ps != null)
             {
                 ps.AddOverHeat(5f);
