@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _01.Scripts.Weapons_ScriptableObjects.Emission
@@ -9,8 +10,8 @@ namespace _01.Scripts.Weapons_ScriptableObjects.Emission
         [Tooltip("사거리")] 
         public float range = 100f;
         [Tooltip("적 레이어마스크")]
-        public LayerMask enemyMask = LayerMask.GetMask("Enemy"); // TODO 하드코딩 수정
-        
+        public LayerMask enemyMask;
+
         public override void Execute(PlayerEmission handler, Transform playerCamera, EmissionAbilityData data)
         {
             Debug.Log("레일건 발사");
