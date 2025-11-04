@@ -17,24 +17,23 @@ public class ResourceManager : MonoBehaviour
   private AsyncOperationHandle<IList<GameObject>> _enemyPrefabLoadHandle; // 몬스터
   // 핸들 저장할 변수 (단일)
   private AsyncOperationHandle<GameObject> _playerPrefabLoadHandle;       // 플레이어
+  private AsyncOperationHandle<GameObject> _elevatorPrefabLoadHandle;     // 엘리베이터
 
 
   // 리소스 데이터를 가지고 있는 변수 (다수)
   public Dictionary<string, GameObject> mapPrefabDict { get; private set; }   // 맵
   public Dictionary<string, GameObject> enemyPrefabDict { get; private set; } // 몬스터
   // 리소스 데이터를 가지고 있는 변수 (단일)
-  public GameObject playerPrefab { get; private set; } // 플레이어
+  public GameObject playerPrefab { get; private set; }    // 플레이어
+  public GameObject elevatorPrefab { get; private set; }  // 엘리베이터
 
-  private const string MAP_PROTOTYPE = "Map_Prototype";
-  private const string ENEMY = "Enemy";
-  private const string PLAYER = "Player";
-
-  /// 현재 테스트용
+  // 게임 시작하자마자 불러옴.
   async void Awake()
   {
-    await LoadMapPrefabs();
-    await LoadEnemyPrefabs();
     await LoadPlayerPrefabs();
+    await LoadEnemyPrefabs();
+    await LoadElevatorPrefabs();
+    await LoadMapPrefabs(Constants.MAP_SEWER);
   }
 
   #region async / await로 리소스 데이터 가져오는 방법
@@ -74,13 +73,15 @@ public class ResourceManager : MonoBehaviour
   #endregion
 
   #region 맵 리소스
-  public async Task LoadMapPrefabs()
+  public async Task LoadMapPrefabs(string mapLabel)
   {
+    // 0) 있을 수 있는 핸들 해제
+    ReleaseMapPrefabs();
     // 1) 리소스 데이터 받을 변수 초기화
     mapPrefabDict = new Dictionary<string, GameObject>();
 
     // 2) 리소스 데이터 검색할 핸들 가져오기 (key(Label 값), 콜백 null)
-    _mapPrefabLoadHandle = Addressables.LoadAssetsAsync<GameObject>(MAP_PROTOTYPE, null);
+    _mapPrefabLoadHandle = Addressables.LoadAssetsAsync<GameObject>(mapLabel, null);
 
     // 3) 비동기로 불러오기
     await _mapPrefabLoadHandle.Task;
@@ -116,11 +117,13 @@ public class ResourceManager : MonoBehaviour
   #region 몬스터 리소스 
   public async Task LoadEnemyPrefabs()
   {
+    // 0) 있을 수 있는 핸들 해제
+    ReleaseEnemyPrefabs();
     // 1) 리소스 데이터 받을 변수 초기화
     enemyPrefabDict = new Dictionary<string, GameObject>();
 
     // 2) 리소스 데이터 검색할 핸들 가져오기 (key(Label 값), 콜백 null)
-    _enemyPrefabLoadHandle = Addressables.LoadAssetsAsync<GameObject>(ENEMY, null);
+    _enemyPrefabLoadHandle = Addressables.LoadAssetsAsync<GameObject>(Constants.ENEMY, null);
 
     // 3) 비동기로 불러오기
     await _enemyPrefabLoadHandle.Task;
@@ -156,11 +159,13 @@ public class ResourceManager : MonoBehaviour
   #region 플레이어 리소스
   public async Task LoadPlayerPrefabs()
   {
+    // 0) 있을 수 있는 핸들 해제
+    ReleasePlayerPrefab();
     // 1) 리소스 데이터 변수 초기화
     playerPrefab = null;
 
     // 2) 리소스 핸들값을 가져오기 (단일)
-    _playerPrefabLoadHandle = Addressables.LoadAssetAsync<GameObject>(PLAYER);
+    _playerPrefabLoadHandle = Addressables.LoadAssetAsync<GameObject>(Constants.PLAYER);
 
     // 3) 비동기 실행
     await _playerPrefabLoadHandle.Task;
@@ -176,10 +181,43 @@ public class ResourceManager : MonoBehaviour
   public void ReleasePlayerPrefab()
   {
     // 핸들이 있는지 확인
-    if(_playerPrefabLoadHandle.IsValid())
+    if (_playerPrefabLoadHandle.IsValid())
     {
       Addressables.Release(_playerPrefabLoadHandle);
       playerPrefab = null;
+    }
+  }
+  #endregion
+  
+  #region 엘리베이터 리소스
+  public async Task LoadElevatorPrefabs()
+  {
+    // 0) 있을 수 있는 핸들 해제
+    ReleaseElevatorPrefab();
+    // 1) 리소스 데이터 변수 초기화
+    elevatorPrefab = null;
+
+    // 2) 리소스 핸들값을 가져오기 (단일)
+    _elevatorPrefabLoadHandle = Addressables.LoadAssetAsync<GameObject>(Constants.ELEVATOR);
+
+    // 3) 비동기 실행
+    await _elevatorPrefabLoadHandle.Task;
+
+    // 4) 잘 가져왔는지 체크
+    if (_elevatorPrefabLoadHandle.Status == AsyncOperationStatus.Succeeded)
+      elevatorPrefab = _elevatorPrefabLoadHandle.Result;
+    else
+      Debug.LogError("엘리베이터 프리팹 로드 실패");
+  }
+
+  // 리소스 해제
+  public void ReleaseElevatorPrefab()
+  {
+    // 핸들이 있는지 확인
+    if(_elevatorPrefabLoadHandle.IsValid())
+    {
+      Addressables.Release(_elevatorPrefabLoadHandle);
+      elevatorPrefab = null;
     }
   }
   #endregion

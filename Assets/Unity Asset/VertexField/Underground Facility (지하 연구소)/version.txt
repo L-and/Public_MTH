@@ -1,0 +1,14 @@
+Release version 1.1
+- Added UV2 for meshes to work with Unity Baked Lighting.
+- Added Demo_scene_baked with example how to bake static lighting. Check documentation "Baking Level"
+- Improved some UV maps of few objects.
+
+
+
+First release version 1.0
+
+-Make sure to import unity post processing effects version 1 and apply the profile(found in "Extra" folder) on the camera to get the same results as shown in the videos and screenshots.
+
+You can find the latest version of Unity PostProcessing stack on GitHub https://github.com/Unity-Technologies/PostProcessing/wiki
+
+-To explore the level in the first person view please import "Characters" from Unity Standard Assets or use your own setup.

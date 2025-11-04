@@ -3834,7 +3834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02137ded521381241a4e70b835fd7493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamage
-  bodyHitsToDie: 5
+  bodyHitsToDie: 10
   animator: {fileID: 6753294354981382485}
   deathTrigger: Die
   agent: {fileID: 1439184569480505706}
@@ -3911,6 +3911,7 @@ MonoBehaviour:
   animator: {fileID: 6753294354981382485}
   speedParam: moveSpeed
   speedDamp: 0.1
+  meleeTrigger: Attack
   attackBehaviours:
   - {fileID: 6763832161982336850}
   attackFacingDot: 0.6

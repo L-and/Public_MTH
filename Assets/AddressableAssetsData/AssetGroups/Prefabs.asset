@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Prefabs
   m_GUID: 252014c56743a2c4a8fc772f285f302b
   m_SerializeEntries:
+  - m_GUID: 058b7167d18c4d145a610157fe3868d2
+    m_Address: Room_Sewer_2x2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map_Sewer
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0947c6d805e591d488ebd642cc3b3d4c
     m_Address: Player_Prototype.prefab
     m_ReadOnly: 0
@@ -40,7 +46,7 @@ MonoBehaviour:
     m_Address: Elevator_Dummy.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map_Prototype
+    - Elevator
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3a29d606c03dfa34ea1d92b592163d05
     m_Address: Options.prefab
@@ -68,6 +74,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map_Prototype
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b37f2e4a4200314faff979285943f1a
+    m_Address: Room_Sewer_1x1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map_Sewer
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7022b80ae6591294e98fad14e5216424
     m_Address: Room_Prototype_Boos.prefab
@@ -109,6 +121,17 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7ba35a948922b84582870d241bd0135
+    m_Address: Room_Sewer_2x1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map_Sewer
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7887146ca167174dac2400877af3ab7
+    m_Address: Handgun.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d08b7aff9e1323f40b1860718f026843
     m_Address: Casing_Small.prefab
     m_ReadOnly: 0
@@ -128,6 +151,12 @@ MonoBehaviour:
     m_Address: GameUI.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7e3ce56a659bc34598b60b9c880414a
+    m_Address: Connector_Sewer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map_Sewer
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ff0cbf59a1aebf34a94cd2619878710c
     m_Address: Room_Prototype_01.prefab

@@ -207,6 +207,19 @@ namespace _01.Scripts.PlayerControll
             _recoil = transform.GetComponentInChildren<Recoil>(); // 반동 컴포넌트
         }
 
+        private void Start()
+        {
+            // 상태 머신 생성
+            MovementFSM = new MovementStateMachine(this);
+            SubWeaponFSM = new SubWeaponStateMachine(this);
+            EmissionFSM = new EmissionStateMachine(this);
+            
+            // 각 상태 머신의 초기 상태 설정
+            MovementFSM.Initialize(MovementFSM.IdleState);
+            SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
+            EmissionFSM.Initialize(EmissionFSM.ReadyState);
+        }
+
         /// <summary>
         /// PlayerManager에 의해 호출되어 플레이어의 스탯과 장비를 설정합니다.
         /// </summary>
@@ -223,16 +236,6 @@ namespace _01.Scripts.PlayerControll
             SetupMainWeapon(loadout.Weapon);
             SetupEmission(loadout.Emission);
             SetupSubWeapon(loadout.SubWeapon);
-                
-            // 상태 머신 생성
-            MovementFSM = new MovementStateMachine(this);
-            SubWeaponFSM = new SubWeaponStateMachine(this);
-            EmissionFSM = new EmissionStateMachine(this);
-            
-            // 각 상태 머신의 초기 상태 설정
-            MovementFSM.Initialize(MovementFSM.IdleState);
-            SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
-            EmissionFSM.Initialize(EmissionFSM.ReadyState);
         }
 
         /// <summary>

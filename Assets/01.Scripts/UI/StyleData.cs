@@ -4,7 +4,7 @@ using UnityEngine;
 public class StyleData : ScriptableObject
 {
     [SerializedDictionary("ID", "Info")]
-    public SerializedDictionary<int, Info> Style;
+    public AYellowpaper.SerializedCollections.SerializedDictionary<int, Info> Style;
 
     [System.Serializable]
     public class Info

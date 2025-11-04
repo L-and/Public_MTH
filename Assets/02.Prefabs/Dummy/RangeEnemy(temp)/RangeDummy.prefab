@@ -248,6 +248,7 @@ MonoBehaviour:
   animator: {fileID: 123129990713458841}
   speedParam: moveSpeed
   speedDamp: 0.1
+  meleeTrigger: Attack
   attackBehaviours:
   - {fileID: 3313090653099956408}
   attackFacingDot: 0.6
@@ -265,7 +266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RangedAttack
   _minRange: 4
-  _maxRange: 15
+  _maxRange: 500
   _coolDown: 1.2
   _requireLOS: 1
   projectilePrefab: {fileID: 2933245234672188447, guid: 377fdb20f00a6b7498b0518aabe00c2a,
