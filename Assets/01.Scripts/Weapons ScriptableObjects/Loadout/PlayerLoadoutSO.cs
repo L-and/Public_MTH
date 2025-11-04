@@ -1,3 +1,4 @@
+using System;
 using _01.Scripts.Weapons_ScriptableObjects.Emission;
 using _01.Scripts.Weapons_ScriptableObjects.SubWeapon;
 using _01.Scripts.Weapons_ScriptableObjects.Weapon;
@@ -17,6 +18,7 @@ namespace _01.Scripts.Weapons_ScriptableObjects.Loadout
         public EmissionAbilityData[] emissions;
     }
 
+    [Serializable]
     public class PlayerLoadout
     {
         public WeaponData Weapon;

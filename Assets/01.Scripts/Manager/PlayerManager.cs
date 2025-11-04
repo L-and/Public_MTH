@@ -7,17 +7,17 @@ namespace _01.Scripts.Manager
 {
     public class PlayerManager : MonoBehaviour
     {
-        [Header("플레이어 상태값 (Scriptable Object)")]
-        [SerializeField] private PlayerStatSO PlayerStatSO;
+        [Header("플레이어 스탯 (Scriptable Object)")]
+        [SerializeField] private PlayerStatSO playerStatSo;
+        
+        private PlayerStat _playerStat;
+        public PlayerStat PlayerStat => _playerStat;
         
         [SerializeField]
         public PlayerController PlayerController { get; private set; }
-
-        [Header("플레이어 스탯 (Scriptable Object)")]          
-        [SerializeField] private PlayerStat playerStat;
-        public PlayerStat PlayerStat => playerStat;
         
-        [Header("플레이어 장비 (Scriptable Object)")]          
+        
+        [Header("선택할 수 있는 장비 목록(무기, 보조무기, 방출) (Scriptable Object)")]          
         [SerializeField] private PlayerLoadoutsSO loadoutsSo; // 무기, 보조무기, 방출 목록들 SO
 
         [Header("선택된 무기/보조무기/방출")]
@@ -40,10 +40,16 @@ namespace _01.Scripts.Manager
         /// <param name="emissionId"></param>
         public void SetLoadout(int weaponId, int subWeaponId, int emissionId)
         {
+            // 기존 이벤트 구독 해제
+            if (currentLoadout.Weapon)
+                currentLoadout.Weapon.OnStatsChanged -= UpdateWeaponData;
+                
+            currentLoadout.Weapon = Instantiate(loadoutsSo.weapons[weaponId]);
+            currentLoadout.SubWeapon = Instantiate(loadoutsSo.subWeapons[subWeaponId]);
+            currentLoadout.Emission = Instantiate(loadoutsSo.emissions[emissionId]);
             
-            currentLoadout.Weapon = loadoutsSo.weapons[weaponId];
-            currentLoadout.SubWeapon = loadoutsSo.subWeapons[subWeaponId];
-            currentLoadout.Emission = loadoutsSo.emissions[emissionId];
+            // 이벤트 구독
+            currentLoadout.Weapon.OnStatsChanged += UpdateWeaponData;
         }
         
         /// <summary>
@@ -58,7 +64,7 @@ namespace _01.Scripts.Manager
             InitializePlayerStat();
             
             // PlayerController에 스탯 정보 전달
-            PlayerController.Initialize(playerStat, currentLoadout);
+            PlayerController.Initialize(_playerStat, currentLoadout);
         }
         
         /// <summary>
@@ -67,7 +73,24 @@ namespace _01.Scripts.Manager
         [ContextMenu("Player Stat 초기화")]
         public void InitializePlayerStat()
         {
-            playerStat = new PlayerStat(PlayerStatSO.playerStat);
+            _playerStat = new PlayerStat(playerStatSo.playerStat);
         }
+        
+        #region 속성값 변경 적용 이벤트메서드
+
+        /// <summary>
+        /// 주무기(총기) 속성변경 적용
+        /// </summary>
+        private void UpdateWeaponData()
+        {
+            if (!PlayerController)
+            {
+                Debug.LogWarning("PlayerController가 연결되지 않았습니다.");
+            }
+            
+            PlayerController.UpdateMainWeaponData(currentLoadout.Weapon);
+        }
+        
+        #endregion
     }
 }

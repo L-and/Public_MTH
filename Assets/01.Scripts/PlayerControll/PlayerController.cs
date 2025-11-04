@@ -77,6 +77,8 @@ namespace _01.Scripts.PlayerControll
         public PlayerInput PlayerInput { get; private set; }
         public Rigidbody Rb { get; private set; }
         public Transform PlayerCamera { get; private set; }
+
+        private Recoil _recoil;
         
         # endregion
 
@@ -200,6 +202,9 @@ namespace _01.Scripts.PlayerControll
             Rb = GetComponent<Rigidbody>();
             PlayerCamera = Camera.main.transform;
             CharacterAnimController = transform.GetComponentInChildren<CharacterAnimationController>();
+            
+            // private 컴포넌트 캐싱
+            _recoil = transform.GetComponentInChildren<Recoil>(); // 반동 컴포넌트
         }
 
         /// <summary>
@@ -230,6 +235,10 @@ namespace _01.Scripts.PlayerControll
             EmissionFSM.Initialize(EmissionFSM.ReadyState);
         }
 
+        /// <summary>
+        /// 주무기 초기설정 메서드 (GameObject 생성, 컴포넌트 캐싱, weaponData 값 적용)
+        /// </summary>
+        /// <param name="weaponData"></param>
         private void SetupMainWeapon(WeaponData weaponData)
         {
             if (!weaponData)
@@ -251,28 +260,37 @@ namespace _01.Scripts.PlayerControll
                 Debug.LogWarning($"[총기: {weaponData.name}] WeaponBehaviour이 없습니다!");
                 return;
             }
-            
+
+            UpdateMainWeaponData(weaponData); // 총기 속성값 적용
+        }
+
+        /// <summary>
+        /// 총기의 속성값(공격력,탄창 등)을 적용하는 메서드
+        /// </summary>
+        /// <param name="weaponData">총기의 속성값들</param>
+        public void UpdateMainWeaponData(WeaponData weaponData)
+        {
             // 데미지 설정 TODO 여기가 옳은 위치인가?
-            GameManager.PlayerManager.PlayerStat.bulletDamage = weaponData.damage;
+            GameManager.PlayerManager.PlayerStat.bulletDamage = weaponData.Damage;
             
             // 탄창/RPM 설정
             equippedWeapon.Initialize();
-            equippedWeapon.SetMagazineSize(weaponData.magazineSize);
-            equippedWeapon.SetRateOfFire(weaponData.rpm);
+            equippedWeapon.SetMagazineSize(weaponData.MagazineSize);
+            equippedWeapon.SetRateOfFire(weaponData.Rpm);
             
             // 반동설정
-            Recoil recoil = transform.GetComponentInChildren<Recoil>();
-            if (!recoil)
+            
+            if (!_recoil)
             {
                 Debug.LogWarning($"[플레이어 프리팹 {name}] Recoil 컴포넌트가 없습니다!");
                 return;
             }
             
-            recoil.RecoilX = weaponData.verticalRecoil;
-            recoil.RecoilY = weaponData.horizontalRecoil;
+            _recoil.RecoilX = weaponData.VerticalRecoil;
+            _recoil.RecoilY = weaponData.HorizontalRecoil;
             
             
-            Debug.Log($"[총기설정 완료] 공격력: {weaponData.damage}, RPM: {weaponData.rpm}, 탄창크기: {weaponData.magazineSize}");
+            Debug.Log($"[총기설정 완료] 공격력: {weaponData.Damage}, RPM: {weaponData.Rpm}, 탄창크기: {weaponData.MagazineSize}, 반동: ({weaponData.HorizontalRecoil}, {weaponData.VerticalRecoil})");
         }
         
         /// <summary>
@@ -332,13 +350,17 @@ namespace _01.Scripts.PlayerControll
             {
                 playerSubWeapon.ExecuteSubWeapon();
             }
-            
-            // TODO 제거필요 (무기데미지 변경 테스트코드)
-            if (Input.GetKeyDown(KeyCode.P))
+
+
+            // 업그레이드 테스트
+            if (Input.GetKeyDown(KeyCode.F1))
             {
-                GameManager.PlayerManager.PlayerStat.bulletDamage = 20;
+                GameManager.PlayerManager.currentLoadout.Weapon.VerticalRecoil = -4;
+                GameManager.PlayerManager.currentLoadout.Weapon.Rpm = 600;
+
+                GameManager.PlayerManager.currentLoadout.Weapon.MagazineSize = 20;
             }
-            
+
             // 스테미너 회복
             if (Stat.stamina.Value < Stat.stamina.maxValue)
             {
@@ -351,7 +373,8 @@ namespace _01.Scripts.PlayerControll
             EmissionFSM.CurrentState?.OnUpdate();
             
             // 디버그
-            speedText.text = PlatSpeed.ToString(CultureInfo.InvariantCulture);
+            if (speedText)
+                speedText.text = PlatSpeed.ToString(CultureInfo.InvariantCulture);
         }
 
         private void FixedUpdate()
@@ -362,7 +385,8 @@ namespace _01.Scripts.PlayerControll
             EmissionFSM.CurrentState?.OnFixedUpdate();
             
             // 디버그
-            stateText.text = MovementState;
+            if (stateText)
+                stateText.text = MovementState;
         }
         #endregion
 

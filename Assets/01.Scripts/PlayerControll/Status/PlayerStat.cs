@@ -62,6 +62,10 @@ namespace _01.Scripts.PlayerControll.Status
         [Header("대쉬상태 관련변수")] 
         [SerializeField] private float dashDurationTime = 0.5f;
 
+        /// <summary>
+        /// 대쉬상태의 지속시간을 설정하는 프로퍼티
+        /// (무적시간을 의미함)
+        /// </summary>
         public float DashDurationtime
         {
             get => dashDurationTime;
@@ -91,13 +95,15 @@ namespace _01.Scripts.PlayerControll.Status
             overheat.Value = 0;
         }
         
-        
+        /// <summary>
+        /// 과열게이지 값 충전
+        /// </summary>
+        /// <param name="amount"></param>
         public void AddOverHeat(float amount)
         {
             overheat.Value += amount;
             overheat.Value = Mathf.Clamp(overheat.Value, 0, overheat.maxValue);
         }
-        
         # endregion
         
     }
