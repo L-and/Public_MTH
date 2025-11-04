@@ -5,33 +5,52 @@ using UnityEngine;
 
 namespace _01.Scripts.Manager
 {
+    /// <summary>
+    ///
+    /// 데이터 관리방식:
+    /// 플레이어 속성(체력, 스테미너...), 장비목록(주무기, 보조무기, 방출) 데이터를 Scriptable Object로 관리,
+    /// 게임시작(플레이어 스폰) 시 SO의 데이터를 토대로 플레이어 속성, 장비목록을 필드로 저장하게 됨
+    ///
+    /// 
+    /// </summary>
     public class PlayerManager : MonoBehaviour
     {
+        [Header("플레이어 프리팹")]
+        [SerializeField] private GameObject _playerPrefab;
+        
+        #region Scriptable Object 필드들  (플레이어 스탯, 장비목록들을 SO로 만들어서 게임플레이 시 적용하는 방식)
+        
         [Header("플레이어 스탯 (Scriptable Object)")]
-        [SerializeField] private PlayerStatSO playerStatSo;
-        
-        private PlayerStat _playerStat;
-        public PlayerStat PlayerStat => _playerStat;
-        
-        [SerializeField]
-        public PlayerController PlayerController { get; private set; }
-        
+        [SerializeField] private PlayerStatSO playerStatSo; // 플레이어 속성값
         
         [Header("선택할 수 있는 장비 목록(무기, 보조무기, 방출) (Scriptable Object)")]          
         [SerializeField] private PlayerLoadoutsSO loadoutsSo; // 무기, 보조무기, 방출 목록들 SO
+        
+        #endregion
 
-        [Header("선택된 무기/보조무기/방출")]
+        # region 게임플레이 중 사용되는 게임 데이터 필드들
+        
+        [Header("게임플레이 중 사용되는 데이터")]
         [SerializeField] public PlayerLoadout currentLoadout;
         
-        private void Awake()
+        [SerializeField] private PlayerStat _playerStat;
+        public PlayerStat PlayerStat => _playerStat;
+   
+        public PlayerController PlayerController { get; private set; }
+        
+        # endregion
+
+        /// <summary>
+        /// 선택된 장비ID를 이용하여 플레이어 게임오브젝트를 생성하는 메서드
+        /// 사용방법: 장비선택 UI 이후 레벨1 시작에서 사용될것으로 예상
+        /// </summary>
+        [ContextMenu("플레이어 생성")]
+        private void PlayerSpawnTest()
         {
-            currentLoadout = new PlayerLoadout();
-            // TODO 테스트용 코드라서 이후에 제거 필요
-            // 게임시작 후 스탯, 장비적용 테스트용 코드
             SetLoadout(0, 0, 0);
             GameStart();
         }
-
+        
         /// <summary>
         /// 장비선택 UI에서 선택된 장비SO를 불러와서 LoadOut에 적용시키는 메서드
         /// </summary>
@@ -40,6 +59,8 @@ namespace _01.Scripts.Manager
         /// <param name="emissionId"></param>
         public void SetLoadout(int weaponId, int subWeaponId, int emissionId)
         {
+            currentLoadout = new PlayerLoadout();
+            
             // 기존 이벤트 구독 해제
             if (currentLoadout.Weapon)
                 currentLoadout.Weapon.OnStatsChanged -= UpdateWeaponData;
@@ -58,17 +79,23 @@ namespace _01.Scripts.Manager
         /// </summary>
         public void GameStart()
         {
-            PlayerController = FindObjectOfType<PlayerController>();
+            var playerGo = Instantiate(_playerPrefab, Vector3.zero, Quaternion.identity);
 
-            // PlayerStat 정보를 SO에서 가져오기
-            InitializePlayerStat();
+            // 플레이어 게임오브젝트 생성
+            if (playerGo.TryGetComponent<PlayerController>(out var pc))
+            {
+                PlayerController = pc;
+                
+                // 플레이어 속성값을 SO에서 가져와서 게임플레이중 데이터로 사용
+                InitializePlayerStat();
             
-            // PlayerController에 스탯 정보 전달
-            PlayerController.Initialize(_playerStat, currentLoadout);
+                // PlayerController에 스탯 정보 전달
+                PlayerController.Initialize(_playerStat, currentLoadout);
+            }
         }
         
         /// <summary>
-        /// 플레이어의 스탯정보를 초기화하는 메서드
+        /// 플레이어의 스탯정보를 초기화하는 메서드 (게임 시작시 사용)
         /// </summary>
         [ContextMenu("Player Stat 초기화")]
         public void InitializePlayerStat()
