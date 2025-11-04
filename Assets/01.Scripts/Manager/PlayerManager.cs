@@ -1,3 +1,4 @@
+using System;
 using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
 using _01.Scripts.Weapons_ScriptableObjects.Loadout;
@@ -39,6 +40,13 @@ namespace _01.Scripts.Manager
         public PlayerController PlayerController { get; private set; }
         
         # endregion
+
+        private void Awake()
+        {
+            // TODO 나중에 씬 연결을 하게되면 제거해야 함
+            // 씬 플레이 시 플레이어의 프리팹을 생성하여 테스트를 편하게 하기위해 작성한 코드임
+            PlayerSpawnTest();
+        }
 
         /// <summary>
         /// 선택된 장비ID를 이용하여 플레이어 게임오브젝트를 생성하는 메서드
