@@ -1,3 +1,8 @@
 using UnityEngine;
 
-public enum HitZones {Head, Body}
+public enum HitZones { Weak, Body }
+
+public class HitZone: MonoBehaviour
+{
+    public HitZones zone = HitZones.Body;
+}

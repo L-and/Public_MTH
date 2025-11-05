@@ -8,11 +8,17 @@ public class EmissionUsingState : EmissionState
 
     public override void OnEnter()
     {
-        // 현재 선택된 방출 스킬(레일건, 화염방사기 등)의 로직 실행
+        controller.CharacterAnimController.EmissionFireAnimation();
+        controller.playerEmission.ModelSetActive(true);
+        // TODO 방출 애니메이션(무기들기, 무기내리기)에 맞게 방출사용 및 상태전환 되도록 추가
+        // controller.UseEmission();
     }
 
     public override void OnUpdate()
     {
-        // 사용 종료 조건 감지 시 CooldownState로 전환
+        // if (TODO 사용 종료 조건 감지 시 CooldownState로 전환)
+        {
+            stateMachine.ChangeState(stateMachine.CooldownState);
+        }
     }
 }

@@ -17,6 +17,21 @@ public class Recoil : MonoBehaviour
     [SerializeField] private float recoilY;
     [SerializeField] private float recoilZ;
 
+    public float RecoilX
+    {
+        set => recoilX = value;
+    }
+    
+    public float RecoilY
+    {
+        set => recoilY = value;
+    }
+    
+    public float RecoilZ
+    {
+        set => recoilZ = value;
+    }
+    
     [Header("반동 적용/복귀속도 설정값")]
     [SerializeField] private float snappiness;
     [SerializeField] private float returnSpeed;

@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class ElevatorUpgradeManager : MonoBehaviour
 {
-    [Header("참조")]
-    public PlayerStatus playerStatus;
+    [Header("참조")] 
     public UpgradeData upgradeData;
     public elevtest3 linkedElevator;
     public UpgradeUIManager upgradeUIManager; //
 
+    // PlayerManager를 통해 PlayerStat을 참조하는 프로퍼티
+    private PlayerStat PlayerStat => GameManager.PlayerManager?.PlayerStat;
+    
     private IUpgradeEffect[] allEffects;
     private bool effectsLoaded = false;
 
@@ -49,10 +51,10 @@ public class ElevatorUpgradeManager : MonoBehaviour
         Debug.Log($"[DEBUG] 업그레이드 버튼 클릭됨 ID: {id}");
 
         //PlayerStatus의 UpgradeSlotID에 id 값 할당
-        int[] upgradeSlots = new int[3] { playerStatus.UpgradeSlot1ID, playerStatus.UpgradeSlot2ID, playerStatus.UpgradeSlot3ID };
-        upgradeSlots[playerStatus.UpgradeNumber] = id;
-        playerStatus.UpgradeNumber++;
-        Debug.Log(playerStatus.UpgradeSlot1ID);
+        int[] upgradeSlots = new int[3] { PlayerStat.UpgradeSlot1ID, PlayerStat.UpgradeSlot2ID, PlayerStat.UpgradeSlot3ID };
+        upgradeSlots[PlayerStat.UpgradeNumber] = id;
+        PlayerStat.UpgradeNumber++;
+        Debug.Log(PlayerStat.UpgradeSlot1ID);
 
         //아직 효과가 로드 안되면 즉시 다시 시도
         if (!effectsLoaded || allEffects == null || allEffects.Length == 0)
@@ -74,7 +76,7 @@ public class ElevatorUpgradeManager : MonoBehaviour
 
         if (effect != null)
         {
-            effect.ApplyEffect(playerStatus);
+            effect.ApplyEffect(PlayerStat);
             Debug.Log($" {effectName} 업그레이드 적용 완료");
         }
         else

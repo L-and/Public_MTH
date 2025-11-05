@@ -3,6 +3,6 @@ using UnityEngine;
 
 public interface IUpgradeEffect 
 {
-    string EffectName { get; }   // È¿°úÀÌ¸§
-    void ApplyEffect(PlayerStatus playerStatus);   // È¿°ú Àû¿ë ¸Þ¼­µå
+    string EffectName { get; }   // È¿ï¿½ï¿½ï¿½Ì¸ï¿½
+    void ApplyEffect(PlayerStat playerStat);   // È¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 }

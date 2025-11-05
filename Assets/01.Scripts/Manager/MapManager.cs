@@ -1,0 +1,238 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+
+public class MapManager : MonoBehaviour
+{
+  private Dictionary<string, GameObject> _mapPrefabs; // 현재 층의 맵 리소스가 전부 들어있는 변수
+
+  private List<GameObject> _normalRoomPrefabs; // 방 프리팹만 가지고 있는 리스트 변수
+  // private List<GameObject> connectorPrefabs;
+  private GameObject _connectorPrefab;
+  private GameObject _boosRoomPrefab;
+  private GameObject _elevatorPrefab;
+
+  private TextMeshProUGUI floorCountText; // 현재 층 표시하는 TextUI
+  private Transform _mapRoot;             // 맵 생성 부모
+  private Transform _attachPoint;         // 현재 진행 Anchor
+
+  private bool _isCheck;
+  private bool _isCount;
+
+  async void Start()
+  {
+    if (!_isCount)
+    {
+      GameManager.GameData.currentFloor++;
+      _isCount = true;
+    }
+    
+    var curFloor = GameManager.GameData.currentFloor;
+    var thisFloor = GameManager.GameData.SewerMapMaxFloor();
+
+    // 현재층이 해당 컨셉 최대 층 보다 높을 경우
+    if (curFloor > thisFloor)
+      await GameManager.ResourceEx.LoadMapPrefabs(Constants.MAP_PROTOTYPE);
+
+    StartCoroutine(SetupMap());
+  }
+
+  private IEnumerator SetupMap()
+  {
+    // GameScene에서 시작하기 위해 테스트용
+    yield return new WaitForSeconds(3f);
+
+    // 1) 씬이 시작되면 맵 리소스 데이터 전체를 가져옴.
+    _mapPrefabs = GameManager.ResourceEx.mapPrefabDict;
+    // 2) 프리팹 초기화 
+    _normalRoomPrefabs = new List<GameObject>();
+    _connectorPrefab = null;
+    _elevatorPrefab = GameManager.ResourceEx.elevatorPrefab;
+    _mapRoot = new GameObject("Map").transform;
+
+    // 3) 맵 리소스 데이터를 전체 순회 하면서 프리팹별로 나눔.
+    foreach (var pair in _mapPrefabs)
+    {
+      string key = pair.Key;
+      GameObject prefab = pair.Value;
+
+      if (key.StartsWith(Constants.ROOM))
+        _normalRoomPrefabs.Add(prefab);
+      else if (key.StartsWith(Constants.CONNECTOR))
+        _connectorPrefab = prefab;
+    }
+
+    // 방 생성 함수 호출
+    CreateFloor();
+
+    // 플레이어 생성
+    GameManager.SceneEx.PlayerSpawn();
+  }
+
+  // 방 초기화하고 생성하는 함수
+  public void CreateFloor()
+  {
+    //TODO: 현재층이 보스층인지 아니면 일반층인지 구분
+    var thisFloorInfo = Constants.NORMAL_ROOM;
+
+    // 2) 시작 엘리베이터 생성 (플레이어 시작 위치)
+    var startElevator = Instantiate(_elevatorPrefab, _mapRoot);
+    startElevator.transform.position = Vector3.zero;
+    startElevator.transform.rotation = Quaternion.identity;
+    var startAnchor = startElevator.GetComponent<ElevatorAnchor>();
+    _attachPoint = startAnchor.elevatorAnchor;   // 출구를 기준으로 다음 연결 시작
+    startElevator.GetComponent<ElevatorController>().SetupForStart();
+
+    switch (thisFloorInfo)
+    {
+      case Constants.NORMAL_ROOM:
+        NormalMapSetting();
+        break;
+      case Constants.BOSS_ROOM:
+        BossMapSetting();
+        break;
+    }
+  }
+
+  // 일반적인 맵 생성
+  private void NormalMapSetting()
+  {
+    // 방 목록 섞기
+    var candidates = new List<GameObject>(_normalRoomPrefabs);
+    var roomCount = GameManager.GameData.RoomCount();
+    Shuffle(candidates);
+
+    // 2) 방과 복도 생성
+    int placed = 0;
+    while (placed < roomCount)
+    {
+      if (placed > candidates.Count && !_isCheck)
+      {
+        _isCheck = true;
+        Shuffle(candidates);
+      }
+        
+      var nextPrefab = candidates[placed % candidates.Count];
+      PlaceConnectorAndRoom(nextPrefab);
+      placed++;
+    }
+
+    // 마지막 엘리베이터 앞 복도 배치
+    var connector = Instantiate(_connectorPrefab, _mapRoot);
+    var cn = connector.GetComponent<ConnectorAnchor>();
+    AlignAtoB(connector.transform, cn.entryAnchor, _attachPoint);
+
+    // 통로 마지막에 진행 포인트 갱신
+    _attachPoint = cn.exitAnchor;
+
+    // 3) 마지막 엘리베이터 생성 (다음 층으로 이동하는 출구)
+    if (_elevatorPrefab != null && _attachPoint != null)
+    {
+      var endElevator = Instantiate(_elevatorPrefab, _mapRoot);
+      endElevator.transform.Rotate(0f, 180f, 0f, Space.Self);      // 엘리베이터 프리팹 회전
+
+      var ea = endElevator.GetComponent<ElevatorAnchor>();
+      AlignAtoB(endElevator.transform, ea.elevatorAnchor, _attachPoint);
+      endElevator.GetComponent<ElevatorController>().SetupForEnd();
+    }
+  }
+
+  // 보스방이 있는 맵 생성
+  private void BossMapSetting()
+  {
+    // 2) 복도복도 보스방 복도복도 배치
+    for (int i = 0; i < 2; i++)
+    {
+      var connector = Instantiate(_connectorPrefab, _mapRoot);
+      var cn = connector.GetComponent<ConnectorAnchor>();
+      AlignAtoB(connector.transform, cn.entryAnchor, _attachPoint);
+
+      // 통로 마지막에 진행 포인트 갱신
+      _attachPoint = cn.exitAnchor;
+    }
+
+    var room = Instantiate(_boosRoomPrefab, _mapRoot);
+    var ra = room.GetComponent<RoomAnchor>();
+    AlignAtoB(room.transform, ra.entryAnchor, _attachPoint);
+
+    _attachPoint = ra.exitAnchor;
+
+    for (int i = 0; i < 2; i++)
+    {
+      var connector = Instantiate(_connectorPrefab, _mapRoot);
+      var cn = connector.GetComponent<ConnectorAnchor>();
+      AlignAtoB(connector.transform, cn.entryAnchor, _attachPoint);
+
+      // 통로 마지막에 진행 포인트 갱신
+      _attachPoint = cn.exitAnchor;
+    }
+
+    // 3) 마지막 엘리베이터 생성 (다음 층으로 이동하는 출구)
+    if (_elevatorPrefab != null && _attachPoint != null)
+    {
+      var endElevator = Instantiate(_elevatorPrefab, _mapRoot);
+      endElevator.transform.Rotate(0f, 180f, 0f, Space.Self);      // 엘리베이터 프리팹 회전
+
+      var ea = endElevator.GetComponent<ElevatorAnchor>();
+      AlignAtoB(endElevator.transform, ea.elevatorAnchor, _attachPoint);
+
+      //endElevator.GetComponent<ElevatorController>().SetupForEnd();
+    }
+  }
+
+  // 복도와 방 배치하는 함수
+  private void PlaceConnectorAndRoom(GameObject roomPrefab)
+  {
+    // a) 복도 배치
+    var connector = Instantiate(_connectorPrefab, _mapRoot);
+    var cn = connector.GetComponent<ConnectorAnchor>();
+    AlignAtoB(connector.transform, cn.entryAnchor, _attachPoint);
+
+    // b) 방 배치
+    var room = Instantiate(roomPrefab, _mapRoot);
+    var ra = room.GetComponent<RoomAnchor>();
+    AlignAtoB(room.transform, ra.entryAnchor, cn.exitAnchor);
+
+    // c) 진행 포인트 갱신
+    _attachPoint = ra.exitAnchor;
+  }
+
+  // Anchor A가 속한 루트(rootToMove)를 움직여, Anchor A를 Anchor B에 정렬
+  private void AlignAtoB(Transform rootToMove, Transform anchorToMove, Transform anchorTarget)
+  {
+    // 1) 회전 정렬
+    // anchorToMove(예: 새 방의 입구)가 anchorTarget(예: 복도의 출구)을
+    // 정확히 마주보도록(즉, 180도 반대 방향) 목표 회전값을 계산합니다.
+    // (anchorTarget.forward의 반대 방향을 바라보도록 설정)
+    Quaternion targetRotation = Quaternion.LookRotation(-anchorTarget.forward, anchorTarget.up);
+
+    // rootToMove에 적용해야 할 '회전 차이값(delta)'을 계산합니다.
+    // (목표 회전값 * 현재 회전값의 역)
+    Quaternion rotationDelta = targetRotation * Quaternion.Inverse(anchorToMove.rotation);
+
+    // rootToMove(맵/복도 루트)를 회전시킵니다.
+    // (자식 객체인 anchorToMove도 따라서 회전합니다)
+    rootToMove.rotation = rotationDelta * rootToMove.rotation;
+
+    // 2) 위치 정렬
+    
+    // 이제 rootToMove가 올바른 방향을 바라보고 있으므로, 위치 오프셋을 계산합니다.
+    // (이 부분은 기존 코드가 맞습니다)
+    Vector3 positionOffset = anchorTarget.position - anchorToMove.position;
+
+    // rootToMove 자체의 위치를 변경합니다.
+    rootToMove.position += positionOffset;
+  }
+
+  // list에 있는 순서를 섞는 함수
+  private void Shuffle<T>(IList<T> list)
+  {
+    for (int i = list.Count - 1; i > 0; i--)
+    {
+      int j = Random.Range(0, i + 1);
+      (list[i], list[j]) = (list[j], list[i]);
+    }
+  }
+}
+

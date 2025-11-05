@@ -39,7 +39,7 @@ public class DashState : MovementState
         }
         
         // 무적시간 이후 상태 전환
-        if (_elapsedTime >= controller.Status.DashDurationtime)
+        if (_elapsedTime >= controller.Stat.DashDurationtime)
         {
             if (!controller.IsGrounded) // 점프상태 전환조건
             {

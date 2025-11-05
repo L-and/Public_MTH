@@ -21,6 +21,7 @@ public class CutsceneController : MonoBehaviour
     public Image cutImage;   // ÀÏ¹Ý ÄÆ (1500x550)
     public Image cutImageLarge;  //4¹ø ÄÆ (1500x1357) 
     public TextMeshProUGUI cutText;
+    public GameObject MainMenu;
     
     public Cut[] cuts;
     public string nextSceneName = "MainMenu";
@@ -82,7 +83,7 @@ public class CutsceneController : MonoBehaviour
         }
 
         // ÄÆ¾À ³¡ ¡æ ´ÙÀ½ ¾À ÀÌµ¿
-        SceneManager.LoadScene(nextSceneName);
+        GameManager.SceneEx.LoadScene(nextSceneName, false);
     }
 
     IEnumerator FadeBoth(Graphic img, Graphic txt, float start, float end, float duration)

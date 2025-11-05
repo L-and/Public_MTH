@@ -3,8 +3,27 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class BodyPart : MonoBehaviour
 {
-    public HitZones zone = HitZones.Body;        // 머리는 Head, 나머진 Body
+    [Header("데미지 부위 설정")]
+    public HitZones zone = HitZones.Body;        // 약점은 Weak, 나머진 Body
     [SerializeField] private LayerMask hitFrom; // Player 탄/근접이 속한 레이어
+    [SerializeField] private MonoBehaviour owner;
+    private IDamageableZone _damageable; // 루트(IDamageableZone) 참고를 외부에서 주입받음
+
+    // 루트가 이걸 호출해서 주입
+    public void Initialize(IDamageableZone damageable)
+    {
+        _damageable = damageable;
+        owner = damageable as MonoBehaviour; // 디버그용 확인 
+    }
+
+    private void Awake()
+    {
+        // inspector에 직접 넣어둔 경우용
+        if (_damageable == null && owner is IDamageableZone dz) _damageable = dz;
+    }
+
+    // 레일건 혹은 레이캐스트에서 쓸 얇은 API
+    public IDamageableZone GetOwner() => _damageable;
 
     private void Reset()
     {
@@ -12,7 +31,7 @@ public class BodyPart : MonoBehaviour
         col.isTrigger = false;                  // 반드시 Trigger
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
         // 공격물이 지정 레이어가 아니면 무시 (선택)
         if ((hitFrom.value & (1 << collision.gameObject.layer)) == 0)
@@ -36,7 +55,8 @@ public class BodyPart : MonoBehaviour
             {
                 Debug.LogWarning($"⚠️ No contact point for {name}, fallback to transform.position");
             }
-            target.ApplyHit(src.damage, hitPoint, zone);
+            //target.ApplyHit(src.damage, hitPoint, zone);
+            target.ApplyHit(src.GetDamage(), hitPoint, zone);
             // Vector3 hitPoint = collision.contacts.Length > 0 ?
             //     collision.contacts[0].point : transform.position;
             // target.ApplyHit(src.damage, hitPoint, zone);

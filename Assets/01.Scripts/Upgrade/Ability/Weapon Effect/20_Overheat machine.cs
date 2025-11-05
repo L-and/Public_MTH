@@ -6,7 +6,7 @@ public class Overheatmachine_20 : MonoBehaviour, IUpgradeEffect
     // UpgradeData.Name 과 정확히 동일해야 함
     public string EffectName => "과열 축적기"; 
 
-    public void ApplyEffect(PlayerStatus playerStatus)
+    public void ApplyEffect(PlayerStat playerStatus)
     {
         if (playerStatus == null)
         {

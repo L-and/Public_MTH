@@ -1,118 +1,96 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
 public class RoomController : MonoBehaviour
 {
-  [SerializeField] private DoorController entryDoor;
-  [SerializeField] private DoorController exitDoor;
+  [Header("방에 있는 문")]
+  [SerializeField] private GameObject entryDoor;
+  [SerializeField] private GameObject exitDoor;
 
-  // 프리팹 원본 배열
-  [SerializeField] private List<EnemySpawner> enemySpawnerPrefabs;
+  [Header("방에 있는 스포너 리스트")]
+  [SerializeField] private List<EnemySpawner> Spawners;
 
-  // 씬에 생성된 스포너들 (Clone)
-  private List<EnemySpawner> enemySpawners;
-
-  private bool hasBeenTriggered = false;  // 이 방이 활성화 되었는지 확인
-  private bool isRoomClear = false;
-  public bool isAllDoorOpen { get; private set; } // 방이 클리어 되었는지 체크
-  public string roomType = null;
-  private const string BOSS_ROOM = "Boss Room";
-  private const string NORMAL_ROOM = "Normal Room";
-
-  void Start()
-  {
-    isAllDoorOpen = false;
-
-    enemySpawners = new List<EnemySpawner>();
-
-    if (roomType == NORMAL_ROOM)
-    {
-      var index = 0;
-
-      foreach (EnemySpawner spawner in enemySpawnerPrefabs)
-      {
-        EnemySpawner newEnemySpawner = Instantiate(spawner, transform.position + new Vector3(-7 + (7 * index), 0, 7), transform.rotation, this.transform);
-
-        enemySpawners.Add(newEnemySpawner);
-        index++;
-      }
-    }
-    else if(roomType == BOSS_ROOM)
-    {
-        EnemySpawner newEnemySpawner = Instantiate(enemySpawnerPrefabs[0], transform.position + new Vector3(0, 0, 7), transform.rotation, this.transform);
-
-        enemySpawners.Add(newEnemySpawner);      
-    }
-  }
-
-  void Update()
-  {
-    RoomClearCheck();
-  }
+  private int totalEnemysToSpawn = 0; // 이 방에 생성될 수 있는 총 몬스터 수
+  private int killedEnemysCount = 0;  // 현재 죽은 몬스터 수
+  private bool isCleared = false;     // 현재 방이 클리어 되었는지 체크
 
   void OnTriggerEnter(Collider other)
   {
-    // 이미 활성화 됐거나, Player가 아닐 경우 무시
-    if (hasBeenTriggered || !other.CompareTag("Player"))
+    // 이미 클리어한 방인지, Trigger에 잡힌 Object가 Player 태그를 가지고 있는지 체크
+    if (!isCleared && other.CompareTag("Player"))
     {
-      return;
+      // 문이 있으면 닫음.
+      CloseAllDoor();
+
+      // 한번 들어왔으니 더이상 방 안 Trigger는 필요 없으므로 비활성화
+      GetComponent<BoxCollider>().enabled = false;
+
+      // 몬스터 스포너 활성화 함수 호출
+      ActivateSpawners();
     }
-
-    // 1) 방 활성화
-    hasBeenTriggered = true;
-
-    // 2) 들어온 문 닫기
-    entryDoor.CloseDoor();
-
-    // 3) 적 스폰 시작
-    EnemySpawn();
-
-    // 4) 더 이상 트리거 발생하지 않도록 BoxCollider 비활성
-    this.GetComponent<BoxCollider>().enabled = false;
   }
 
-  private void EnemySpawn()
+  // 스포너 활성 및 총 몬스터 수 집계하는 함수
+  private void ActivateSpawners()
   {
-    if (enemySpawners != null)
+    // 스포너가 없거나 비어있는지 체크
+    if (Spawners == null || Spawners.Count == 0)
+      return;
+
+    // 카운트 초기화
+    totalEnemysToSpawn = 0;
+
+    // 가지고 있는 스포너 순회
+    foreach (EnemySpawner spawner in Spawners)
     {
-      foreach (EnemySpawner spawner in enemySpawners)
-      {
-        if (spawner != null)
-          spawner.SpawnEnemy();
-      }
+      // 스포너 초기화 함수 호출
+      spawner.Initialize(this);
+      // 해당 스포너의 최대 스폰할 몬스터 개수 가져옴.
+      totalEnemysToSpawn += spawner.GetMaxSpawnCount();
+
+      spawner.TrySpawnEnemy();
+    }
+  }
+
+  // 몬스터가 죽으면 해당 함수 호출 (EnemyDamage)
+  public void NotifyEnemyDied()
+  {
+    // 이 방이 이미 클리어 되었으면 리턴
+    if (isCleared)
+      return;
+
+    // 킬 카운터 증가
+    killedEnemysCount++;
+    Debug.Log($"[{gameObject.name}] 몬스터 처치. ({killedEnemysCount} / {totalEnemysToSpawn})");
+
+    // 모든 몬스터 처치했는지 체크
+    if (killedEnemysCount >= totalEnemysToSpawn)
+    {
+      OpenAllDoor();
     }
   }
   
-  private void RoomClearCheck()
+  // 모든 문이 닫히는 함수
+  private void CloseAllDoor()
   {
-    if (enemySpawners != null)
+    if (entryDoor != null && exitDoor != null)
     {
-      if (!isAllDoorOpen)
-      {
-        var spawnerClearCount = 0;
-
-        foreach (EnemySpawner spawner in enemySpawners)
-        {
-          if (spawner.isEnemyCleared)
-            spawnerClearCount++;
-        }
-
-        if (spawnerClearCount == enemySpawners.Count && !isRoomClear)
-          isRoomClear = true;
-
-        if (isRoomClear)
-          OpenAllDoor();
-      }
+      entryDoor.GetComponent<Door>().Close();
+      exitDoor.GetComponent<Door>().Close();
     }
   }
-
+  
+  // 모든 문이 열리는 함수
   private void OpenAllDoor()
   {
-    isAllDoorOpen = true;
+    // 현재 방이 클리어 되었으니 true
+    isCleared = true;
 
-    entryDoor.OpenDoor();
-    exitDoor.OpenDoor();
+    entryDoor.GetComponent<Door>().Open();
+    exitDoor.GetComponent<Door>().Open();
+
+    Debug.Log($"[{gameObject.name}] 방 클리어! 문이 열립니다.");
   }
 }

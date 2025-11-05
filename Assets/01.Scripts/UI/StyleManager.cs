@@ -23,8 +23,8 @@ public class StyleManager : MonoBehaviour
     Dictionary<string, float> styleList = new Dictionary<string, float>()
     {
         {"Ã³Ä¡", 3 },
-        {"´ëÇü Ã³Ä¡", 8 },
-        {"È¸ÇÇ", 6 }
+        {"ï¿½ï¿½ï¿½ï¿½ Ã³Ä¡", 8 },
+        {"È¸ï¿½ï¿½", 6 }
     };
 
 
@@ -38,19 +38,16 @@ public class StyleManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             CreateNewStyle(0);
-            SetCombo(comboes + 1);
             RestoreComboBar();
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             CreateNewStyle(1);
-            SetCombo(comboes + 1);
             RestoreComboBar();
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             CreateNewStyle(2);
-            SetCombo(comboes + 1);
             RestoreComboBar();
         }
 
@@ -79,13 +76,15 @@ public class StyleManager : MonoBehaviour
 
     public void CreateNewStyle(int id)
     {
+        SetCombo(comboes + 1);
+
         string name = styleData.Style[id].Name;
         float value = styleData.Style[id].Value;
         Color color = styleData.Style[id].Color;
 
-        PlayerStatus status = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
+        PlayerStat stat = GameObject.FindWithTag("Player").GetComponent<PlayerStat>();
 
-        uiManager.SetOh(status.overheat.Value + value);
+        uiManager.SetOh(stat.overheat.Value + value);
         CreateText("style"," "+ name +" +"+ value + "%", 36, color);
 
         if (textGrid.transform.childCount > 7)

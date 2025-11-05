@@ -15,7 +15,7 @@ public class StateMachine
 
     public void ChangeState(IState newState)
     {
-        Debug.Log($"이전상태: {CurrentState}, 다음상태: {newState}");
+        // Debug.Log($"이전상태: {CurrentState}, 다음상태: {newState}");
         CurrentState?.OnExit();
         CurrentState = newState;
         CurrentState.OnEnter();

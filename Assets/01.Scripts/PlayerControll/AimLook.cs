@@ -41,8 +41,8 @@ namespace _01.Scripts.PlayerControll
             // if (_isBlurActive) return;
 
             // 마우스움직임으로 회전 적용
-            var mouseX = _pc.MouseDeltaInput.x * _pc.Status.mouseSensitivity;
-            var mouseY = _pc.MouseDeltaInput.y * _pc.Status.mouseSensitivity;
+            var mouseX = _pc.MouseDeltaInput.x * _pc.Stat.mouseSensitivity;
+            var mouseY = _pc.MouseDeltaInput.y * _pc.Stat.mouseSensitivity;
 
             _yRotValue += mouseX;
             _xRotValue -= mouseY;
