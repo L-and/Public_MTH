@@ -21,7 +21,7 @@ public class CutsceneController : MonoBehaviour
     public Image cutImage;   // 일반 컷 (1500x550)
     public Image cutImageLarge;  //4번 컷 (1500x1357) 
     public TextMeshProUGUI cutText;
-    public Image nextArrow; // ▼ 아이콘 이미지 연결
+    public TextMeshProUGUI nextArrowText; // ▼ 아이콘 이미지 연결
     
     public Cut[] cuts;
     public string nextSceneName = "MainMenu";
@@ -62,6 +62,7 @@ public class CutsceneController : MonoBehaviour
             cutText.text = "";
             SetAlpha(activeImage, 0);
             SetAlpha(cutText, 0);
+            SetArrowAlpha(0);
 
             // 페이드 인
             yield return FadeBoth(activeImage, cutText,0, 1, cut.fadeDuration);
@@ -75,8 +76,7 @@ public class CutsceneController : MonoBehaviour
             yield return StartCoroutine(TypeText(cut.text));
 
             // 텍스트가 다 나왔으면 ▼ 아이콘 깜빡이기 시작
-            if (nextArrow)
-                blinkCoroutine = StartCoroutine(BlinkArrow());
+             blinkCoroutine = StartCoroutine(BlinkArrow());
 
             // 엔터 입력 기다리기
             yield return new WaitUntil(() => nextPressed);
@@ -88,7 +88,7 @@ public class CutsceneController : MonoBehaviour
                 StopCoroutine(blinkCoroutine);
                 blinkCoroutine = null;
             }
-            if (nextArrow) SetAlpha(nextArrow, 0);
+            SetArrowAlpha(0);
 
 
             //페이드 아웃
@@ -123,6 +123,11 @@ public class CutsceneController : MonoBehaviour
         g.color = c;
     }
 
+    void SetArrowAlpha(float a)
+    { 
+        if (nextArrowText) SetAlpha(nextArrowText, a);
+    }
+
     IEnumerator TypeText(string text)
     {
         isTyping = true;
@@ -141,7 +146,7 @@ public class CutsceneController : MonoBehaviour
             }
 
             // 글자 당 속도
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.1f);
         }
         isTyping = false;
     }
@@ -166,13 +171,14 @@ public class CutsceneController : MonoBehaviour
     IEnumerator BlinkArrow()
     {
         float duration = 0.8f; // 한 번 깜빡이는 시간
-        while (true)
+         while (true)
         {
             // 서서히 나타남
             float t = 0f;
             while (t < duration)
             {
-                SetAlpha(nextArrow, Mathf.Lerp(0f, 1f, t / duration));
+                float alpha = Mathf.Sin( t / duration * Mathf.PI*0.5f);
+                SetArrowAlpha(alpha);
                 t += Time.deltaTime;
                 yield return null;
             }
@@ -181,7 +187,8 @@ public class CutsceneController : MonoBehaviour
             t = 0f;
             while (t < duration)
             {
-                SetAlpha(nextArrow, Mathf.Lerp(1f, 0f, t / duration));
+                float alpha = Mathf.Sin((1- (t /duration)) * Mathf.PI * 0.5f);
+                SetArrowAlpha(alpha);
                 t += Time.deltaTime;
                 yield return null;
             }
