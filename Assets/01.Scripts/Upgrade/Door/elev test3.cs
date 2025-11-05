@@ -86,7 +86,7 @@ public class elevtest3 : MonoBehaviour
         isMoving = false;
     }
 
-    // 플레이어를 부드럽게 이동 -> 내부도착 후 애니메이션 정지
+    // 플레이어를 부드럽게 이동 -> 내부도착 
     private IEnumerator MovePlayerSmooth(GameObject player, Vector3 startPos, Vector3 endPos)
     {
         float t = 0f;
@@ -98,23 +98,6 @@ public class elevtest3 : MonoBehaviour
             yield return null;
         }
         player.transform.position = endPos;
-
-        // 엘리베이터 내부 도착 시 모션 완전 정지 + IdleState로 강제 전환
-        Animator anim = player.GetComponentInChildren<Animator>();
-        if (anim != null)
-        {
-            anim.SetBool("isMoving", false);
-            anim.SetFloat("Speed", 0f);
-            anim.Play("IdleState", 0, 0f); // IdleState로 즉시 전환
-
-            Rigidbody rb = player.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-            }
-            Debug.Log("player elv position 도착 - IdleState 전환 완료");
-        }
     }
 
     // 문 방향으로 플레이어 회전시키는 코루틴
