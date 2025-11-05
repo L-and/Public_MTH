@@ -1,6 +1,7 @@
 using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
 using DG.Tweening;
+using Michsky.MUIP;
 using System.Collections;
 using TMPro;
 using UnityEditor.Playables;
@@ -13,10 +14,10 @@ public class UIManager : MonoBehaviour
 
     public GameObject hud;
     public GameObject gameover;
-    public Slider hpBar;
-    public Slider ohBar;
+    public ProgressBar hpBar;
+    public ProgressBar ohBar;
     public TextMeshProUGUI ohBarText;
-    public Slider stmBar;
+    public ProgressBar stmBar;
     public Image hpBarFill;
     public Image ohBarFill;
     public Image stmBarFill;
@@ -86,14 +87,13 @@ public class UIManager : MonoBehaviour
         }
         playerStatus.hp.Value = Mathf.Clamp(value, 0, playerStatus.hp.maxValue);
         hpBar.maxValue = playerStatus.hp.maxValue;
-        hpBar.value = playerStatus.hp.Value;
+        hpBar.currentPercent = playerStatus.hp.Value;
     }
     public void SetOh(float value)
     {
         playerStatus.overheat.Value = playerStatus.overheat.maxValue;
         ohBar.maxValue = playerStatus.overheat.maxValue;
-        ohBarText.text = playerStatus.overheat.Value + "%";
-        ohBar.value = playerStatus.overheat.Value;
+        ohBar.currentPercent = 100;
         Color color2;
         ColorUtility.TryParseHtmlString("#FF8D00", out color2);
         ohBarFill.color = Color.Lerp(ohBarFillColor, color2, playerStatus.overheat.Value / 100);
@@ -117,7 +117,7 @@ public class UIManager : MonoBehaviour
     {
         playerStatus.stamina.Value = value;
         stmBar.maxValue = playerStatus.stamina.maxValue;
-        stmBar.value = playerStatus.stamina.Value;
+        stmBar.currentPercent = playerStatus.stamina.Value;
 
         if (playerStatus.stamina.Value < playerStatus.stamina.maxValue) stmFulled = false;
         if (!stmFulled && playerStatus.stamina.Value >= playerStatus.stamina.maxValue)

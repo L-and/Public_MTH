@@ -714,6 +714,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 618279133408754097, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: restart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 618279133408754097, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: maxValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 618279133408754097, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: currentPercent
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4852705149962116616, guid: f653ece3382b72c4d8cde9ccf084a054,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -833,6 +848,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9044762062791368212, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 107.9401
+      objectReference: {fileID: 0}
+    - target: {fileID: 9044762062791368212, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 156.49995
+      objectReference: {fileID: 0}
+    - target: {fileID: 9044762062791368212, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 10.343414
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060398463672058669, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: restart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060398463672058669, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: currentPercent
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154815313009928866, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: restart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154815313009928866, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: maxValue
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154815313009928866, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: currentPercent
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

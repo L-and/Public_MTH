@@ -14,11 +14,13 @@ public class GameManager : Singleton<GameManager>
   ResourceManager _resourceManager;
   DataManager _dataManager;
   PlayerManager _playerManager;
+  SoundManager _soundManager;
 
   public static SceneManagerEx SceneEx { get { return Instance._sceneManagerEx; } }
   public static ResourceManager ResourceEx { get { return Instance._resourceManager; } }
   public static DataManager GameData { get { return Instance._dataManager; } }
   public static PlayerManager PlayerManager { get { return Instance._playerManager; } }
+  public static SoundManager Sound { get { return Instance._soundManager; } }
   #endregion  
 
   protected override void Awake()
@@ -49,6 +51,7 @@ public class GameManager : Singleton<GameManager>
     _resourceManager = gameObject.GetComponent<ResourceManager>();
     _dataManager = gameObject.GetComponent<DataManager>();
     _playerManager = gameObject.AddComponent<PlayerManager>();
+    _soundManager = gameObject.AddComponent<SoundManager>();
     #endregion
   }
 }
