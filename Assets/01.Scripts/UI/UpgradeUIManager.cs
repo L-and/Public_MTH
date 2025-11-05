@@ -14,8 +14,36 @@ public class UpgradeUIManager : MonoBehaviour
     public TextMeshProUGUI flavor;
     public UpgradeData upgradeData;
     public GameObject upgradeUiPrefab;
+    public UpgradeButton upgradeButton;
+    public UpgradeButton upgradeButton2;
+    public UpgradeButton upgradeButton3;
+    int dataId;
+    int dataId2;
+    int dataId3;
+    int dataIdMax = 20;
+
 
     public int upgradeChance = 1;
+
+    public void SetDataID()
+    {
+        CreateDataIDValue();
+        upgradeButton.dataId = dataId;
+        upgradeButton2.dataId = dataId2;
+        upgradeButton3.dataId = dataId3;
+    }
+    void CreateDataIDValue()
+    {
+        dataId = Random.Range(0, dataIdMax + 1);
+        do
+        {
+            dataId2 = Random.Range(0, dataIdMax + 1);
+        } while (dataId2 == dataId);
+        do
+        {
+            dataId3 = Random.Range(0, dataIdMax + 1);
+        } while (dataId3 == dataId || dataId3 == dataId2);
+    }
 
     public void UpgradesReActive()
     {

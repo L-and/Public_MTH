@@ -125,6 +125,10 @@ MonoBehaviour:
   flavor: {fileID: 652792792982538848}
   upgradeData: {fileID: 11400000, guid: 79b6748b460b4ec489c376075b38702c, type: 2}
   upgradeUiPrefab: {fileID: 1248932832003197862}
+  upgradeButton: {fileID: 7740592621014134699}
+  upgradeButton2: {fileID: 3136969055611663511}
+  upgradeButton3: {fileID: 3502251499619550217}
+  upgradeChance: 1
 --- !u!225 &8730952764849508040
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -421,6 +425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeUi: {fileID: 1248932832003197862}
   order: 0
+  dataId: 0
 --- !u!1 &4876032424892591182
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,6 +561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeUi: {fileID: 1248932832003197862}
   order: 1
+  dataId: 0
 --- !u!1 &5104582134015995843
 GameObject:
   m_ObjectHideFlags: 0
@@ -691,6 +697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeUi: {fileID: 1248932832003197862}
   order: 2
+  dataId: 0
 --- !u!1 &5300480706336465193
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,7 +18,7 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private bool isTouchable = false;
 
     private Tween scaleTween;
-    private int dataId;
+    public int dataId;
 
     void Start()
     {
