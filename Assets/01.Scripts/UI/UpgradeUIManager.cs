@@ -22,7 +22,6 @@ public class UpgradeUIManager : MonoBehaviour
     int dataId3;
     int dataIdMax = 20;
 
-
     public int upgradeChance = 1;
 
     public void SetDataID()

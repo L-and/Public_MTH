@@ -20,12 +20,22 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private Tween scaleTween;
     public int dataId;
 
-    void Start()
+    void Awake()
     {
+        originPosition = transform.localPosition;
         upgradeUiCanvasGroup = upgradeUi.GetComponent<CanvasGroup>();
         upgradeUiManager = upgradeUi.GetComponent<UpgradeUIManager>();
         button = GetComponent<Button>();
+    }
+    void OnEnable()
+    {
+        transform.localPosition = originPosition;
+        
+        // 0~21 id랜덤 제시 ->  UpgradeUI 반영
+        dataId = Random.Range(0, 21);
+
         UpgradeOn();
+        GetComponent<Image>().DOFade(1, 0);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -34,7 +44,7 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             transform.DOScale(1, 0);
             scaleTween = transform.DOScale(1.2f, 0.2f);
-            upgradeUiManager.SetUpgradeText(order); // UpgradeUI
+            upgradeUiManager.SetUpgradeText(dataId); // UpgradeUI 활성화
         }
     }
     public void OnPointerExit(PointerEventData eventData)
@@ -47,11 +57,13 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (isTouchable)
         {
+            Debug.Log("[UpgradeButton] 버튼 활성화"); 
             SetIstouchable(false);
             GlobalMethod.Fade(upgradeUi, 0.4f);
             transform.DOLocalMoveX(0, 0.5f).OnComplete(() =>
             {
-                upgradeUiCanvasGroup.DOFade(1, 1.2f).OnComplete(() => upgradeUiCanvasGroup.DOFade(0, 1));
+                upgradeUiCanvasGroup.DOFade(1, 1.2f).OnComplete(() => upgradeUiCanvasGroup.DOFade(0, 1)).OnComplete(()
+                => OnObjectDisable());
             });
 
             for (int i = 0; i < 3; i++)
@@ -61,16 +73,16 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 child.GetComponent<Image>().DOFade(0, 0.2f).OnComplete(() => child.gameObject.SetActive(false));
             }
 
-            // ?곗＜ - ElevatorUpgradeManager濡??곕룞
+            // 연주 - ElevatorUpgradeManager로 호출됨
             var manager = Object.FindFirstObjectByType<ElevatorUpgradeManager>();
             if (manager != null)
             {
                 manager.ApplyUpgrade(dataId);
-                Debug.Log($"[DEBUG] ?낃렇?덉씠???곸슜 ?쒕룄: ID {dataId}");
+                Debug.Log($"[DEBUG] 업그레이드 버튼 활성 완료: ID {dataId}");
             }
             else
             {
-                Debug.Log("ElevatorUpgradeManager瑜?李얠쓣 ???놁뒿?덈떎!");
+                Debug.Log("ElevatorUpgradeManager를 찾을 수 없습니다!");
             }
         }
     }
@@ -87,10 +99,17 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     void OnObjectDisable()
     {
+        // 각 층 업그레이드를 1회만 가능하도록 변경
         if (CheckEVHacker() && upgradeUiManager.upgradeChance > 0)
         {   
             upgradeUiManager.upgradeChance--;
-            upgradeUiManager.UpgradesReActive();
+
+            // 엘베 매니저가 다음 층 진입 -> 재활성화 이전까지 다시 열지 않음
+            if (upgradeUiManager.upgradeChance <= 0)
+            {
+                upgradeUi.SetActive(false);
+            }
+            //upgradeUiManager.UpgradesReActive();
         }
         else upgradeUi.SetActive(false);
     }

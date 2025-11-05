@@ -8,14 +8,17 @@ public class ElevatorUpgradeManager : MonoBehaviour
     public PlayerStatus playerStatus;
     public UpgradeData upgradeData;
     public elevtest3 linkedElevator;
+    public UpgradeUIManager upgradeUIManager; //
 
     private IUpgradeEffect[] allEffects;
     private bool effectsLoaded = false;
 
+    private int currentFloor = 0;     // 🌟 현재 층
+    private const int maxFloor = 3;   // 🌟 총 3층 기준 (필요시 조정 가능)
+
     private void Awake()
     {
         LoadAllEffects();
-        
         //var monoBehaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
         //allEffects = monoBehaviours.OfType<IUpgradeEffect>().ToArray();
     }
@@ -24,7 +27,7 @@ public class ElevatorUpgradeManager : MonoBehaviour
     {
         // 비활성 포함 전체 탐색
         var monoBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        allEffects = monoBehaviours.OfType<IUpgradeEffect>().ToArray( );
+        allEffects = monoBehaviours.OfType<IUpgradeEffect>().ToArray();
         effectsLoaded = allEffects.Length > 0;
 
         //감지된 효과 목록 로그 출력
@@ -39,10 +42,11 @@ public class ElevatorUpgradeManager : MonoBehaviour
         }
     }
 
+ 
     //  적용효과 목록 로그 출력
     public void ApplyUpgrade(int id)
     {
-        Debug.Log($"[DEBUG] 업그레이드 버튼 클릭됨 — ID: {id}");
+        Debug.Log($"[DEBUG] 업그레이드 버튼 클릭됨 ID: {id}");
 
         //PlayerStatus의 UpgradeSlotID에 id 값 할당
         int[] upgradeSlots = new int[3] { playerStatus.UpgradeSlot1ID, playerStatus.UpgradeSlot2ID, playerStatus.UpgradeSlot3ID };

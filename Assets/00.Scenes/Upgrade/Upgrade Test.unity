@@ -1454,7 +1454,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorUpgradeManager
   playerStatus: {fileID: 4520828795006216946}
   upgradeData: {fileID: 11400000, guid: 79b6748b460b4ec489c376075b38702c, type: 2}
-  linkedElevator: {fileID: 0}
+  linkedElevator: {fileID: 1805071421}
+  upgradeUIManager: {fileID: 739020111}
 --- !u!1 &707958744
 GameObject:
   m_ObjectHideFlags: 0
@@ -1505,6 +1506,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 664384745}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &739020111 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8177491368735802957, guid: f0eb4a501688d1045ae51cc43bb63391,
+    type: 3}
+  m_PrefabInstance: {fileID: 664384745}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739020109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc1ba0ed8199c0742a5aab204acb6a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeUIManager
 --- !u!1 &766582870
 GameObject:
   m_ObjectHideFlags: 0
@@ -3793,8 +3806,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 13.991385, y: 7.6008596, z: 6.3969927}
-  m_Center: {x: 0.9624934, y: -0.15364027, z: -1.1707487}
+  m_Size: {x: 17.34903, y: 7.6008596, z: 6.3969927}
+  m_Center: {x: 2.6413178, y: -0.15364027, z: -1.1707487}
 --- !u!1001 &2077855083
 PrefabInstance:
   m_ObjectHideFlags: 0
