@@ -20,21 +20,12 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private Tween scaleTween;
     private int dataId;
 
-    void Awake()
+    void Start()
     {
-        originPosition = transform.localPosition;
         upgradeUiCanvasGroup = upgradeUi.GetComponent<CanvasGroup>();
         upgradeUiManager = upgradeUi.GetComponent<UpgradeUIManager>();
         button = GetComponent<Button>();
-    }
-    void OnEnable()
-    {
-        transform.localPosition = originPosition;
-
-        SetDataIDRandomly();
-        if (order == 0) CompareDuplicate();
         UpgradeOn();
-        GetComponent<Image>().DOFade(1, 0);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -43,10 +34,10 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             transform.DOScale(1, 0);
             scaleTween = transform.DOScale(1.2f, 0.2f);
-            upgradeUiManager.SetUpgradeText(dataId); // UpgradeUI는 이쪽으로 표시됨
+            upgradeUiManager.SetUpgradeText(order); // UpgradeUI
         }
     }
-    public void OnPointerExit(PointerEventData eventData) 
+    public void OnPointerExit(PointerEventData eventData)
     {
         scaleTween.Kill(transform);
         transform.DOScale(1, 0.1f);
@@ -57,11 +48,10 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (isTouchable)
         {
             SetIstouchable(false);
-            GlobalMethod.Fade(upgradeUi,0.4f);
+            GlobalMethod.Fade(upgradeUi, 0.4f);
             transform.DOLocalMoveX(0, 0.5f).OnComplete(() =>
             {
-                upgradeUiCanvasGroup.DOFade(1, 1.2f).OnComplete(() => upgradeUiCanvasGroup.DOFade(0, 1)).OnComplete(()
-                => OnObjectDisable());
+                upgradeUiCanvasGroup.DOFade(1, 1.2f).OnComplete(() => upgradeUiCanvasGroup.DOFade(0, 1));
             });
 
             for (int i = 0; i < 3; i++)
@@ -71,16 +61,16 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 child.GetComponent<Image>().DOFade(0, 0.2f).OnComplete(() => child.gameObject.SetActive(false));
             }
 
-            // 연주 - ElevatorUpgradeManager로 연동
-            var manager =Object.FindFirstObjectByType<ElevatorUpgradeManager>();
+            // ?곗＜ - ElevatorUpgradeManager濡??곕룞
+            var manager = Object.FindFirstObjectByType<ElevatorUpgradeManager>();
             if (manager != null)
             {
                 manager.ApplyUpgrade(dataId);
-                Debug.Log($"[DEBUG] 업그레이드 적용 시도: ID {dataId}");
+                Debug.Log($"[DEBUG] ?낃렇?덉씠???곸슜 ?쒕룄: ID {dataId}");
             }
             else
             {
-                Debug.Log("ElevatorUpgradeManager를 찾을 수 없습니다!");
+                Debug.Log("ElevatorUpgradeManager瑜?李얠쓣 ???놁뒿?덈떎!");
             }
         }
     }
@@ -90,8 +80,8 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         transform.DOLocalMoveY(0, 1).OnComplete(() => SetIstouchable(true));
     }
-    void SetIstouchable(bool value) 
-    { 
+    void SetIstouchable(bool value)
+    {
         isTouchable = value;
     }
 
@@ -138,5 +128,4 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             CompareDuplicate();
         }
     }
-
 }

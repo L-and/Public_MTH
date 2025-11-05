@@ -7,6 +7,7 @@ public class ElevatorUpgradeManager : MonoBehaviour
     [Header("참조")]
     public PlayerStatus playerStatus;
     public UpgradeData upgradeData;
+    public elevtest3 linkedElevator;
 
     private IUpgradeEffect[] allEffects;
     private bool effectsLoaded = false;

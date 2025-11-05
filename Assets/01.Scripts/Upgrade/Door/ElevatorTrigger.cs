@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ElevatorTrigger : MonoBehaviour
 {
-    public DoorClose door;
+    public DoorManager door;
 
     private void OnTriggerEnter(Collider other)
     {

@@ -1,39 +1,55 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
-public class DoorClose : MonoBehaviour
+public class DoorManager : MonoBehaviour
 {
-    [Header("¿¤¸®º£ÀÌÅÍ ¹® ¿ÀºêÁ§Æ® ¿¬°á")]
+    [Header("ì—˜ë¦¬ë² ì´í„° ë¬¸ ì˜¤ë¸Œì íŠ¸ ì—°ê²°")]
     public Transform leftDoor;
     public Transform rightDoor;
 
-    [Header("¹® ´İÈ÷´Â °Å¸® ¹× ¼Óµµ")]
-    public float moveDistance = 1.5f;  // ¹®ÀÌ ¾ó¸¶³ª ¿­¸±Áö
-    public float closeSpeed = 2f; // ¹® ¿­¸²´İÈû ¼Óµµ
-    public float autoCloseDelay = 2f; //¹® ¿­¸² ÈÄ ´İÈ÷±â±îÁö ´ë±â ½Ã°£
+    [Header("ë¬¸ ë‹«íˆëŠ” ê±°ë¦¬ ë° ì†ë„")]
+    public float moveDistance = 1.5f;  // ë¬¸ì´ ì–¼ë§ˆë‚˜ ì—´ë¦´ì§€
+    public float closeSpeed = 2f; // ë¬¸ ì—´ë¦¼ë‹«í˜ ì†ë„
+    public float autoCloseDelay = 2f; //ë¬¸ ì—´ë¦¼ í›„ ë‹«íˆê¸°ê¹Œì§€ ëŒ€ê¸° ì‹œê°„
+
+    //public bool autoCloseEnabled = true; // âœ… elevtestì—ì„œ ìë™ë‹«í˜ì„ ì œì–´í•  ìˆ˜ ìˆê²Œ
+    //public bool triggerEnabled = true;   // âœ… íŠ¸ë¦¬ê±° ìë™ì—´ë¦¼ ë°©ì§€ìš©
 
     public Vector3 leftDoorOpenPos;
     public Vector3 rightDoorOpenPos;
     public Vector3 leftDoorClosedPos;
     public Vector3 rightDoorClosedPos;
-    
+
     private Coroutine currentRoutine;
 
     void Start()
     {
-        // Ã³À½ À§Ä¡ ÀúÀå
+        // ì²˜ìŒ ìœ„ì¹˜ ì €ì¥
         leftDoorClosedPos = leftDoor.localPosition;
         rightDoorClosedPos = rightDoor.localPosition;
 
-        // ¿­¸² À§Ä¡ °è»ê (´İÈù À§Ä¡¿¡¼­ ¹İ´ë)
+        // ì—´ë¦¼ ìœ„ì¹˜ ê³„ì‚° (ë‹«íŒ ìœ„ì¹˜ì—ì„œ ë°˜ëŒ€)
         leftDoorOpenPos = leftDoorClosedPos + Vector3.forward * moveDistance;
         rightDoorOpenPos = rightDoorClosedPos + Vector3.back * moveDistance;
 
-        // ½ÃÀÛ ½Ã ¹® ´İÈù »óÅÂ À¯Áö
+        // ì‹œì‘ ì‹œ ë¬¸ ë‹«íŒ ìƒíƒœ ìœ ì§€
         leftDoor.localPosition = leftDoorClosedPos;
         rightDoor.localPosition = rightDoorClosedPos;
     }
-     
+
+    //// íŠ¸ë¦¬ê±°â˜…
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    // âœ… elevtestì—ì„œ triggerEnabled = falseë¡œ ì„¤ì • ì‹œ ìë™ ì—´ë¦¼ ë°©ì§€
+    //    if (!triggerEnabled) return;
+
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        Debug.Log("ğŸšª í”Œë ˆì´ì–´ ê°ì§€ë¨ â†’ ë¬¸ ìë™ ì—´ë¦¼");
+    //        OpenDoors();
+    //    }
+    //}
+
     public void OpenDoors()
     {
         if (currentRoutine != null) StopCoroutine(currentRoutine);
@@ -47,14 +63,14 @@ public class DoorClose : MonoBehaviour
     }
 
     IEnumerator DoorRoutine(bool open)
-    { 
+    {
         float t = 0f;
 
-        // ÇöÀç ¹® À§Ä¡ ±âÁØÀ¸·Î ¿­¸²´İÈû
+        // í˜„ì¬ ë¬¸ ìœ„ì¹˜ ê¸°ì¤€ìœ¼ë¡œ ì—´ë¦¼ë‹«í˜
         Vector3 leftStart = leftDoor.localPosition;
         Vector3 rightStart = rightDoor.localPosition;
 
-        // openÀÌ true, false¿¡ µû¶ó open,closed ¾²±â
+        // openì´ true, falseì— ë”°ë¼ open,closed ì“°ê¸°
         Vector3 leftTarget = open ? leftDoorOpenPos : leftDoorClosedPos;
         Vector3 rightTarget = open ? rightDoorOpenPos : rightDoorClosedPos;
 
@@ -62,16 +78,26 @@ public class DoorClose : MonoBehaviour
         {
             t += Time.deltaTime * closeSpeed;
             leftDoor.localPosition = Vector3.Lerp(leftStart, leftTarget, t);
-            rightDoor.localPosition = Vector3.Lerp(rightStart,rightTarget, t);
-            
+            rightDoor.localPosition = Vector3.Lerp(rightStart, rightTarget, t);
+
             yield return null;
         }
 
-        // ¿­·ÈÀ» ¶§ ÀÏÁ¤ ½Ã°£ ÈÄ ´İ±â
+        // ì—´ë ¸ì„ ë•Œ ì¼ì • ì‹œê°„ í›„ ë‹«ê¸°
         if (open)
         {
             yield return new WaitForSeconds(autoCloseDelay);
             CloseDoors();
         }
+
+
+        //// âœ… ìë™ ë‹«í˜ ì¡°ê±´ ìˆ˜ì •
+        //if (open && autoCloseEnabled)
+        //{
+        //    yield return new WaitForSeconds(autoCloseDelay);
+        //    CloseDoors();
+        //}
+
+
     }
 }

@@ -1,17 +1,16 @@
 ﻿using _01.Scripts.PlayerControll;
-using InfimaGames.LowPolyShooterPack;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class elevtest : MonoBehaviour
+public class elevtest3 : MonoBehaviour
 {
     [Header("플레이어 태그")]
     public string playerTag = "Player";
 
     [Header("엘리베이터 이동경로")]
     public Transform targetPosition; // Player elv position 
-    public Transform doorFront; // elv door position
+    public Transform doorFront;      // elv door position
 
     [Header("이동 속도")]
     public float moveSpeed = 3f;
@@ -19,20 +18,19 @@ public class elevtest : MonoBehaviour
 
     [Header("UI 설정")]
     public GameObject upgradeUI;
-    public GameObject gameUI; // 0 
+    public GameObject gameUI;
     public float fadeDuration = 1f; // 페이드 시간
 
     private bool isMoving = false;
-    private bool controlLocked = true; // 조작 잠금 유지
+    private bool controlLocked = true;
 
     private PlayerController playerController;
     private AimLook aimLook;
     private PlayerInput playerInput;
+    private GameObject currentPlayer;
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("현재 메인 카메라 이름: " + Camera.main.name);
-
         if (other.CompareTag(playerTag) && !isMoving)
         {
             StartCoroutine(ElevatorEnterSequence(other.gameObject));
@@ -43,17 +41,17 @@ public class elevtest : MonoBehaviour
     {
         isMoving = true;
 
-        // 조작 스트립트 가져오기
+        // 제어할 스크립트 가져오기
         playerController = player.GetComponent<PlayerController>();
         aimLook = player.GetComponentInChildren<AimLook>();
         playerInput = player.GetComponent<PlayerInput>();
 
-        // 플레이어 기능 완전 차단 
+        // 플레이어 기능 완전 차단
         if (playerController != null) playerController.enabled = false;
         if (aimLook != null) aimLook.enabled = false;
         if (playerInput != null) playerInput.enabled = false;
 
-        // 리지드바디 정지
+        //리지드바디 정지
         Rigidbody rb = player.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -61,77 +59,92 @@ public class elevtest : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
-        // ✅ GameUI 페이드 아웃 시작
+        // GameUI 페이드 아웃 시작
         //if (gameUI != null)
         //{
         //    gameUI.SetActive(false);
 
-        //    Debug.Log("✅ 엘리베이터 진입 시 GameUI 페이드 아웃 시작");
+        //    Debug.Log("엘리베이터 진입 시 GameUI 페이드 아웃 시작");
         //    //yield return StartCoroutine(FadeOutGameUI()); 이거는 옛날꺼
         //}
 
-        // 자동 이동
+        // 엘리베이터 내부로 이동
         Debug.Log("플레이어 엘리베이터 진입 시작");
-        Vector3 startPos = player.transform.position;
-        Quaternion startRot = player.transform.rotation;
-        Vector3 endPos = new Vector3(targetPosition.position.x, startPos.y, targetPosition.position.z);
-
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime * moveSpeed;
-            player.transform.position = Vector3.Lerp(startPos, endPos, t);
-            player.transform.rotation = startRot;
-            yield return null;
-        }
-
-        player.transform.position = endPos;
+        yield return StartCoroutine(MovePlayerSmooth(player, player.transform.position, targetPosition.position));
         Debug.Log("플레이어 엘리베이터 중심 도착");
 
-        Camera mainCam = Camera.main;
-        if (mainCam != null)
-        {
-            // 도착 후 180도로 플레이어 몸 회전
-            Debug.Log("플레이어 회전");
+        // 180회전 (문 방향)
+        yield return StartCoroutine(RotatePlayerToDoor(player));
 
-            //현재 플레이어 회전 값 저장
-            Quaternion startRotTurn = player.transform.rotation;
-
-            // 문쪽으로 y축만 고정
-            Vector3 lookDir = doorFront.position - player.transform.position;
-            lookDir.y = 0f;
-            Quaternion endRotTurn = Quaternion.LookRotation(lookDir);
-
-            // 부드럽게 회전
-            float rotT = 0f;
-            while (rotT < 1f)
-            {
-                rotT += Time.deltaTime * rotateSpeed;
-                player.transform.rotation = Quaternion.Slerp(startRotTurn, endRotTurn, rotT);
-                mainCam.transform.rotation = Quaternion.Slerp(startRotTurn, endRotTurn, rotT);
-                yield return null;
-            }
-
-            // player.transform.rotation = endRotTurn;
-            // mainCam.transform.rotation = endRotTurn;
-            Debug.Log("플레이어가 문 방향으로 180도 회전 완료");
-            aimLook.UpdateRotation(endRotTurn, endRotTurn); // 완료 후 회전값을 aimLook에 적용
-
-            yield return new WaitForSeconds(1f);
-            Debug.Log("UI 페이드 전환 시작");
-            yield return StartCoroutine(FadeInUpgradeUI());
-
-        }
+        // UI 표시
+        yield return StartCoroutine(FadeInUpgradeUI());
+        
+        // 이쪽 쯤에 씬 전환 하면 좋을 듯
+        Debug.Log("UI 선택 대기 중... (ElevatorUpgradeManager 신호 대기)");
 
         isMoving = false;
     }
 
+    // 플레이어를 부드럽게 이동 -> 내부도착 후 애니메이션 정지
+    private IEnumerator MovePlayerSmooth(GameObject player, Vector3 startPos, Vector3 endPos)
+    {
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime * moveSpeed;
+            player.transform.position = Vector3.Lerp(startPos, endPos, t);
+            yield return null;
+        }
+        player.transform.position = endPos;
+
+        // 엘리베이터 내부 도착 시 모션 완전 정지 + IdleState로 강제 전환
+        Animator anim = player.GetComponentInChildren<Animator>();
+        if (anim != null)
+        {
+            anim.SetBool("isMoving", false);
+            anim.SetFloat("Speed", 0f);
+            anim.Play("IdleState", 0, 0f); // IdleState로 즉시 전환
+
+            Rigidbody rb = player.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+            Debug.Log("player elv position 도착 - IdleState 전환 완료");
+        }
+    }
+
+    // 문 방향으로 플레이어 회전시키는 코루틴
+    private IEnumerator RotatePlayerToDoor(GameObject player)
+    {
+        // 도착후 180도로 문쪽을 향해 y축 회전
+        Vector3 lookDir = doorFront.position - player.transform.position;
+        lookDir.y = 0f;
+        Quaternion startRot = player.transform.rotation;
+        Quaternion endRot = Quaternion.LookRotation(lookDir);
+
+        // 부드럽게 회전
+        float rotT = 0f;
+        while (rotT < 1f)
+        {
+            rotT += Time.deltaTime * rotateSpeed;
+            player.transform.rotation = Quaternion.Slerp(startRot, endRot, rotT);
+            yield return null;
+        }
+
+        // 엘리베이터 위치 도착
+        player.transform.rotation = endRot;
+    }
+
+    //  업그레이드 UI 페이드인
     private IEnumerator FadeInUpgradeUI()
     {
         if (upgradeUI == null)
             yield break;
 
-        // 업그레이드 ui 버튼 활성화
+        //업그레이드 ui버튼 활성화
         upgradeUI.SetActive(true);
         yield return null;
 
@@ -156,6 +169,6 @@ public class elevtest : MonoBehaviour
         upgradeCanvas.interactable = true;
         upgradeCanvas.blocksRaycasts = true;
 
-        Debug.Log("✅ UpgradeUI 페이드 인 완료");
+        Debug.Log("UpgradeUI 페이드 인 완료");
     }
 }
