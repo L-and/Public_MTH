@@ -29,6 +29,19 @@ public class MapManager : MonoBehaviour
       GameManager.GameData.currentFloor++;
       _isCount = true;
     }
+
+    var elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab(Constants.ASSET_ELE);
+    
+    if(elevatorPrefab == null)
+    {
+      Debug.LogWarning("맵을 생성하는 과정에서 Elevator Prefab이 Null 이어서 맵을 제대로 생성하지 못했습니다.");
+
+      await GameManager.ResourceEx.LoadElevatorPrefabs();
+
+      elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab(Constants.ASSET_ELE);
+    }
+
+    _elevatorPrefab = elevatorPrefab;
     
     var curFloor = GameManager.GameData.currentFloor;
     var thisFloor = GameManager.GameData.SewerMapMaxFloor();
@@ -50,7 +63,7 @@ public class MapManager : MonoBehaviour
     // 2) 프리팹 초기화 
     _normalRoomPrefabs = new List<GameObject>();
     _connectorPrefab = null;
-    _elevatorPrefab = GameManager.ResourceEx.elevatorPrefab;
+
     _mapRoot = new GameObject("Map").transform;
 
     // 3) 맵 리소스 데이터를 전체 순회 하면서 프리팹별로 나눔.
@@ -69,7 +82,7 @@ public class MapManager : MonoBehaviour
     CreateFloor();
 
     // 플레이어 생성
-    GameManager.SceneEx.PlayerSpawn();
+    GameManager.PlayerSpawn.PlayerSpawn();
 
     // 엘리베이터 문이 열림.
     _startElevator.GetComponent<ElevatorController>().DoorsOpen(1f);

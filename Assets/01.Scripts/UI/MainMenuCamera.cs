@@ -34,6 +34,6 @@ public class MainMenuCamera : MonoBehaviour
     IEnumerator SceneMove()
     {
         yield return new WaitForSeconds(1.75f);
-        GameManager.SceneEx.LoadScene("Game Scene", true);
+        GameManager.SceneEx.LoadScene(Constants.GAMESCENE);
     }
 }

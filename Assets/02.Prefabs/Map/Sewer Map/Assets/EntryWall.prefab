@@ -467,7 +467,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwingDoorController
   doorMoveSpeed: 1
-  maxAngle: 180
+  maxOpenAngle: 90
+  minCloseAngle: 0
 --- !u!1 &6708448337881555458
 GameObject:
   m_ObjectHideFlags: 0

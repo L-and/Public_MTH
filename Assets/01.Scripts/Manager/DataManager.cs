@@ -33,8 +33,8 @@ public class DataManager : MonoBehaviour
   [Header("현재 방출")]
   [SerializeField] private int _currentEmissionId = 0;
 
-    // 현재 층 컨셉 체크 변수
-    public string thisMapConcept;
+  // 현재 층 컨셉 체크 변수
+  public string thisMapConcept;
 
   // 프로퍼티
   public int SewerMapMaxFloor() { return _sewerMapMaxFloor; }

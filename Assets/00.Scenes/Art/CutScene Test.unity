@@ -132,6 +132,8 @@ GameObject:
   - component: {fileID: 65364431}
   - component: {fileID: 65364430}
   - component: {fileID: 65364429}
+  - component: {fileID: 65364434}
+  - component: {fileID: 65364435}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -176,6 +178,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DataManager
   currentFloor: 0
+  _roomCount: 5
+  _sewerMapMaxFloor: 1
+  _prototypeMapMaxFloor: 2
+  _prototype2MapMaxFloor: 3
+  _bossFloor: 4
+  _currentWeaponId: 0
+  _currentSideWeaponId: 0
+  _currentEmissionId: 0
+  thisMapConcept: 
 --- !u!114 &65364432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,6 +214,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &65364434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65364428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16d2e45c824ff4f4cafb73cb4aef0bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawnManager
+--- !u!114 &65364435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65364428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8302ea70af8e4194a9ba57f76ca3a468, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.Manager.PlayerManager
 --- !u!1 &87342909
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,7 +580,6 @@ MonoBehaviour:
     fadeDuration: 1
     isPanEffect: 0
     panOffset: {x: 0, y: 800}
-  nextSceneName: MainMenu
 --- !u!1 &1205745230
 GameObject:
   m_ObjectHideFlags: 0

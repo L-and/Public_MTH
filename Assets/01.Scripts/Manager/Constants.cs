@@ -2,6 +2,12 @@ public static class Constants
 {
   ///////////////////////
   /// 문자열 상수화 모음
+  /// *** 스크립트 제작 이유 ***
+  /// 문자열 값을 직접 입력할때 생기는 오타 때문에
+  /// 컴파일 단계에서는 오류를 잡지 못하기 때문에 씁니다.
+  /// 
+  /// 접근 방법
+  /// ex) Constants.ROOM;
   ///////////////////////
 
   // 맵 Label
@@ -25,4 +31,8 @@ public static class Constants
   public const string CUTSCENE = "CutScene Test";
   public const string MAINMENU = "MainMenu";
   public const string GAMESCENE = "Game Scene";
+
+  // 엘리베이터 구분
+  public const string PROTOTYPE_ELE = "Elevator_Prototype";
+  public const string ASSET_ELE = "Elevator_Asset";
 }

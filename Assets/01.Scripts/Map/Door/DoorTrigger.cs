@@ -16,12 +16,4 @@ public class DoorTrigger : MonoBehaviour
       doorController.GetComponent<Door>().Open();
     }
   }
-
-  private void OnTriggerExit(Collider other)
-  {
-    var collider = GetComponent<BoxCollider>();
-    collider.enabled = false;
-
-    isOpen = false;
-  }
 }

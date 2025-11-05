@@ -24,7 +24,6 @@ public class CutsceneController : MonoBehaviour
     public GameObject MainMenu;
     
     public Cut[] cuts;
-    public string nextSceneName = "MainMenu";
 
     private bool isTyping = false;
     private bool nextPressed = false;
@@ -83,7 +82,7 @@ public class CutsceneController : MonoBehaviour
         }
 
         // ÄÆ¾À ³¡ ¡æ ´ÙÀ½ ¾À ÀÌµ¿
-        GameManager.SceneEx.LoadScene(nextSceneName, false);
+        GameManager.SceneEx.LoadScene(Constants.MAINMENU);
     }
 
     IEnumerator FadeBoth(Graphic img, Graphic txt, float start, float end, float duration)

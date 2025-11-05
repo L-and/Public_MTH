@@ -13,16 +13,16 @@ public class ElevatorController : MonoBehaviour
   [SerializeField] private GameObject _doorBlocker;
 
   [Header("입구 상단 층 수 표시 Object")]
-  [SerializeField] private GameObject _elevatorEntranceFloorText;
+  [SerializeField] private TextMeshPro _elevatorEntranceFloorText;
 
   [Header("안 측면 층 수 표시 Object")]
-  [SerializeField] private GameObject _elevatorInsideFloorText;
+  [SerializeField] private TextMeshPro _elevatorInsideFloorText;
 
   [Header("위로 올라가는 표시 MeshRenderer List")]
-  [SerializeField] private List<MeshRenderer> arrowsUp = new List<MeshRenderer>();
+  [SerializeField] private List<MeshRenderer> _arrowsUp = new List<MeshRenderer>();
 
   [Header("아래로 내려가는 표시 MeshRenderer List")]
-  [SerializeField] private List<MeshRenderer> arrowDown = new List<MeshRenderer>();
+  [SerializeField] private List<MeshRenderer> _arrowDown = new List<MeshRenderer>();
 
   [Header("바깥 문 Animation")]
   [SerializeField] private Animation _outterDoorsAnim;
@@ -41,9 +41,9 @@ public class ElevatorController : MonoBehaviour
   void Start()
   {
     var curFloor = GameManager.GameData.currentFloor;
-    
-    _elevatorEntranceFloorText.GetComponent<TextMeshProUGUI>().text = curFloor.ToString();
-    _elevatorInsideFloorText.GetComponent<TextMeshProUGUI>().text = curFloor.ToString();
+
+    _elevatorEntranceFloorText.text = curFloor.ToString();
+    _elevatorInsideFloorText.text = curFloor.ToString();
 
     SwitchArrows(false, false);
   }
@@ -90,25 +90,24 @@ public class ElevatorController : MonoBehaviour
       // 엘리베이터 문이 닫히는 함수 호출
       StartCoroutine(DoorsOpenClose(_innerDoorsAnim, 1, -1, 0, _doorCloseAudio));
       StartCoroutine(DoorsOpenClose(_outterDoorsAnim, 1, -1, 0, _doorCloseAudio));
-      // 현재 층 수 올라감.
-      GameManager.GameData.currentFloor++;
       // 문이 다 닫히면 씬 로드 실행
-      GameManager.SceneEx.LoadScene(Constants.GAMESCENE, false);
+      GameManager.SceneEx.LoadScene(Constants.GAMESCENE);
     }
   }
 
   // 화살표 표시 함수
   private void SwitchArrows(bool upValue, bool downValue)
   {
-    for (int i = 0; i < arrowsUp.Count; i++)
+    for (int i = 0; i < _arrowsUp.Count; i++)
     {
-      arrowsUp[i].enabled = upValue;
-      arrowDown[i].enabled = downValue;
+      _arrowsUp[i].enabled = upValue;
+      _arrowDown[i].enabled = downValue;
     }
   }
 
   public void DoorsOpen(float delayTime)
   {
+    Debug.Log("엘리베이터 문이 열도록 하는 함수 호출 함.");
     StartCoroutine(DoorsOpenClose(_innerDoorsAnim, 0, 1, delayTime, _doorOpenAudio));
     StartCoroutine(DoorsOpenClose(_outterDoorsAnim, 0, 1, delayTime, _doorOpenAudio));
   }
