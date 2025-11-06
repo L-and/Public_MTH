@@ -46,6 +46,13 @@ namespace _01.Scripts.PlayerControll.Animation
             if (weapon != null)
                 weapon.FillAmmunition(-1);
         }
+
+        // TODO 이런식의 코드가 좋지는 않은듯...
+        private void OnReloadDone()
+        {
+            if (weapon != null)
+                weapon.SetState(EPlayerStates.WeaponState.Idle);
+        }
         
         #endregion
     }

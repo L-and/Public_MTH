@@ -1,4 +1,5 @@
 using System;
+using _01.Scripts.PlayerControll;
 using InfimaGames.LowPolyShooterPack;
 using UnityEngine;
 
@@ -66,6 +67,8 @@ namespace _01.Scripts.Weapon
         
         #region FIELDS
 
+        
+        
         /// <summary>
         /// 현재 장탄수
         /// </summary>
@@ -149,10 +152,18 @@ namespace _01.Scripts.Weapon
         {
             _magazineBehaviour.SetMaxAmount(amount);
         }
+
+        public override void SetState(EPlayerStates.WeaponState state)
+        {
+            WeaponState = state;
+        }
         
         #endregion
         
         #region GETTERS
+        
+        public override EPlayerStates.WeaponState WeaponState { get; protected set; }
+        
         
         public override Animator GetAnimator() => _gunAnimator;
         
@@ -183,6 +194,10 @@ namespace _01.Scripts.Weapon
 
         public override void Fire(float spreadMultiplier = 1)
         {
+            if (WeaponState == EPlayerStates.WeaponState.Reload) return;
+                
+            SetState(EPlayerStates.WeaponState.Fire);
+            
             //We need a muzzle in order to fire this weapon!
             if (_muzzleBehaviour == null)
                 return;
@@ -232,7 +247,10 @@ namespace _01.Scripts.Weapon
 
         public override void Reload()
         {
+            SetState(EPlayerStates.WeaponState.Reload);
+            
             string animName = HasAmmunition() ? "Reload" : "Reload Empty";
+            _audioSource.PlayOneShot(audioClipReload);
             _gunAnimator.Play(animName, 0, 0f);
         }
         
@@ -242,8 +260,8 @@ namespace _01.Scripts.Weapon
             _ammunitionCurrent = amount != -1 ? Mathf.Clamp(_ammunitionCurrent + amount, 
                 0, GetAmmunitionTotal()) : _magazineBehaviour.GetAmmunitionTotal();
         }
-
-
+        
+        
         /// <summary>
         /// 탄피 배출
         /// </summary>
@@ -252,11 +270,15 @@ namespace _01.Scripts.Weapon
             if(prefabCasing != null && socketEjection != null)
                 Instantiate(prefabCasing, socketEjection.position, socketEjection.rotation);
         }
-        
-        #endregion
 
+
+        #endregion
+        
         public override void Initialize()
         {
+            // 총기 상태설정
+            WeaponState = EPlayerStates.WeaponState.Idle;
+            
             //Get Magazine.
             _magazineBehaviour = _attachmentManager.GetEquippedMagazine();
             //Get Muzzle.

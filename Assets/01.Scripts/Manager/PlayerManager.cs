@@ -51,8 +51,7 @@ namespace _01.Scripts.Manager
         /// spawnPosition으로 플레이어 위치변경 
         /// </summary>
         /// <param name="spawnPosition">스폰할 위치</param>
-        [ContextMenu("플레이어 생성")]
-        public void PlayerSpawn(Vector3 spawnPosition)
+        public void PlayerSpawn(Vector3 spawnPosition, GameObject playerInstance = null)
         {
             Debug.Log($"스폰위치: {spawnPosition}");
             // 플레이어가 처음 스폰되는것이라면
@@ -65,10 +64,18 @@ namespace _01.Scripts.Manager
                 InitializePlayerStat();
 
                 // 플레이어 프리팹 로드
-                var playerPrefab = GameManager.ResourceEx.playerPrefab;
+                // TODO 테스트를 위한 코드임으로 수정이 필요할 수 있음
+                // (GameManager.ResourceEx.playerPrefab이 준비되지 않았으면 테스트용 프리팹으로 생성)
+                var playerPrefab = GameManager.ResourceEx ? GameManager.ResourceEx.playerPrefab : playerInstance;
                 if (!playerPrefab)
                 {
-                    Debug.LogWarning("[## 중요 ##] 플레이어 프리팹을 ResourceManager에서 가져오기 실패!!");
+                    var variableInfo = GameManager.ResourceEx.playerPrefab
+                        ? "GameManager.ResourceEx.playerPrefab"
+                        : "GameManager.PlayerManager.playerPrefab";
+                    
+                    Debug.LogWarning("[## 중요 ##] 지정된 플레이어 프리팹이 없습니다!!\n" +
+                                     $"사용한 프리팹 변수경로: {variableInfo}");
+                    
                     return;
                 }
 
@@ -144,5 +151,25 @@ namespace _01.Scripts.Manager
         }
         
         #endregion
+        
+        #region 컨텐스트메뉴 메서드
+
+        [Header("씬 시작시 플레이어 자동생성")] 
+        [SerializeField] private bool autoSpawn = true;
+        [SerializeField] private GameObject playerPrefab;
+        
+        [ContextMenu("플레이어 생성 (컴포넌트가 할당된 게임오브젝트의 위치로 플레이어 스폰)")]
+        private void CM_PlayerSpawn()
+        {
+            // 컴포넌트가 할당된 게임오브젝트의 위치로 플레이어 스폰 
+            PlayerSpawn(transform.position, playerPrefab);
+        }
+        
+        #endregion
+
+        private void Start()
+        {
+            if (autoSpawn) CM_PlayerSpawn();
+        }
     }
 }

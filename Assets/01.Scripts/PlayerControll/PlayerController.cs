@@ -10,6 +10,7 @@ using _01.Scripts.Weapons_ScriptableObjects.SubWeapon;
 using _01.Scripts.Weapons_ScriptableObjects.Weapon;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 using WeaponBehaviour = _01.Scripts.Weapon.WeaponBehaviour;
 
@@ -54,7 +55,7 @@ namespace _01.Scripts.PlayerControll
                 if (MovementFSM.CurrentState is SlidingState)
                     return Stat.SlidingAcc;
 
-                return Stat.BaseAcc;
+                 return Stat.BaseAcc;
             }
         }
         
@@ -66,7 +67,7 @@ namespace _01.Scripts.PlayerControll
         # endregion
         
         # region 컴포넌트/클래스 참조 프로퍼티
-        
+  
         // 상태 머신 참조
         public MovementStateMachine MovementFSM { get; private set; }
         public SubWeaponStateMachine SubWeaponFSM { get; private set; }
@@ -187,39 +188,10 @@ namespace _01.Scripts.PlayerControll
         #endregion
         
         
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = IsGrounded ? Color.green : Color.red;
-
-            Gizmos.DrawRay(groundCheckPivot.position, -transform.up * 10f);
-        }
         
-        private void Awake()
-        {
-            // 컴포넌트 초기화
-            CapsuleCollider = GetComponent<CapsuleCollider>();
-            PlayerInput = GetComponent<PlayerInput>();
-            Rb = GetComponent<Rigidbody>();
-            PlayerCamera = Camera.main.transform;
-            CharacterAnimController = transform.GetComponentInChildren<CharacterAnimationController>();
-            
-            // private 컴포넌트 캐싱
-            _recoil = transform.GetComponentInChildren<Recoil>(); // 반동 컴포넌트
-        }
 
-        private void Start()
-        {
-            // 상태 머신 생성
-            MovementFSM = new MovementStateMachine(this);
-            SubWeaponFSM = new SubWeaponStateMachine(this);
-            EmissionFSM = new EmissionStateMachine(this);
-            
-            // 각 상태 머신의 초기 상태 설정
-            MovementFSM.Initialize(MovementFSM.IdleState);
-            SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
-            EmissionFSM.Initialize(EmissionFSM.ReadyState);
-        }
-
+        #region 플레이어 초기설정(장비, 스탯) 메서드
+        
         /// <summary>
         /// PlayerManager에 의해 호출되어 플레이어의 스탯과 장비를 설정합니다.
         /// </summary>
@@ -331,15 +303,49 @@ namespace _01.Scripts.PlayerControll
             playerEmission.InitializeEmission(this);
         }
 
+        #endregion
 
         #region Unity Functions
 
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = IsGrounded ? Color.green : Color.red;
+
+            Gizmos.DrawRay(groundCheckPivot.position, -transform.up * 10f);
+        }
+        
+        private void Awake()
+        {
+            // 컴포넌트 초기화
+            CapsuleCollider = GetComponent<CapsuleCollider>();
+            PlayerInput = GetComponent<PlayerInput>();
+            Rb = GetComponent<Rigidbody>();
+            PlayerCamera = Camera.main.transform;
+            CharacterAnimController = transform.GetComponentInChildren<CharacterAnimationController>();
+            
+            // private 컴포넌트 캐싱
+            _recoil = transform.GetComponentInChildren<Recoil>(); // 반동 컴포넌트
+        }
+
+        private void Start()
+        {
+            // 상태 머신 생성
+            MovementFSM = new MovementStateMachine(this);
+            SubWeaponFSM = new SubWeaponStateMachine(this);
+            EmissionFSM = new EmissionStateMachine(this);
+            
+            // 각 상태 머신의 초기 상태 설정
+            MovementFSM.Initialize(MovementFSM.IdleState);
+            SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
+            EmissionFSM.Initialize(EmissionFSM.ReadyState);
+        }
+        
         private void Update()
         {
             // 애니메이터에 필요한 값 전달
             CharacterAnimController.movementVelocity = Rb.linearVelocity;
             
-            // 무기발사 (코드이동 필요)
+            // 무기발사 (TODO 코드이동 필요)
             if (_holdingFire)
             {
                 if (Time.time - _lastShotTime > 60.0f / equippedWeapon.GetRateOfFire())
@@ -374,6 +380,8 @@ namespace _01.Scripts.PlayerControll
             MovementFSM.CurrentState?.OnUpdate();
             SubWeaponFSM.CurrentState?.OnUpdate();
             EmissionFSM.CurrentState?.OnUpdate();
+            
+            Debug.Log($"[Current State] {EmissionFSM.CurrentState}");
             
             // 디버그
             if (speedText)
@@ -477,23 +485,6 @@ namespace _01.Scripts.PlayerControll
                     break;
             }
         }
-
-        /// <summary>
-        /// 방출키 입력
-        /// </summary>
-        public void OnTryEmission(InputAction.CallbackContext context)
-        {
-            switch (context)
-            {
-                case {phase: InputActionPhase.Started}:
-                    // TODO
-                    // EmissionFSM의 EmissionUsingState.Enter에서
-                    // 애니메이션과 동작이 실행되도록 수정해야 함
-                    // emission.ExecuteEmission(emissiondata);
-                    break;
-            }
-        }
-        
         
         # endregion
 
@@ -504,8 +495,14 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         private void Fire()
         {
-            _lastShotTime = Time.time;
-
+            if (!equippedWeapon) return;
+            if (equippedWeapon.WeaponState == EPlayerStates.WeaponState.Reload) return; // 재장전중일땐 발사못하도록 막음
+            
+            _lastShotTime = Time.time; // 연사를 위해 발사된 시각 저장
+            
+            // 발사상태(격발/공격발)에 따라 캐릭터 애니메이션 재생
+            CharacterAnimController.FireAnimation(equippedWeapon.HasAmmunition());
+            
             equippedWeapon.Fire();
         }
 
@@ -514,6 +511,9 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         private void Reload()
         {
+            // 재장전 진행중이라면 캔슬못하도록 실행막기
+            if (equippedWeapon.WeaponState == EPlayerStates.WeaponState.Reload) return;
+            
             CharacterAnimController.ReloadAnimation(!equippedWeapon.HasAmmunition());
             equippedWeapon.Reload();
         }
@@ -574,7 +574,6 @@ namespace _01.Scripts.PlayerControll
         {
             if (!IsGrounded) return;
             
-            Debug.Log("점프성공!");
             Rb.AddForce(transform.up * Stat.CurrentJumpForce, ForceMode.Impulse);
         }
 
@@ -598,6 +597,20 @@ namespace _01.Scripts.PlayerControll
         }
         # endregion
 
+        # region 애니메이션 SMB 메서드 (장비의 FSM 상태변경을 위함)
+
+        /// <summary>
+        /// 캐릭터 애니메이터에의 Emission 레이어에서 Default State가 실행되면 왼손이 사용종료되었음을 FSM에 알려줌
+        /// </summary>
+        public void SetLeftHandStateCooldown()
+        {
+            Debug.Log("왼손 상태를 CooldownStat로 설정!");
+            EmissionFSM.ChangeState(EmissionFSM.CooldownState);
+            SubWeaponFSM.ChangeState(SubWeaponFSM.CooldownState);
+        }
+        
+        # endregion
+        
         /// <summary>
         /// 방출공격 사용
         /// </summary>
@@ -606,11 +619,13 @@ namespace _01.Scripts.PlayerControll
             playerEmission.ExecuteEmission(CurrentEmission);
         }
         
+        // 근접공격
         public void ApplyDamage(float damage)
         {
             if (IsInvincible)
             {
                 // TODO 무적상태에서 피격시 스타일리쉬액션 연동코드 작성
+                Debug.Log("[스타일리쉬 액션] 적 공격 회피!");
                 return;
             }
             Debug.Log("플레이어 피격당함");
@@ -626,14 +641,7 @@ namespace _01.Scripts.PlayerControll
         public bool IsDead => Stat.hp.Value <= 0f;
         public void ApplyHit(float rawDamage, Vector3 hitPoint, HitZones zone)
         {
-            Debug.Log("공격당함!");
-            Stat.hp.Value -= rawDamage;
-
-            if (IsDead)
-            {
-                // TODO: 플레이어 사망처리 코드 작성
-                Debug.Log("## 플레이어 사망 ##");
-            }
+            ApplyDamage(rawDamage);
         }
     }
 }

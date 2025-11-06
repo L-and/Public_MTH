@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace _01.Scripts.PlayerControll.Animation
 {
+    /// <summary>
+    /// 플레이어 애니메이터의 애니메이션 실행, 트리거 조작을 담당하는 클래스
+    /// </summary>
     public class CharacterAnimationController : MonoBehaviour
     {
         private PlayerController _playerController;
@@ -24,6 +27,7 @@ namespace _01.Scripts.PlayerControll.Animation
         private float _dampTimeLocomotion = 0.15f;
         private int _layerActions;
         private int _layerEmission;
+        private int _layerOverlay;
 
         private void Awake()
         {
@@ -32,6 +36,7 @@ namespace _01.Scripts.PlayerControll.Animation
             
             _layerActions = _characterAnim.GetLayerIndex("Layer Actions");
             _layerEmission = _characterAnim.GetLayerIndex("Layer Emission");
+            _layerOverlay = _characterAnim.GetLayerIndex("Layer Overlay");
         }
 
         private void Update()
@@ -48,6 +53,13 @@ namespace _01.Scripts.PlayerControll.Animation
             _characterAnim.SetFloat(HashMovement, movementVelocity.magnitude, _dampTimeLocomotion, Time.deltaTime);
         }
 
+        public void FireAnimation(bool hasAmmo)
+        {
+            var stateName = hasAmmo ? "Fire" : "Fire Empty";
+            _characterAnim.Play(stateName, _layerOverlay, 0.0f);
+
+        }
+        
         public void ReloadAnimation(bool isMagazineEmpty)
         {
             var stateName = isMagazineEmpty ? "Reload Empty" : "Reload";
@@ -56,23 +68,12 @@ namespace _01.Scripts.PlayerControll.Animation
 
         public void EmissionFireAnimation()
         {
-            // var stateName = "Fire";
-            // _characterAnim.Play(stateName, _layerEmission, 0.0f);
-            
             _characterAnim.SetTrigger(EmissionFireAnimHash);
         }
 
         public void SubWeaponAnimation()
         {
             _characterAnim.SetTrigger(SubWeaponUseAnimHash);
-        }
-        
-        /// <summary>
-        /// 애니메이션 클립에서 방출무기를 발사하는 이벤트메서드 [단발] (레일건, 로켓런쳐)
-        /// </summary>
-        public void OnEmissionFire()
-        {
-            _playerController.FireEmission();
         }
 
         /// <summary>
