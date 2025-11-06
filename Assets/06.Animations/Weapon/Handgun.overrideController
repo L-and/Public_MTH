@@ -7,11 +7,13 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Handgun
-  m_Controller: {fileID: 9100000, guid: 3f50821f7ef123c45bf544bf7626e7e0, type: 2}
+  m_Controller: {fileID: 9100000, guid: e985ebb80cb9e514cb23cf0ee5e72b91, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: dcd10b564e23a844ca082a60ed2ded8a, type: 2}
+  - m_OriginalClip: {fileID: 7400002, guid: bfda376b0f658a748870ea8f7c2c7c03, type: 3}
     m_OverrideClip: {fileID: 7400000, guid: c51c8d669beb9f245b6c9e84ab69e7db, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 87a392d683d491546b2c8939cd016f4d, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: c51c8d669beb9f245b6c9e84ab69e7db, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 9f2778c9b91f8f745bac8e764b6e044d, type: 2}
+  - m_OriginalClip: {fileID: 7400004, guid: bfda376b0f658a748870ea8f7c2c7c03, type: 3}
+    m_OverrideClip: {fileID: 7400000, guid: 5f8f03c9a94c46741b4d2d1d73387a9d, type: 2}
+  - m_OriginalClip: {fileID: 7400010, guid: bfda376b0f658a748870ea8f7c2c7c03, type: 3}
     m_OverrideClip: {fileID: 7400000, guid: 233d27be512c6bf4280409b3e85fdde4, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 7fba030ac3cb5884596826fcb4d24243, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 083575a2b14986343a1059d01aa7ac02, type: 2}
