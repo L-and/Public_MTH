@@ -19,6 +19,7 @@ namespace _01.Scripts.PlayerControll.Animation
         private static readonly int HashMovement = Animator.StringToHash("Movement");
 
         private static readonly int EmissionFireAnimHash = Animator.StringToHash("Emission Fire");
+        private static readonly int SubWeaponUseAnimHash = Animator.StringToHash("SubWeapon Use");
 
         private float _dampTimeLocomotion = 0.15f;
         private int _layerActions;
@@ -60,6 +61,11 @@ namespace _01.Scripts.PlayerControll.Animation
             
             _characterAnim.SetTrigger(EmissionFireAnimHash);
         }
+
+        public void SubWeaponAnimation()
+        {
+            _characterAnim.SetTrigger(SubWeaponUseAnimHash);
+        }
         
         /// <summary>
         /// 애니메이션 클립에서 방출무기를 발사하는 이벤트메서드 [단발] (레일건, 로켓런쳐)
@@ -67,6 +73,22 @@ namespace _01.Scripts.PlayerControll.Animation
         public void OnEmissionFire()
         {
             _playerController.FireEmission();
+        }
+
+        /// <summary>
+        /// 쉴드 튕겨내기 애니메이션 트리거
+        /// </summary>
+        public void OnShieldImpact()
+        {
+            _characterAnim.SetTrigger("Shield Impact");
+        }
+
+        /// <summary>
+        /// 쉴드 사용종료 애니메이션 트리거
+        /// </summary>
+        public void OnShieldUsingDone()
+        {
+            _characterAnim.SetTrigger("Shield Using Done");
         }
     }
 }
