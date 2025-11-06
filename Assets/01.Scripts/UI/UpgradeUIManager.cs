@@ -24,7 +24,7 @@ public class UpgradeUIManager : MonoBehaviour
 
     public int upgradeChance = 1;
 
-    private void Start()
+    private void OnEnable()
     {
         // 0~21 id랜덤 제시 ->  UpgradeUI 반영
         SetDataID();
