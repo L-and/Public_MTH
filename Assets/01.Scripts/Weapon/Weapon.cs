@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using _01.Scripts.PlayerControll;
 using InfimaGames.LowPolyShooterPack;
 using UnityEngine;
@@ -250,8 +251,30 @@ namespace _01.Scripts.Weapon
             SetState(EPlayerStates.WeaponState.Reload);
             
             string animName = HasAmmunition() ? "Reload" : "Reload Empty";
-            _audioSource.PlayOneShot(audioClipReload);
+            // 재장전속도에 맞게 사운드재생을 위해 AudioClip.pitch를 변경 후 복구
             _gunAnimator.Play(animName, 0, 0f);
+            StartCoroutine(PlayReloadSoundCoroutine());
+            
+        }
+
+        /// <summary>
+        /// 재장전속도 업그레이드에 맞춰서 사운드의 속도를 Pitch를 변경하여 재생
+        /// TODO 피치를 수정해서 재생속도를 수정하면 문제가있어서 추후에 전용 사운드 제작필요
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator PlayReloadSoundCoroutine()
+        {
+            // 총기 애니메이터에서 재장전속도를 가져옴
+            float reloadSpeed = _gunAnimator.GetFloat("Reload Speed");
+            
+            // 재장전속도에 맞춰서 사운드재생
+            _audioSource.pitch = reloadSpeed;
+            var source = HasAmmunition() ? GetAudioClipReload() : GetAudioClipReloadEmpty();
+            _audioSource.PlayOneShot(source);
+            yield return new WaitForSeconds(source.length / reloadSpeed);
+            
+            // 사운드재생속도 복원
+            _audioSource.pitch = 1.0f;
         }
         
         // amount가 -1이면 탄약을 전부 충전
@@ -273,6 +296,8 @@ namespace _01.Scripts.Weapon
 
 
         #endregion
+        
+       
         
         public override void Initialize()
         {

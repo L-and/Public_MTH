@@ -17,9 +17,10 @@ namespace _01.Scripts.PlayerControll.Animation
         public Vector3 movementVelocity;
         
         /// <summary>
-        /// Hashed "Movement".
+        /// Hashed Parameters
         /// </summary>
         private static readonly int HashMovement = Animator.StringToHash("Movement");
+        private static readonly int HashReloadSpeed = Animator.StringToHash("Reload Speed");
 
         private static readonly int EmissionFireAnimHash = Animator.StringToHash("Emission Fire");
         private static readonly int SubWeaponUseAnimHash = Animator.StringToHash("SubWeapon Use");
@@ -66,6 +67,14 @@ namespace _01.Scripts.PlayerControll.Animation
             _characterAnim.Play(stateName, _layerActions, 0.0f);
         }
 
+        /// <summary>
+        /// Reload Speed를 value값으로 변경
+        /// </summary>
+        public void SetReloadSpeed(float value)
+        {
+            _characterAnim.SetFloat(HashReloadSpeed, value);
+        }
+        
         public void EmissionFireAnimation()
         {
             _characterAnim.SetTrigger(EmissionFireAnimHash);

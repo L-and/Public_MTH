@@ -87,7 +87,7 @@ namespace _01.Scripts.PlayerControll
         /// 캐릭터 팔 애니메이션 스크립트
         /// </summary>
         public CharacterAnimationController CharacterAnimController { get; private set; }
-
+        public Animator GunAnimController  { get; private set; }
 
         // PlayerInput 입력값 프로퍼티
         public Vector2 MoveInput { get; private set; }
@@ -208,6 +208,8 @@ namespace _01.Scripts.PlayerControll
             SetupMainWeapon(loadout.Weapon);
             SetupEmission(loadout.Emission);
             SetupSubWeapon(loadout.SubWeapon);
+            
+            
         }
 
         /// <summary>
@@ -235,6 +237,8 @@ namespace _01.Scripts.PlayerControll
                 Debug.LogWarning($"[총기: {weaponData.name}] WeaponBehaviour이 없습니다!");
                 return;
             }
+
+            GunAnimController = equippedWeapon.GetAnimator();
 
             UpdateMainWeaponData(weaponData); // 총기 속성값 적용
         }
@@ -611,6 +615,25 @@ namespace _01.Scripts.PlayerControll
         
         # endregion
         
+        #region 업그레이드 적용 메서드
+
+        /// <summary>
+        /// 재장전 속도증가 업그레이드를 적용 TODO 업그레이드 적용기능을 담당하는 스크립트를 만들어야할듯
+        /// </summary>
+        /// <param name="value"></param>
+        public void UpgradeReloadSpeed(float value)
+        {
+            GunAnimController.SetFloat("Reload Speed", value); // TODO 직접 총기애니메이터를 참조해서 파라미터를 변경하는거라 리팩터링 필요
+            CharacterAnimController.SetReloadSpeed(value);
+        }
+
+        [ContextMenu("재장전 업그레이드 적용")]
+        public void UpgradeReload()
+        {
+            UpgradeReloadSpeed(1.5f);
+        }
+        
+        #endregion
         /// <summary>
         /// 방출공격 사용
         /// </summary>
