@@ -385,8 +385,6 @@ namespace _01.Scripts.PlayerControll
             SubWeaponFSM.CurrentState?.OnUpdate();
             EmissionFSM.CurrentState?.OnUpdate();
             
-            Debug.Log($"[Current State] {EmissionFSM.CurrentState}");
-            
             // 디버그
             if (speedText)
                 speedText.text = PlatSpeed.ToString(CultureInfo.InvariantCulture);
