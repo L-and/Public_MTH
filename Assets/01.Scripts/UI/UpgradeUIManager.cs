@@ -20,9 +20,15 @@ public class UpgradeUIManager : MonoBehaviour
     int dataId;
     int dataId2;
     int dataId3;
-    int dataIdMax = 20;
+    int dataIdMax = 21;
 
     public int upgradeChance = 1;
+
+    private void Start()
+    {
+        // 0~21 id랜덤 제시 ->  UpgradeUI 반영
+        SetDataID();
+    }
 
     public void SetDataID()
     {
@@ -33,14 +39,14 @@ public class UpgradeUIManager : MonoBehaviour
     }
     void CreateDataIDValue()
     {
-        dataId = Random.Range(0, dataIdMax + 1);
+        dataId = Random.Range(0, dataIdMax);
         do
         {
-            dataId2 = Random.Range(0, dataIdMax + 1);
+            dataId2 = Random.Range(0, dataIdMax);
         } while (dataId2 == dataId);
         do
         {
-            dataId3 = Random.Range(0, dataIdMax + 1);
+            dataId3 = Random.Range(0, dataIdMax);
         } while (dataId3 == dataId || dataId3 == dataId2);
     }
 

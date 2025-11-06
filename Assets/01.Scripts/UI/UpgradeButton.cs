@@ -30,9 +30,6 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     void OnEnable()
     {
         transform.localPosition = originPosition;
-        
-        // 0~21 id랜덤 제시 ->  UpgradeUI 반영
-        dataId = Random.Range(0, 21);
 
         UpgradeOn();
         GetComponent<Image>().DOFade(1, 0);
@@ -120,31 +117,4 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return true;
     }
 
-    void SetDataIDRandomly()
-    {
-        // 데이터 아이디 0~20 설정 ->  id를 UpgradeUI 에 가져가서 텍스트 변경 설정
-        dataId = Random.Range(0, 21);
-    }
-
-    void CompareDuplicate()
-    {
-        int dataId1 = transform.parent.GetChild(0).GetComponent<UpgradeButton>().dataId;
-        int dataId2 = transform.parent.GetChild(1).GetComponent<UpgradeButton>().dataId;
-        int dataId3 = transform.parent.GetChild(2).GetComponent<UpgradeButton>().dataId;
-        if (dataId1 == dataId2)
-        {
-            transform.parent.GetChild(0).GetComponent<UpgradeButton>().SetDataIDRandomly();
-            CompareDuplicate();
-        }
-        if (dataId2 == dataId3)
-        {
-            transform.parent.GetChild(1).GetComponent<UpgradeButton>().SetDataIDRandomly();
-            CompareDuplicate();
-        }
-        if (dataId1 == dataId3)
-        {
-            transform.parent.GetChild(2).GetComponent<UpgradeButton>().SetDataIDRandomly();
-            CompareDuplicate();
-        }
-    }
 }
