@@ -13,6 +13,9 @@ public static class Constants
   // 맵 Label
   public const string MAP_PROTOTYPE = "Map_Prototype";
   public const string MAP_SEWER = "Map_Sewer";
+  public const string MAP_UNDERCASTLE = "Map_UnderCastle";
+  public const string MAP_ICECAVE = "Map_IceCave";
+  public const string MAP_BOSS = "Map_Boss";
 
   // Room 구분
   public const string NORMAL_ROOM = "Normal Room";
@@ -33,6 +36,6 @@ public static class Constants
   public const string GAMESCENE = "Game Scene";
 
   // 엘리베이터 구분
-  public const string PROTOTYPE_ELE = "Elevator_Prototype";
-  public const string ASSET_ELE = "Elevator_Asset";
+  public const string ELEVATOR_PROTOTYPE = "Elevator_Prototype";
+  public const string ELEVATOR_SEWER = "Elevator_Sewer";
 }

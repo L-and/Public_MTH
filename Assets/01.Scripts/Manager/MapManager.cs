@@ -30,25 +30,36 @@ public class MapManager : MonoBehaviour
       _isCount = true;
     }
 
-    var elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab(Constants.ASSET_ELE);
-    
-    if(elevatorPrefab == null)
+    // var mapConceptName = GameManager.GameData.GetMapConceptForFloor();
+
+    // string mapConceptName;
+    // if (GameManager.GameData.currentFloor == 1)
+    //   mapConceptName = Constants.MAP_SEWER;
+    // else
+    //   mapConceptName = Constants.MAP_PROTOTYPE;
+
+      var elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab("Map_Sewer");
+
+    Debug.Log(elevatorPrefab);
+
+    if (elevatorPrefab == null)
     {
       Debug.LogWarning("맵을 생성하는 과정에서 Elevator Prefab이 Null 이어서 맵을 제대로 생성하지 못했습니다.");
 
       await GameManager.ResourceEx.LoadElevatorPrefabs();
 
-      elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab(Constants.ASSET_ELE);
+      elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab("Map_Sewer");
+
+      if (elevatorPrefab == null)
+      {
+        Debug.LogWarning("Elevator Prefab을 찾을 수 없습니다.");
+        return;
+      }
+
+      _elevatorPrefab = elevatorPrefab;
     }
-
-    _elevatorPrefab = elevatorPrefab;
     
-    var curFloor = GameManager.GameData.currentFloor;
-    var thisFloor = GameManager.GameData.SewerMapMaxFloor();
-
-    // 현재층이 해당 컨셉 최대 층 보다 높을 경우
-    if (curFloor > thisFloor)
-      await GameManager.ResourceEx.LoadMapPrefabs(Constants.MAP_PROTOTYPE);
+    await GameManager.ResourceEx.LoadMapPrefabs("Map_Sewer");
 
     StartCoroutine(SetupMap());
   }

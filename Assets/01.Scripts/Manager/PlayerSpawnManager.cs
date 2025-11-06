@@ -14,7 +14,7 @@ public class PlayerSpawnManager : MonoBehaviour
   {
     // 플레이어와 엘리베이터 프리팹 가져옴.
     _playerPrefab = GameManager.ResourceEx.playerPrefab;
-    _elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab(Constants.PROTOTYPE_ELE);
+    _elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab(Constants.ELEVATOR_PROTOTYPE);
 
     if (_elevatorPrefab != null)
       _startPoint = _elevatorPrefab.GetComponent<ElevatorController>().StartPoint;

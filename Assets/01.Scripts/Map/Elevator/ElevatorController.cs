@@ -36,14 +36,20 @@ public class ElevatorController : MonoBehaviour
   [Header("문 닫히는 Audio")]
   [SerializeField] private AudioSource _doorCloseAudio;
 
-  private bool hasBeenTriggered = false;  // Trigger 작동 했는지 체크하는 함수
+  [Header("방 안 Box Collider")]
+  [SerializeField] private GameObject _roomCollider;
+
+  [Header("통로 쪽 Box Collider")]
+  [SerializeField] private GameObject _doorOpenCollider;
+
+  private bool _hasBeenTriggered = false;  // Trigger 작동 했는지 체크하는 함수
 
   void Start()
   {
     var curFloor = GameManager.GameData.currentFloor;
 
-    _elevatorEntranceFloorText.text = curFloor.ToString();
-    _elevatorInsideFloorText.text = curFloor.ToString();
+    if(_elevatorEntranceFloorText != null) _elevatorEntranceFloorText.text = curFloor.ToString();
+    if(_elevatorInsideFloorText != null) _elevatorInsideFloorText.text = curFloor.ToString();
 
     SwitchArrows(false, false);
   }
@@ -54,7 +60,7 @@ public class ElevatorController : MonoBehaviour
     private set { _startPoint = value; }
   }
 
-  // 맵 처음 시작부분 엘리베이터 설정
+  // 맵 처음 시작부분 엘리베이터 방 설정
   public void SetupForStart()
   {
     if (_startPoint != null) _startPoint.SetActive(true);
@@ -62,9 +68,11 @@ public class ElevatorController : MonoBehaviour
     var collider = GetComponent<BoxCollider>();
 
     if (collider != null) collider.enabled = false;
+
+    if (_doorOpenCollider != null) _doorOpenCollider.SetActive(false);
   }
 
-  // 맵 끝에 있는 엘리베이터 설정
+  // 맵 끝에 있는 엘리베이터 방 설정
   public void SetupForEnd()
   {
     if (_startPoint != null) _startPoint.SetActive(false);
@@ -72,24 +80,25 @@ public class ElevatorController : MonoBehaviour
     var collider = GetComponent<BoxCollider>();
 
     if (collider != null) collider.enabled = true;
+
+    if (_roomCollider != null) _roomCollider.GetComponent<ElevatorRoomTrigger>().IsEndRoom(true);
   }
 
   private void OnTriggerEnter(Collider other)
   {
-    if (!hasBeenTriggered && other.CompareTag("Player"))
+    if (!_hasBeenTriggered && other.CompareTag("Player"))
     {
       // TODO : 엘리베이터 안에 들어왔을때 발생하는 업그레이드 선택창 관련 추가
 
       // 화살표 내려가는 표시
       SwitchArrows(false, true);
       // Trigger 작동 했기 때문에 더이상 추가 작동되지 않게 하기 위해서 true
-      hasBeenTriggered = true;
+      _hasBeenTriggered = true;
       Debug.Log("다음 층으로 내려갑니다.");
       // 실제 엘리베이터 문 닫히기 전에 플레이어가 나가지 않도록 투명 벽 활성화
       _doorBlocker.SetActive(true);
       // 엘리베이터 문이 닫히는 함수 호출
-      StartCoroutine(DoorsOpenClose(_innerDoorsAnim, 1, -1, 0, _doorCloseAudio));
-      StartCoroutine(DoorsOpenClose(_outterDoorsAnim, 1, -1, 0, _doorCloseAudio));
+      DoorsClose(1f);
       // 문이 다 닫히면 씬 로드 실행
       GameManager.SceneEx.LoadScene(Constants.GAMESCENE);
     }
@@ -98,18 +107,26 @@ public class ElevatorController : MonoBehaviour
   // 화살표 표시 함수
   private void SwitchArrows(bool upValue, bool downValue)
   {
-    for (int i = 0; i < _arrowsUp.Count; i++)
+    if (_arrowsUp.Count != 0)
     {
-      _arrowsUp[i].enabled = upValue;
-      _arrowDown[i].enabled = downValue;
+      for (int i = 0; i < _arrowsUp.Count; i++)
+      {
+        _arrowsUp[i].enabled = upValue;
+        _arrowDown[i].enabled = downValue;
+      }
     }
   }
 
   public void DoorsOpen(float delayTime)
   {
-    Debug.Log("엘리베이터 문이 열도록 하는 함수 호출 함.");
     StartCoroutine(DoorsOpenClose(_innerDoorsAnim, 0, 1, delayTime, _doorOpenAudio));
     StartCoroutine(DoorsOpenClose(_outterDoorsAnim, 0, 1, delayTime, _doorOpenAudio));
+  }
+
+  public void DoorsClose(float delayTime)
+  {
+    StartCoroutine(DoorsOpenClose(_innerDoorsAnim, 1, -1, delayTime, _doorCloseAudio));
+    StartCoroutine(DoorsOpenClose(_outterDoorsAnim, 1, -1, delayTime, _doorCloseAudio));
   }
 
   // 엘리베이터 문 닫히는 함수

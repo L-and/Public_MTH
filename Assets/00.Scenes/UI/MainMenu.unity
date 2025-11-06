@@ -321,15 +321,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DataManager
   currentFloor: 0
+  _floorDataList:
+  - startFloor: 1
+    endFloor: 1
+    concept: 0
+  - startFloor: 7
+    endFloor: 7
+    concept: 1
+  - startFloor: 8
+    endFloor: 8
+    concept: 2
+  - startFloor: 4
+    endFloor: 4
+    concept: 3
   _roomCount: 5
-  _sewerMapMaxFloor: 1
-  _prototypeMapMaxFloor: 2
-  _prototype2MapMaxFloor: 3
-  _bossFloor: 4
   _currentWeaponId: 0
   _currentSideWeaponId: 0
   _currentEmissionId: 0
-  thisMapConcept: 
 --- !u!114 &101155865
 MonoBehaviour:
   m_ObjectHideFlags: 0

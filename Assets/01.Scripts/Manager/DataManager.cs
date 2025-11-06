@@ -1,4 +1,27 @@
+using System.Collections.Generic;
 using UnityEngine;
+
+public enum EMapConcept
+{
+  Map_Sewer,
+  Map_UnderCastle,
+  Map_IceCave,
+  Map_Boss
+}
+
+// 맵 컨셉과 관련된 정보를 저장하는 구조체
+[System.Serializable]
+public struct FloorData
+{
+  [Tooltip("해당 컨셉이 시작되는 층")]
+  public int startFloor;
+
+  [Tooltip("해당 컨셉이 끝나는 층")]
+  public int endFloor;
+
+  [Tooltip("해당 층에 해당하는 컨셉의 맵")]
+  public EMapConcept concept;
+}
 
 public class DataManager : MonoBehaviour
 {
@@ -9,20 +32,11 @@ public class DataManager : MonoBehaviour
   [Header("현재 층")]
   public int currentFloor = 0;
 
+  [Header("층별 컨셉 데이터 리스트")]
+  [SerializeField] private List<FloorData> _floorDataList;
+
   [Header("모든 층 방 개수")]
   [SerializeField] private int _roomCount = 5;
-
-  [Header("하수구 맵 나오는 최대 층")]
-  [SerializeField] private int _sewerMapMaxFloor = 1;
-
-  [Header("지하도시(미제작) 맵 나오는 최대 층")]
-  [SerializeField] private int _prototypeMapMaxFloor = 2;
-
-  [Header("(미제작) 맵 나오는 최대 층")]
-  [SerializeField] private int _prototype2MapMaxFloor = 3; // 미사용
-
-  [Header("보스(미제작)가 나오는 층")]
-  [SerializeField] private int _bossFloor = 4;
 
   [Header("현재 주무기")]
   [SerializeField] private int _currentWeaponId = 0;
@@ -33,18 +47,36 @@ public class DataManager : MonoBehaviour
   [Header("현재 방출")]
   [SerializeField] private int _currentEmissionId = 0;
 
-  // 현재 층 컨셉 체크 변수
-  public string thisMapConcept;
 
   // 프로퍼티
-  public int SewerMapMaxFloor() { return _sewerMapMaxFloor; }
-  public int PrototypeMapMaxFloor() { return _prototypeMapMaxFloor; }
-  public int RoomCount() { return _roomCount; } 
-  public int BossFloor() { return _bossFloor; }
+  public int RoomCount() { return _roomCount; }
   public int CurrentWeaponID() { return _currentWeaponId; }
   public int CurrentSideWeaponID() { return _currentSideWeaponId; }
   public int CurrentEmissionID() { return _currentEmissionId; }
   public void SetCurrentWeaponID(int value) { _currentWeaponId = value; }
   public void SetCurrentSideWeaponID(int value) { _currentSideWeaponId = value; }
   public void SetCurrentEmissionID(int value) { _currentEmissionId = value; }
+
+  // 현재층에 해당하는 맵 컨셉 반환 함수
+  public string GetMapConceptForFloor()
+  {
+    // [디버깅 1] currentFloor가 0인지 1인지 확인
+    Debug.Log($"[DataManager] 함수 호출됨. 현재 층(currentFloor) = {currentFloor}");
+
+    foreach (var data in _floorDataList)
+    {
+      // [디버깅 2] (가장 중요)
+      // 인스펙터의 값이 '정말로' 어떻게 읽히는지 확인
+      Debug.Log($"[DataManager] 루프 확인 중... " +
+                $"현재 층({currentFloor})을 {data.startFloor}층 ~ {data.endFloor}층과 비교합니다.");
+
+      if (currentFloor >= data.startFloor && currentFloor <= data.endFloor)
+      {
+        return data.concept.ToString(); // (string 방식이면 data.conceptName)
+      }
+    }
+
+    Debug.LogWarning("현재층에 맞는 층 데이터가 없습니다. Prototype을 반환합니다.");
+    return Constants.MAP_PROTOTYPE;
+  }
 }
