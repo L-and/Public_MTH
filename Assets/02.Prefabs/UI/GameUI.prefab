@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3637401922714948699}
   - component: {fileID: 843786096259301562}
   - component: {fileID: 162372952791403720}
+  - component: {fileID: 4791898816834726247}
   m_Layer: 5
   m_Name: Options Button
   m_TagString: Untagged
@@ -133,6 +134,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4791898816834726247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88528829130363958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1 &210673752553678074
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,6 +350,7 @@ GameObject:
   - component: {fileID: 1123107753921481864}
   - component: {fileID: 1936811366358952685}
   - component: {fileID: 3444943673123156281}
+  - component: {fileID: 8870975108437879856}
   m_Layer: 5
   m_Name: Resume Button
   m_TagString: Untagged
@@ -458,6 +472,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8870975108437879856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434200005565144609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1 &466269419931682480
 GameObject:
   m_ObjectHideFlags: 0
@@ -2480,6 +2506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TimerController
   startTime: 230
   timerText: {fileID: 8901791408468847570}
+  isTimerRunning: 1
 --- !u!1 &6394264475780324513
 GameObject:
   m_ObjectHideFlags: 0
@@ -2492,6 +2519,7 @@ GameObject:
   - component: {fileID: 5622674700467827116}
   - component: {fileID: 4979263664769935690}
   - component: {fileID: 1003809210978912168}
+  - component: {fileID: 1171202361743640698}
   m_Layer: 5
   m_Name: Menu Button
   m_TagString: Untagged
@@ -2601,6 +2629,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1171202361743640698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6394264475780324513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1 &6484503644776657809
 GameObject:
   m_ObjectHideFlags: 0
@@ -2749,6 +2789,7 @@ GameObject:
   - component: {fileID: 2455156716533232748}
   - component: {fileID: 8707667790425971972}
   - component: {fileID: 8039150206429845198}
+  - component: {fileID: 8085658717788423379}
   m_Layer: 5
   m_Name: Restart Button
   m_TagString: Untagged
@@ -2858,6 +2899,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8085658717788423379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6575397121617673268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1 &6649259787036531459
 GameObject:
   m_ObjectHideFlags: 0
@@ -3749,6 +3802,7 @@ GameObject:
   - component: {fileID: 791875296231466924}
   - component: {fileID: 8255264589297594570}
   - component: {fileID: 4260259596910059136}
+  - component: {fileID: 4813715173561942071}
   m_Layer: 5
   m_Name: Quit Button
   m_TagString: Untagged
@@ -3870,6 +3924,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4813715173561942071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8980165221548608956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1001 &649580297257918257
 PrefabInstance:
   m_ObjectHideFlags: 0

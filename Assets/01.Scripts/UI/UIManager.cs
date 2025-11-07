@@ -85,6 +85,11 @@ public class UIManager : MonoBehaviour
     }
     public void SetOh(float value)
     {
+        if (PlayerStat.overheat.Value < value)
+        {
+            GameManager.Sound.PlaySFX("Overheat_Up");
+        }
+
         PlayerStat.overheat.Value = value;
         ohBar.maxValue = PlayerStat.overheat.maxValue;
         ohBarText.text = PlayerStat.overheat.Value + "%";
@@ -102,6 +107,7 @@ public class UIManager : MonoBehaviour
         if (!ohFulled && PlayerStat.overheat.Value >= PlayerStat.overheat.maxValue)
         {
             ohFulled = true;
+            GameManager.Sound.PlaySFX("Overheat_Full");
             DOTween.Kill(ohBarFill);
             ohBarFill.color = color2;
             ohBarFill.DOColor(Color.white, 0.8f).SetLoops(2, LoopType.Yoyo);
@@ -118,6 +124,7 @@ public class UIManager : MonoBehaviour
         if (!stmFulled && PlayerStat.stamina.Value >= PlayerStat.stamina.maxValue)
         {
             stmFulled = true;
+            GameManager.Sound.PlaySFX("Stemina_Full");
             DOTween.Kill(stmBarFill);
             stmBarFill.color = stmBarFillColor;
             stmBarFill.DOColor(Color.white, 0.15f).SetLoops(2, LoopType.Yoyo);
@@ -128,6 +135,7 @@ public class UIManager : MonoBehaviour
     public void GameOver()
     {
         isGameover = true;
+        GameManager.Sound.PlayMusic("BGM_Game_Over");
         hud.SetActive(false);
         gameover.SetActive(true);
     }

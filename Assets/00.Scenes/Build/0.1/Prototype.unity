@@ -701,6 +701,155 @@ MonoBehaviour:
   ignoreCooldownWhileChaining: 1
   chainRange: 2.8
   chainFacingDot: 0.5
+--- !u!1 &665575808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 665575813}
+  - component: {fileID: 665575812}
+  - component: {fileID: 665575811}
+  - component: {fileID: 665575810}
+  - component: {fileID: 665575809}
+  - component: {fileID: 665575815}
+  - component: {fileID: 665575814}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &665575809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665575808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d9ae35e48cd59e4fb029c221928c8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneManagerEx
+--- !u!114 &665575810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665575808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b495126dbfcbbd488507fa38ead867a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+--- !u!114 &665575811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665575808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16ca3182b2c1bd469ff32fe88938bd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DataManager
+  currentFloor: 0
+  _roomCount: 5
+  _sewerMapMaxFloor: 1
+  _prototypeMapMaxFloor: 2
+  _prototype2MapMaxFloor: 3
+  _bossFloor: 4
+  _currentWeaponId: 0
+  _currentSideWeaponId: 0
+  _currentEmissionId: 0
+  thisMapConcept: 
+--- !u!114 &665575812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665575808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 457778f8f45c9014382aaecd75d6af82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+--- !u!4 &665575813
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665575808}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &665575814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665575808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58cb3fd3f7ce6e541b2a17a9e6ccee06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+--- !u!114 &665575815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665575808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73c3c37744515034cb619b1e263aa75c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.Manager.PlayerManager
+  _playerPrefab: {fileID: 0}
+  playerStatSo: {fileID: 0}
+  loadoutsSo: {fileID: 0}
+  currentLoadout:
+    Weapon: {fileID: 0}
+    SubWeapon: {fileID: 0}
+    Emission: {fileID: 0}
+  _playerStat:
+    hp:
+      maxValue: 0
+      value: 0
+    stamina:
+      maxValue: 0
+      value: 0
+    overheat:
+      maxValue: 0
+      value: 0
+    bulletDamage: 0
+    maxSpeed: 0
+    dashMaxSpeed: 0
+    slidingMaxSpeed: 0
+    jumpMaxSpeed: 0
+    baseAcc: 0
+    airAcc: 0
+    slidingAcc: 0
+    dashPower: 0
+    slidingPower: 0
+    dashDurationTime: 0
+    mouseSensitivity: 0
+    jumpForce: 0
 --- !u!1001 &706005828
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1741,3 +1890,4 @@ SceneRoots:
   - {fileID: 7505367101223140871}
   - {fileID: 706005828}
   - {fileID: 1516549337}
+  - {fileID: 665575813}

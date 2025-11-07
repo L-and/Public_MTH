@@ -533,6 +533,7 @@ GameObject:
   - component: {fileID: 649468083714234657}
   - component: {fileID: 6996994077259633335}
   - component: {fileID: 3890015811373563850}
+  - component: {fileID: 6229814575663764137}
   m_Layer: 5
   m_Name: Back Button
   m_TagString: Untagged
@@ -654,6 +655,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6229814575663764137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301797242007951056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1 &1317809434630874118
 GameObject:
   m_ObjectHideFlags: 0
@@ -3768,6 +3781,7 @@ GameObject:
   - component: {fileID: 2475523627257663110}
   - component: {fileID: 4641368061495823168}
   - component: {fileID: 5007898183761900874}
+  - component: {fileID: 8970498922885060328}
   m_Layer: 5
   m_Name: Video Button
   m_TagString: Untagged
@@ -3889,6 +3903,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8970498922885060328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5264191447599799607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1 &5270618691412013457
 GameObject:
   m_ObjectHideFlags: 0
@@ -4181,6 +4207,7 @@ GameObject:
   - component: {fileID: 8391180627954412677}
   - component: {fileID: 3868648434206415024}
   - component: {fileID: 7931049169904602864}
+  - component: {fileID: 3265967535365893958}
   m_Layer: 5
   m_Name: Gameplay Button
   m_TagString: Untagged
@@ -4302,6 +4329,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3265967535365893958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5445243747027798233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1 &5639058866928606379
 GameObject:
   m_ObjectHideFlags: 0
@@ -4952,6 +4991,7 @@ GameObject:
   - component: {fileID: 6725133124260701433}
   - component: {fileID: 4848093106199019280}
   - component: {fileID: 1688376182285520201}
+  - component: {fileID: 6379276548258684628}
   m_Layer: 5
   m_Name: Audio Button
   m_TagString: Untagged
@@ -5073,6 +5113,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6379276548258684628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6284597037102856515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1 &6376476475442728802
 GameObject:
   m_ObjectHideFlags: 0
@@ -5620,6 +5672,7 @@ GameObject:
   - component: {fileID: 8737741665491817089}
   - component: {fileID: 7472148338974139540}
   - component: {fileID: 5851405545617170410}
+  - component: {fileID: 4908957390016799342}
   m_Layer: 5
   m_Name: Control Button
   m_TagString: Untagged
@@ -5741,6 +5794,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4908957390016799342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7074030317154202677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8882b210ed563b04da74149130f0cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommonButton
 --- !u!1 &7080469401490497041
 GameObject:
   m_ObjectHideFlags: 0

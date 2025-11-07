@@ -51,6 +51,7 @@ public class SoundManager : MonoBehaviour
     }
     public void PlayMusic(string musicName)
     {
+        musicSource.Stop();
         if (_soundDict[musicName] == null) return;
         musicClip = _soundDict[musicName];
         musicSource.clip = musicClip;
