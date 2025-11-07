@@ -12,6 +12,13 @@ public static class StyleEventManager
 
     public static void TriggerStyleAction(EStyleType styleId)
     {
+        // 스타일리쉬 액션관련 과열게이지 증가
+        
+        if (styleId == EStyleType.SlidingUpgrade)
+        {
+            GameManager.PlayerManager?.PlayerStat.AddOverHeat(2);
+        }
+        
         Debug.Log($"[스타일리쉬 액션 이벤트] {styleId} 실행");
         OnStyleAction?.Invoke((int)styleId);
     }

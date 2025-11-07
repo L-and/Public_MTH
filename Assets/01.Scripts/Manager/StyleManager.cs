@@ -2,6 +2,7 @@ using System;
 using _01.Scripts.PlayerControll.Status;
 using DG.Tweening;
 using System.Collections.Generic;
+using _01.Scripts.Enums;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;

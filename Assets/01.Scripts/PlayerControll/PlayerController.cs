@@ -617,7 +617,19 @@ namespace _01.Scripts.PlayerControll
         
         # endregion
         
-        #region 업그레이드 적용 메서드
+        #region 업그레이드 적용 관련
+
+        // 슬라이딩 업그레이드 시 몇초당 과열게이지를 충전할지를 판단하는 변수
+        public float getOverHeatSecWithUpgrade = 2f;
+        // [업그레이드] 슬라이딩 업그레이드 플래그
+        public  bool IsSlidingUpgrade { get; private set; }
+        
+        // 슬라이딩 업그레이드
+        [ContextMenu("슬라이딩 업그레이드")]
+        public void SlidingUpgrade()
+        {
+            IsSlidingUpgrade = true;
+        }
 
         /// <summary>
         /// 재장전 속도증가 업그레이드를 적용 TODO 업그레이드 적용기능을 담당하는 스크립트를 만들어야할듯

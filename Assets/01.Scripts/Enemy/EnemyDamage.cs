@@ -97,7 +97,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
         if (IsDead) return;
         IsDead = true;
         // 스타일리쉬 액션 이벤트 실행
-        var styleType = zone == HitZones.Weak ? EStyleType.BigEnemyKill : EStyleType.EnemyKill;
+        var styleType = zone == HitZones.Weak ? EStyleType.HeadshotKill : EStyleType.EnemyKill;
         StyleEventManager.TriggerStyleAction(styleType);
         
         /// 사망시 스포너에게 알리는 구문
