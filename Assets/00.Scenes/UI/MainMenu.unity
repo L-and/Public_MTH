@@ -308,6 +308,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b495126dbfcbbd488507fa38ead867a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+  mapNameMappingList:
+  - key: Map_Prototype
+    value: Elevator_Prototype
+  - key: Map_Sewer
+    value: Elevator_Sewer
+  - key: Map_UndergroundPrison
+    value: Elevator_UndergroundPrison
+  - key: Map_Boss
+    value: Elevator_Boss
 --- !u!114 &101155864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,11 +331,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DataManager
   currentFloor: 0
   _floorDataList:
+  - startFloor: 2
+    endFloor: 2
+    concept: 0
   - startFloor: 1
     endFloor: 1
-    concept: 0
-  - startFloor: 7
-    endFloor: 7
     concept: 1
   - startFloor: 8
     endFloor: 8

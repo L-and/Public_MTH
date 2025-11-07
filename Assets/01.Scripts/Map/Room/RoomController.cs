@@ -6,8 +6,13 @@ using UnityEngine;
 public class RoomController : MonoBehaviour
 {
   [Header("방에 있는 문")]
-  [SerializeField] private GameObject entryDoor;
-  [SerializeField] private GameObject exitDoor;
+  [SerializeField] private GameObject _entryDoor;
+  [SerializeField] private GameObject _exitDoor;
+
+  [Header("양 문일 경우 (오른쪽)")]
+  [SerializeField] private GameObject _entryDoor2;
+  [SerializeField] private GameObject _exitDoor2;
+  
 
   [Header("방에 있는 스포너 리스트")]
   [SerializeField] private List<EnemySpawner> Spawners;
@@ -71,14 +76,17 @@ public class RoomController : MonoBehaviour
       OpenAllDoor();
     }
   }
-  
+
   // 모든 문이 닫히는 함수
   private void CloseAllDoor()
   {
-    if (entryDoor != null && exitDoor != null)
+    if (_entryDoor != null && _exitDoor != null)
     {
-      entryDoor.GetComponent<Door>().Close();
-      exitDoor.GetComponent<Door>().Close();
+      _entryDoor.GetComponent<Door>().Close();
+      _exitDoor.GetComponent<Door>().Close();
+
+      if (_entryDoor2 != null) _entryDoor2.GetComponent<Door>().Close();
+      if (_exitDoor2 != null) _exitDoor2.GetComponent<Door>().Close();
     }
   }
   
@@ -88,8 +96,11 @@ public class RoomController : MonoBehaviour
     // 현재 방이 클리어 되었으니 true
     isCleared = true;
 
-    entryDoor.GetComponent<Door>().Open();
-    exitDoor.GetComponent<Door>().Open();
+    _entryDoor.GetComponent<Door>().Open();
+    _exitDoor.GetComponent<Door>().Open();
+
+    if (_entryDoor2 != null) _entryDoor2.GetComponent<Door>().Open();
+    if (_exitDoor2 != null) _exitDoor2.GetComponent<Door>().Open();
 
     Debug.Log($"[{gameObject.name}] 방 클리어! 문이 열립니다.");
   }

@@ -999,8 +999,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec07c76f0992b684780485c90ac68114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
-  entryDoor: {fileID: 1643802345709493472}
-  exitDoor: {fileID: 5377698491319428170}
+  _entryDoor: {fileID: 1643802345709493472}
+  _exitDoor: {fileID: 5377698491319428170}
+  _entryDoor2: {fileID: 0}
+  _exitDoor2: {fileID: 0}
   Spawners:
   - {fileID: 1752606794643298919}
   - {fileID: 4800443898936832629}
@@ -4600,7 +4602,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 655c7b7963e86aa4a84dc84636c1894f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorTrigger
-  doorController: {fileID: 1643802345709493472}
+  _doorController: {fileID: 1643802345709493472}
+  _doorController2: {fileID: 0}
 --- !u!1 &3247260517187741399
 GameObject:
   m_ObjectHideFlags: 0

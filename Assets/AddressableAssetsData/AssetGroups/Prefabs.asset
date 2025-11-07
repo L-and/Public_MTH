@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Map_Sewer
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d04ad0585c066e4fab69275d0efe76b
+    m_Address: Connector_UndergroundPrison.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map_UndergroundPrison
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 10f4117826db1bb488ef9d0b51b65fdc
     m_Address: TestDummy.prefab
     m_ReadOnly: 0
@@ -38,6 +44,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Elevator
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28fbf94a1faa4f341932b9fbde378764
+    m_Address: Room_UndergroundPrison_1x1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map_UndergroundPrison
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3a29d606c03dfa34ea1d92b592163d05
     m_Address: Options.prefab
     m_ReadOnly: 0
@@ -48,11 +60,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48ab368575fe141429cf01fd7dcc5490
+    m_Address: Room_UndergroundPrison_2x2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map_UndergroundPrison
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4e1192db91e2bb240ad1679095c738aa
     m_Address: Room_Prototype_03.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map_Prototype
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5969aaed0c81c5b4d8a8c0e7fcbd978b
+    m_Address: Elevator_UndergroundPrison.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Elevator
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5f10c2b329bc91f40bc9e676a5f01a06
     m_Address: Connetor_ProtoType.prefab
@@ -71,6 +95,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map_Prototype
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74a605ae687dc6d41a2dbda4638b6cce
+    m_Address: Room_UndergroundPrison_1X2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map_UndergroundPrison
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 80e43b252d42c294ca2d409092c1fdb3
     m_Address: Room_Prototype_04.prefab

@@ -1,6 +1,6 @@
 public static class Constants
 {
-  ///////////////////////
+  ///////////////////////////////////////////////////
   /// 문자열 상수화 모음
   /// *** 스크립트 제작 이유 ***
   /// 문자열 값을 직접 입력할때 생기는 오타 때문에
@@ -8,12 +8,12 @@ public static class Constants
   /// 
   /// 접근 방법
   /// ex) Constants.ROOM;
-  ///////////////////////
+  ///////////////////////////////////////////////////
 
   // 맵 Label
   public const string MAP_PROTOTYPE = "Map_Prototype";
   public const string MAP_SEWER = "Map_Sewer";
-  public const string MAP_UNDERCASTLE = "Map_UnderCastle";
+  public const string MAP_UNDERGROUNDPRISON = "Map_UndergroundPrison";
   public const string MAP_ICECAVE = "Map_IceCave";
   public const string MAP_BOSS = "Map_Boss";
 
@@ -38,4 +38,7 @@ public static class Constants
   // 엘리베이터 구분
   public const string ELEVATOR_PROTOTYPE = "Elevator_Prototype";
   public const string ELEVATOR_SEWER = "Elevator_Sewer";
+  public const string ELEVATOR_UNDERGROUNDPRISON = "Elevator_UndergroundPrison";
+  public const string ELEVATOR_ICECAVE = "Elevator_IceCave";
+  public const string ELEVATOR_BOSS = "Elevator_Boss";
 }

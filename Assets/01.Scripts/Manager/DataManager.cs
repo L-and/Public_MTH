@@ -4,8 +4,7 @@ using UnityEngine;
 public enum EMapConcept
 {
   Map_Sewer,
-  Map_UnderCastle,
-  Map_IceCave,
+  Map_UndergroundPrison,
   Map_Boss
 }
 
@@ -60,16 +59,8 @@ public class DataManager : MonoBehaviour
   // 현재층에 해당하는 맵 컨셉 반환 함수
   public string GetMapConceptForFloor()
   {
-    // [디버깅 1] currentFloor가 0인지 1인지 확인
-    Debug.Log($"[DataManager] 함수 호출됨. 현재 층(currentFloor) = {currentFloor}");
-
     foreach (var data in _floorDataList)
     {
-      // [디버깅 2] (가장 중요)
-      // 인스펙터의 값이 '정말로' 어떻게 읽히는지 확인
-      Debug.Log($"[DataManager] 루프 확인 중... " +
-                $"현재 층({currentFloor})을 {data.startFloor}층 ~ {data.endFloor}층과 비교합니다.");
-
       if (currentFloor >= data.startFloor && currentFloor <= data.endFloor)
       {
         return data.concept.ToString(); // (string 방식이면 data.conceptName)

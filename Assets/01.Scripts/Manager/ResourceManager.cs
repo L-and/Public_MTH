@@ -1,9 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+
+// 엘리베이터 프리팹 찾기 관련 보조 구조체
+[Serializable]
+public struct StringMapping
+{
+  public string key;
+  public string value;
+}
 
 public class ResourceManager : MonoBehaviour
 {
@@ -26,8 +35,13 @@ public class ResourceManager : MonoBehaviour
   public Dictionary<string, GameObject> enemyPrefabDict { get; private set; } // 몬스터
   private Dictionary<string, GameObject> _elevatorPrefabDict; // 엘리베이터 Dictionary
   // 리소스 데이터를 가지고 있는 변수 (단일)
-  private GameObject _elevatorPrefab;  // 엘리베이터
   public GameObject playerPrefab { get; private set; }    // 플레이어
+
+  // 엘리베이터 관리
+  [Header("Mapping List")]
+  [SerializeField] private List<StringMapping> mapNameMappingList;
+
+  private Dictionary<string, string> mappingDict;
 
   // 게임 시작하자마자 불러옴.
   async void Awake()
@@ -35,7 +49,15 @@ public class ResourceManager : MonoBehaviour
     await LoadPlayerPrefabs();
     await LoadEnemyPrefabs();
     await LoadElevatorPrefabs();
-    await LoadMapPrefabs(Constants.MAP_SEWER);
+
+    // 엘리베이터 데이터 정리
+    mappingDict = new Dictionary<string, string>();
+
+    foreach (var mapping in mapNameMappingList)
+    {
+      if (!mappingDict.ContainsKey(mapping.key))
+        mappingDict.Add(mapping.key, mapping.value);
+    }
   }
 
   #region async / await로 리소스 데이터 가져오는 방법
@@ -195,7 +217,7 @@ public class ResourceManager : MonoBehaviour
     }
   }
   #endregion
-  
+
   #region 엘리베이터 리소스
   public async Task LoadElevatorPrefabs()
   {
@@ -227,23 +249,30 @@ public class ResourceManager : MonoBehaviour
     if (_elevatorPrefabLoadHandle.IsValid())
     {
       Addressables.Release(_elevatorPrefabLoadHandle);
-      _elevatorPrefab = null;
+      _elevatorPrefabDict.Clear();
     }
   }
   #endregion
 
   // 엘리베이터 프리팹 내보내는 함수
-  public GameObject GetElevatorPrefab(string prefabName)
+  public GameObject GetElevatorPrefab(string mapConceptName)
   {
-    if (_elevatorPrefabDict == null)
+    // 현재 맵 컨셉되 대응되는 엘리베이터 프리팹 이름 가져오기
+    string elevatorPrefabName = null;
+
+    if (mappingDict.TryGetValue(mapConceptName, out string elevatorName))
+      elevatorPrefabName = elevatorName;
+
+    // 만약 엘리베이터 프리팹 Dictionary가 비어있거나 이름을 찾지 못했을 경우 return
+    if (_elevatorPrefabDict == null || elevatorPrefabName == null)
       return null;
-      
-    foreach(var fair in _elevatorPrefabDict)
+
+    foreach (var fair in _elevatorPrefabDict)
     {
-      if (fair.Key == prefabName)
+      if (fair.Key == elevatorPrefabName)
         return fair.Value;
     }
-    
+
     return null;
   }
 

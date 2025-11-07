@@ -303,7 +303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd460cc7caefab341ab6e3c5a39bc415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorRoomTrigger
-  doorController: {fileID: 4429957564378441368}
+  _doorController: {fileID: 4429957564378441368}
+  _doorController2: {fileID: 0}
   _elevatorController: {fileID: 1249139602622430701}
 --- !u!1 &1606840997756218381
 GameObject:
@@ -2449,6 +2450,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229220525786855028, guid: aa01ef4567262fc4b80b7ab41604e30a,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 140.22188
+      objectReference: {fileID: 0}
+    - target: {fileID: 8295317229267263453, guid: aa01ef4567262fc4b80b7ab41604e30a,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 135.41605
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
