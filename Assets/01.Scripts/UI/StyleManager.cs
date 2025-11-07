@@ -1,3 +1,4 @@
+using System;
 using _01.Scripts.PlayerControll.Status;
 using DG.Tweening;
 using System.Collections.Generic;
@@ -20,37 +21,20 @@ public class StyleManager : MonoBehaviour
 
     private bool comboStopped = false;
 
-    Dictionary<string, float> styleList = new Dictionary<string, float>()
+    private void Start()
     {
-        {"óġ", 3 },
-        {"���� óġ", 8 },
-        {"ȸ��", 6 }
-    };
-
-
-    void Start()
-    {
+        GameManager.Instance.RegisterStyleManager(this); 
         targetCanvas = FindFirstObjectByType<Canvas>();
+        StyleEventManager.OnStyleAction += CreateNewStyle;
+    }
+
+    private void OnDestroy()
+    {
+        StyleEventManager.OnStyleAction -= CreateNewStyle;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            CreateNewStyle(0);
-            RestoreComboBar();
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            CreateNewStyle(1);
-            RestoreComboBar();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            CreateNewStyle(2);
-            RestoreComboBar();
-        }
-
         DecreaseComboBar();
     }
     public TextMeshProUGUI CreateText(string name, string text, float size, Color color)
@@ -82,7 +66,9 @@ public class StyleManager : MonoBehaviour
         float value = styleData.Style[id].Value;
         Color color = styleData.Style[id].Color;
 
-        PlayerStat stat = GameObject.FindWithTag("Player").GetComponent<PlayerStat>();
+        // PlayerStat stat = GameObject.FindWithTag("Player").GetComponent<PlayerStat>();
+
+        var stat = GameManager.PlayerManager.PlayerStat;
 
         uiManager.SetOh(stat.overheat.Value + value);
         CreateText("style"," "+ name +" +"+ value + "%", 36, color);
@@ -91,6 +77,8 @@ public class StyleManager : MonoBehaviour
         {
             RemoveLatestStyle();
         }
+        
+        RestoreComboBar();
     }
 
     public void RemoveLatestStyle()

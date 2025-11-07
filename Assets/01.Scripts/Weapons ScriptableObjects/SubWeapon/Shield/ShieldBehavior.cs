@@ -1,4 +1,5 @@
-﻿using _01.Scripts.Utils;
+﻿using _01.Scripts.Enums;
+using _01.Scripts.Utils;
 using UnityEngine;
 
 namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon.Shield
@@ -13,6 +14,8 @@ namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon.Shield
 
         public override void ExecuteOnTrigger(Collider other, PlayerSubWeapon handler, Transform playerCamera, SubWeaponData data)
         {
+            StyleEventManager.TriggerStyleAction(EStyleType.Parry);
+            
             // 쉴드 튕겨내기 애니메이션 실행
             handler.playerController.CharacterAnimController.OnShieldImpact();
             

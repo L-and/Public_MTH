@@ -66,7 +66,9 @@ namespace _01.Scripts.Manager
                 // 플레이어 프리팹 로드
                 // TODO 테스트를 위한 코드임으로 수정이 필요할 수 있음
                 // (GameManager.ResourceEx.playerPrefab이 준비되지 않았으면 테스트용 프리팹으로 생성)
-                var playerPrefab = GameManager.ResourceEx ? GameManager.ResourceEx.playerPrefab : playerInstance;
+                var playerPrefab = GameManager.ResourceEx.playerPrefab ? GameManager.ResourceEx.playerPrefab : playerInstance;
+                
+                Debug.Log(playerPrefab);
                 if (!playerPrefab)
                 {
                     var variableInfo = GameManager.ResourceEx.playerPrefab

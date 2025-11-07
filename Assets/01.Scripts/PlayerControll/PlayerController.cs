@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using _01.Scripts.Enums;
 using _01.Scripts.PlayerControll.Animation;
 using _01.Scripts.PlayerControll.Status;
 using _01.Scripts.Weapons_ScriptableObjects.Emission;
@@ -643,16 +644,16 @@ namespace _01.Scripts.PlayerControll
             playerEmission.ExecuteEmission(CurrentEmission);
         }
         
-        // 근접공격
+        // 데미지 적용
         public void ApplyDamage(float damage)
         {
+            Debug.Log("플레이어 피격");
+            // 대쉬중에는 데미지적용 X, 스타일리쉬 액션 실행
             if (IsInvincible)
             {
-                // TODO 무적상태에서 피격시 스타일리쉬액션 연동코드 작성
-                Debug.Log("[스타일리쉬 액션] 적 공격 회피!");
+                StyleEventManager.TriggerStyleAction(EStyleType.Dodge);
                 return;
             }
-            Debug.Log("플레이어 피격당함");
             Stat.hp.Value -= damage;
 
             if (Stat.hp.Value <= 0f)
