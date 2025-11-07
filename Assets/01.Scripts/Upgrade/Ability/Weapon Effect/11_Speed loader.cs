@@ -16,11 +16,11 @@ public class Speedloader_11 : MonoBehaviour,IUpgradeEffect
             return;
         }
 
-        // ✅ 재장전 속도 증가 메서드 호출
+        // 재장전 속도 증가 메서드 호출
         // 기존 대비 150% (1.5배)
         //float reloadMultiplier = 1.5f;
         //weapon.UpgradeReloadSpeed(reloadMultiplier);
 
-        //Debug.Log($"🔁 스피드로더 효과 적용됨! 재장전 속도 {reloadMultiplier * 100f}%로 증가");
+        //Debug.Log($"스피드로더 효과 적용됨! 재장전 속도 {reloadMultiplier * 100f}%로 증가");
     }
 }

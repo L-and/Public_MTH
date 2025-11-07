@@ -15,9 +15,6 @@ public class ElevatorUpgradeManager : MonoBehaviour
     private IUpgradeEffect[] allEffects;
     private bool effectsLoaded = false;
 
-    private int currentFloor = 0;     // 🌟 현재 층
-    private const int maxFloor = 3;   // 🌟 총 3층 기준 (필요시 조정 가능)
-
     private void Awake()
     {
         LoadAllEffects();
@@ -44,7 +41,7 @@ public class ElevatorUpgradeManager : MonoBehaviour
         }
     }
 
- 
+
     //  적용효과 목록 로그 출력
     public void ApplyUpgrade(int id)
     {
@@ -70,18 +67,29 @@ public class ElevatorUpgradeManager : MonoBehaviour
         }
 
         // UpgradeData에서 직접 스크립트 이름 가져오기
-        string effectName = upgradeData.Upgrade[id].Effect;
-        Debug.Log($"[DEBUG] '{effectName}' 효과 적용 시도 중....");
-        var effect = allEffects.FirstOrDefault(e => e.EffectName == effectName); // 정확한 이름 맞는지 비교
+        //string effectName = upgradeData.Upgrade[id].Effect;
+        //Debug.Log($"[DEBUG] '{effectName}' 효과 적용 시도 중....");
+        //var effect = allEffects.FirstOrDefault(e => e.EffectName == effectName); // 정확한 이름 맞는지 비교
 
-        if (effect != null)
+        //if (effect != null)
+        //{
+        //    effect.ApplyEffect(PlayerStat);
+        //    Debug.Log($" {effectName} 업그레이드 적용 완료");
+        //}
+        //else
+        //{
+        //    Debug.Log($" {effectName} 효과 스크립트를 찾지 못했습니다. (씬에 존재하지 않음)");
+        //}
+
+        // UpgradePersistence로 일원화
+        if (UpgradePersistence.Instance != null)
         {
-            effect.ApplyEffect(PlayerStat);
-            Debug.Log($" {effectName} 업그레이드 적용 완료");
+            UpgradePersistence.Instance.SaveAndApply(id, PlayerStat);
+            Debug.Log($"[ElevatorUpgradeManager] UpgradePersistence에 ID {id} 저장 및 적용 요청 완료");
         }
         else
         {
-            Debug.Log($" {effectName} 효과 스크립트를 찾지 못했습니다. (씬에 존재하지 않음)");
+            Debug.LogWarning("[ElevatorUpgradeManager] UpgradePersistence 인스턴스를 찾지 못했습니다!");
         }
     }
 }
