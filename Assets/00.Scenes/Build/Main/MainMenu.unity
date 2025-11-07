@@ -369,7 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.Manager.PlayerManager
   playerStatSo: {fileID: 11400000, guid: 6d3c04a636b54bc4680c341feb96a855, type: 2}
-  loadoutsSo: {fileID: 11400000, guid: 125e38be2021bcb41a0d05aca6acfd4b, type: 2}
+  loadoutsSo: {fileID: 11400000, guid: e8c2ae6980703ac48853294a2fe6ea4f, type: 2}
   currentLoadout:
     Weapon: {fileID: 0}
     SubWeapon: {fileID: 0}
@@ -397,6 +397,9 @@ MonoBehaviour:
     dashDurationTime: 0
     mouseSensitivity: 0
     jumpForce: 0
+  autoSpawn: 1
+  playerPrefab: {fileID: 5456434453428423699, guid: 9512e0d16021f1e42b955162bc2f43a7,
+    type: 3}
 --- !u!1 &101663859
 GameObject:
   m_ObjectHideFlags: 0

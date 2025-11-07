@@ -8,39 +8,45 @@ using PathToTunnel;
 namespace LaserBeams
 {
     public class LaserBeam : MonoBehaviour
-    {
+    { 
         // Public Variables
-        public GameObject launchEffectPrefab; // ·¢ÉäÌØĞ§µÄÔ¤ÖÆÌå
-        public float launchEffectDuration = 1f; // ·¢ÉäÌØĞ§µÄ¼ÓÔØÊ±¼ä
+        public GameObject launchEffectPrefab; // ë°œì‚¬ íš¨ê³¼ í”„ë¦¬íŒ¹
+        public float launchEffectDuration = 1f; // ë°œì‚¬ íš¨ê³¼ ì§€ì† ì‹œê°„
         public float beamGrowthTime = 1f;
         public float Width;
         public float particleSpeedScale = 1f;
         public int beamSegments = 20;
         public BeamType beamType = BeamType.Straight;
         public bool renderPipe = false;
-        public bool enableRaycast = true; // ÓÃÓÚ¿ØÖÆÊÇ·ñÆôÓÃ¶à¶ÎÉäÏß¼ì²â
-        public bool enableCollisionDetection = true; // ÓÃÓÚ¿ØÖÆÊÇ·ñÆôÓÃÅö×²¼ì²â
-        public LayerMask raycastLayerMask; // ÓÃÓÚÖ¸¶¨ÉäÏß¼ì²âµÄÍ¼²ã
+        public bool enableRaycast = true; // ë ˆì´ìºìŠ¤íŠ¸ í™œì„±í™” ì—¬ë¶€
+        public bool enableCollisionDetection = true; // ì¶©ëŒ ê°ì§€ í™œì„±í™” ì—¬ë¶€
+        public LayerMask raycastLayerMask; // ë ˆì´ìºìŠ¤íŠ¸ ë ˆì´ì–´ ë§ˆìŠ¤í¬
 
-        public GameObject hitPrefab; // Åö×²ÌØĞ§µÄÔ¤ÖÆÌå
-        public float detectionInterval = 0.1f; // Åö×²¼ì²â¼ä¸ô
+        public GameObject hitPrefab; // í”¼ê²© íš¨ê³¼ í”„ë¦¬íŒ¹
+        public float detectionInterval = 0.1f; // ê°ì§€ ì£¼ê¸°
+        
         public float hitPrefabDestroyTime = 1f;
+        [Tooltip("ë ˆì´ì € ì§€ì†ì‹œê°„")]
+        public float beamDuration = 1f;
+        [Tooltip("ì§€ì†ì‹œê°„ì´ ëë‚˜ë©´ íŒŒê´´í• ì§€ ì—¬ë¶€")]
+        public bool isBeamDestory = false;
 
         // Private Variables
+        private GameObject currentLaunchEffect; // Added for launch effect reuse
         private BeamPositionsGenerator beamGenerator;
         private List<Vector3> beamPoints;
-        private List<Vector3> currentBeamPoints; // ÓÃÓÚ´æ´¢Êµ¼ÊÕ¹Ê¾µÄbeamPoints
+        private List<Vector3> currentBeamPoints; // ????????????beamPoints
         private List<LineRenderer> lineRenderers = new List<LineRenderer>();
         private List<ParticlePath> particlePaths = new List<ParticlePath>();
         private MeshCollider beamCollider;
         private Vector3 startPos, endPosition;
         private float ratio = 0;
-        private float hitRatio = 1f; // ÓÃÓÚ´æ´¢Åö×²·¢ÉúÊ±µÄ±ÈÀı
-        private float previousRatio = -1f; // ¼ÇÂ¼ÉÏÒ»´ÎµÄratioÖµ
+        private float hitRatio = 1f; // ??????????????????
+        private float previousRatio = -1f; // ??Â¼??????ratio?
         private float beamLength = 0;
         private bool beamLaunched = false;
         private bool isUpdateBeamPositions = false;
-        private float detectionTimer = 0f; // Åö×²¼ì²â¼ÆÊ±Æ÷
+        private float detectionTimer = 0f; // ??????????
 
         // Initialization
         void Start()
@@ -54,52 +60,78 @@ namespace LaserBeams
             beamCollider = gameObject.AddComponent<MeshCollider>();
             beamCollider.convex = false;
             UpdateBeam(_startPos, _endPosition, _beamType);
-            StartCoroutine(LaunchBeamWithDelay());
         }
 
         public void UpdateBeam(Vector3 _startPos, Vector3 _endPosition, BeamType _beamType)
         {
+            StopAllCoroutines();
+
             startPos = _startPos;
             endPosition = _endPosition;
             beamType = _beamType;
-            beamPoints = beamGenerator.GenerateBeam(startPos, endPosition, beamType, 1.0f, beamSegments); // ¼ÆËãÒ»´ÎbeamPoints
+            beamPoints = beamGenerator.GenerateBeam(startPos, endPosition, beamType, 1.0f, beamSegments);
             isUpdateBeamPositions = true;
+
+            StartCoroutine(LaunchBeamWithDelay());
         }
 
         IEnumerator LaunchBeamWithDelay()
         {
-            // Éú³É·¢ÉäÌØĞ§
+            // ë¹” ë°œì‚¬ ì‹œì‘
+            if (currentLaunchEffect != null)
+            {
+                currentLaunchEffect.SetActive(false);
+            }
+
             if (launchEffectPrefab != null && beamPoints.Count > 1)
             {
                 Vector3 direction = beamPoints[1] - beamPoints[0];
                 Quaternion rotation = Quaternion.LookRotation(direction);
-                GameObject launchEffect = Instantiate(launchEffectPrefab, startPos, rotation);
-                launchEffect.transform.SetParent(transform);
+                Vector3 effectPosition = startPos; 
+
+                if (currentLaunchEffect == null)
+                {
+                    currentLaunchEffect = Instantiate(launchEffectPrefab, effectPosition, rotation);
+                    currentLaunchEffect.transform.SetParent(transform); // Parent to LaserBeam GameObject
+                }
+                else
+                {
+                    currentLaunchEffect.transform.position = effectPosition;
+                    currentLaunchEffect.transform.rotation = rotation;
+                    currentLaunchEffect.SetActive(true);
+                }
             }
 
-            // µÈ´ı·¢ÉäÌØĞ§µÄ³ÖĞøÊ±¼ä
-            yield return new WaitForSeconds(launchEffectDuration);
-
-            // ¿ªÊ¼beamµÄÉú³¤
             beamLaunched = true;
             ratio = 0;
-            previousRatio = -1f; // È·±£µÚÒ»´Î¸üĞÂÊ±µ÷ÓÃUpdateBeamCollider
-        }
+            previousRatio = -1f;
 
+            yield return new WaitForSeconds(beamGrowthTime + beamDuration);
+
+            if (isBeamDestory)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+        }
+                
         void Update()
         {
             if (beamLaunched)
             {
                 ratio += Time.deltaTime / beamGrowthTime;
-                if (ratio > hitRatio) ratio = hitRatio; // Èç¹ûratio´óÓÚhitRatio£¬½«ÆäÉèÖÃÎªhitRatio
-                if (Mathf.Abs(ratio - previousRatio) > Mathf.Epsilon || isUpdateBeamPositions) // ¼ì²ératioÊÇ·ñ·¢Éú±ä»¯
+                if (ratio > hitRatio) ratio = hitRatio; // ë¹„ìœ¨ì´ hitRatioë¥¼ ì´ˆê³¼í•˜ì§€ ì•Šë„ë¡
+                if (Mathf.Abs(ratio - previousRatio) > Mathf.Epsilon || isUpdateBeamPositions) // ë¹„ìœ¨ì´ ë³€ê²½ë˜ì—ˆê±°ë‚˜ ì—…ë°ì´íŠ¸ê°€ í•„ìš”í•œ ê²½ìš°
                 {
                     isUpdateBeamPositions = false;
-                    currentBeamPoints = beamGenerator.GetSubVectors(beamPoints, ratio); // Ê¹ÓÃGetSubVectors¸üĞÂcurrentBeamPoints
+                    currentBeamPoints = beamGenerator.GetSubVectors(beamPoints, ratio); // GetSubVectorsë¥¼ ì‚¬ìš©í•˜ì—¬ currentBeamPoints ê³„ì‚°
                     beamLength = beamGenerator.GetLength(beamPoints);
                     UpdateBeamEffect();
                     UpdateBeamCollider();
-                    previousRatio = ratio; // ¸üĞÂpreviousRatio
+                    previousRatio = ratio; // ì´ì „ ë¹„ìœ¨ ì—…ë°ì´íŠ¸
                 }
 
                 detectionTimer += Time.deltaTime;
@@ -120,7 +152,7 @@ namespace LaserBeams
             }
         }
 
-        // ²éÕÒ×Ó½ÚµãÖĞµÄLineRendererºÍParticlePath×é¼ş
+        // ìì‹ ì˜¤ë¸Œì íŠ¸ì—ì„œ LineRendererì™€ ParticlePath ì»´í¬ë„ŒíŠ¸ ì°¾ê¸°
         private void FindComponentsInChildren()
         {
             lineRenderers.Clear();
@@ -130,7 +162,7 @@ namespace LaserBeams
             particlePaths.AddRange(GetComponentsInChildren<ParticlePath>());
         }
 
-        // ¸üĞÂBeamĞ§¹û
+        // ????Beam???
         private void UpdateBeamEffect()
         {
             List<Vector3> relativePoints = new List<Vector3>();
@@ -151,7 +183,7 @@ namespace LaserBeams
             }
         }
 
-        // ¸üĞÂBeamÅö×²Ìå
+        // ????Beam?????
         private void UpdateBeamCollider()
         {
             List<Vector3> relativePoints = new List<Vector3>();
@@ -162,7 +194,7 @@ namespace LaserBeams
 
             if (relativePoints == null || relativePoints.Count < 2) return;
 
-            // Éú³ÉbeamÅö×²Æ÷µÄÍø¸ñ
+            // ????beam???????????
             Mesh beamMesh = PipeGenerator.CreatePipeMesh(relativePoints.ToArray(), Width, 10);
 
             beamCollider.sharedMesh = beamMesh;
@@ -177,7 +209,7 @@ namespace LaserBeams
             }
         }
 
-        // Ö´ĞĞ¶à¶ÎÉäÏß¼ì²â
+        // ???????????
         private void PerformMultiSegmentRaycast()
         {
             bool hitDetected = false;
@@ -203,12 +235,12 @@ namespace LaserBeams
 
             if (!hitDetected)
             {
-                hitRatio = 1f; // Èç¹ûÃ»ÓĞ¼ì²âµ½Åö×²£¬hitRatio±£³ÖÎª1
-                TriggerHitEffects(endPosition); // ÔÚendPosition´¦²¥·ÅÌØĞ§
+                hitRatio = 1f; // ?????????????hitRatio?????1
+                TriggerHitEffects(endPosition); // ??endPosition?????????
             }
         }
 
-        // Ö´ĞĞÅö×²¼ì²â
+        // ?????????
         private void PerformCollisionDetection()
         {
             RaycastHit hit;
@@ -220,12 +252,12 @@ namespace LaserBeams
             }
             else
             {
-                hitRatio = 1f; // Èç¹ûÃ»ÓĞ¼ì²âµ½Åö×²£¬hitRatio±£³ÖÎª1
-                TriggerHitEffects(endPosition); // ÔÚendPosition´¦²¥·ÅÌØĞ§
+                hitRatio = 1f; // ?????????????hitRatio?????1
+                TriggerHitEffects(endPosition); // ??endPosition?????????
             }
         }
 
-        // ´¥·¢Åö×²Ğ§¹û
+        // ??????????
         private void TriggerHitEffects(Vector3 hitPoint)
         {
             if (hitPrefab != null)

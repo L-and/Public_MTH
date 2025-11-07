@@ -10,7 +10,8 @@ namespace _01.Scripts.PlayerControll.Animation
     {
         private PlayerController _playerController;
         private Animator _characterAnim;
-
+        public Animator Animator => _characterAnim;
+        
         /// <summary>
         /// 플레이어의 이동속도
         /// </summary>

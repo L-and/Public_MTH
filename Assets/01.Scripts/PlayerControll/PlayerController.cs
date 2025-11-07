@@ -23,7 +23,6 @@ namespace _01.Scripts.PlayerControll
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour, IDamageableZone
     {
-        
         # region 플레이어 스탯 필드/프로퍼티
         
         /// <summary>
@@ -69,10 +68,13 @@ namespace _01.Scripts.PlayerControll
         # region 컴포넌트/클래스 참조 프로퍼티
   
         // 상태 머신 참조
-        public MovementStateMachine MovementFSM { get; private set; }
-        public SubWeaponStateMachine SubWeaponFSM { get; private set; }
+        public MovementStateMachine MovementFSM { get; private set; } // 사용X
+        public SubWeaponStateMachine SubWeaponFSM { get; private set; } // 사용X
         public EmissionStateMachine EmissionFSM { get; private set; }
 
+        // Enum 상태필드
+        public EPlayerStates.SubWeaponState SubWeaponState;
+        
         // 컴포넌트 참조 프로퍼티
         public CapsuleCollider CapsuleCollider { get; private set; }
         public PlayerInput PlayerInput { get; private set; }
@@ -186,14 +188,11 @@ namespace _01.Scripts.PlayerControll
         }
         
         #endregion
-        
-        
-        
 
         #region 플레이어 초기설정(장비, 스탯) 메서드
         
         /// <summary>
-        /// PlayerManager에 의해 호출되어 플레이어의 스탯과 장비를 설정합니다.
+        /// PlayerManager에 의해 호출되어 플레이어의 스탯,장비를 설정합니다.
         /// </summary>
         public void Initialize(PlayerStat stat, PlayerLoadout loadout) // Overload for PlayerManager
         {
@@ -204,12 +203,13 @@ namespace _01.Scripts.PlayerControll
             playerSubWeapon = GetComponent<PlayerSubWeapon>();
             
             // 무기, 보조무기, 방출 초기설정 진행
-            
             SetupMainWeapon(loadout.Weapon);
             SetupEmission(loadout.Emission);
             SetupSubWeapon(loadout.SubWeapon);
             
-            
+            // 무기에 맞는 캐릭터 애니메이터 적용
+            CharacterAnimController.Animator.runtimeAnimatorController =
+                loadout.Weapon.characterAnimator;
         }
 
         /// <summary>
@@ -337,6 +337,8 @@ namespace _01.Scripts.PlayerControll
             MovementFSM = new MovementStateMachine(this);
             SubWeaponFSM = new SubWeaponStateMachine(this);
             EmissionFSM = new EmissionStateMachine(this);
+
+            SubWeaponState = EPlayerStates.SubWeaponState.Ready;
             
             // 각 상태 머신의 초기 상태 설정
             MovementFSM.Initialize(MovementFSM.IdleState);
@@ -538,8 +540,9 @@ namespace _01.Scripts.PlayerControll
         
         #region Coordinator (중재자) 역할
         // 다른 상태 머신이 현재 상태를 쉽게 조회할 수 있도록 프로퍼티 제공
-        public bool IsUsingSubWeapon => SubWeaponFSM.CurrentState is SubWeaponUsingState;
+        public bool IsUsingSubWeapon => SubWeaponState is EPlayerStates.SubWeaponState.Using;
         public bool IsUsingEmission => EmissionFSM.CurrentState is EmissionUsingState;
+        public bool IsReloading => equippedWeapon.WeaponState is EPlayerStates.WeaponState.Reload;
         // 두 왼손 액션 중 하나라도 사용 중인지 확인하는 편의용 프로퍼티
         public bool IsAnyLeftHandActionInUse => IsUsingSubWeapon || IsUsingEmission;
         
