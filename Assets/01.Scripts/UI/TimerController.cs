@@ -13,7 +13,7 @@ public class TimerController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
 
     private float currentTime; // 현재 남은 시간을 저장하는 변수
-    private bool isTimerRunning = true; // 타이머 실행 상태
+    public bool isTimerRunning = true; // 타이머 실행 상태
 
     void Start()
     {

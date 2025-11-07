@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,13 +13,11 @@ public class MainMenuUIManager : MonoBehaviour
     public GameObject startOption;
   // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-  private void OnEnable()
-  {
-    ButtonsOn();
-  }
+ 
   private void Start()
   {
     ButtonsOn();
+        StartCoroutine(PlayMainMusic());
   }
 
   public void ButtonsOn()
@@ -50,6 +49,11 @@ public class MainMenuUIManager : MonoBehaviour
         startOption.SetActive(false);
     }
 
+    IEnumerator PlayMainMusic()
+    {
+        yield return new WaitForSeconds(3);
+        GameManager.Sound.PlayMusic("bgm_cold_dawn");
+    }
 
 
     public void Quit()
