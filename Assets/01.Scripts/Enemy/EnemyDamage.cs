@@ -69,6 +69,9 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
         // 피격 위치 저장(사망 시 사용할 수 있음)
         lastHitPoint = hitPoint;
 
+        // 연주 - 약점 명중시 배율 적용
+        BodyPartDamageModifier.ProcessHit(ref rawDamage, zone);
+
         if (zone == HitZones.Weak)
         {
             Debug.Log("Bullseye!");
