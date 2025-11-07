@@ -7,17 +7,17 @@ namespace LaserBeams
 {
     public class LaserBeamEmitter : MonoBehaviour
     {
-        public BeamType beamType = BeamType.Straight; // ±©Â¶µÄ beamType ÊôĞÔ
+        public BeamType beamType = BeamType.Straight; // ï¿½ï¿½Â¶ï¿½ï¿½ beamType ï¿½ï¿½ï¿½ï¿½
         public GameObject emitterPoint;
-        public Transform target; // Ä¿±êÎïÌåµÄÒıÓÃ
+        public Transform target; // Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         public Vector3 startPos, targetPosition;
-        public GameObject laserBeamPrefab; // LaserBeam Ô¤ÖÆÌå
+        public GameObject laserBeamPrefab; // LaserBeam Ô¤ï¿½ï¿½ï¿½ï¿½
 
         public bool autoPlay = true;
-        private LaserBeam laserBeamInstance; // LaserBeam ÊµÀı
+        private LaserBeam laserBeamInstance; // LaserBeam Êµï¿½ï¿½
 
-        private Vector3 previousStartPos, previousTargetPosition; // ¼ÇÂ¼ÉÏÒ»´ÎµÄÆğµãºÍÄ¿±êÎ»ÖÃ
-        private BeamType previousBeamType; // ¼ÇÂ¼ÉÏÒ»´ÎµÄ beamType
+        private Vector3 previousStartPos, previousTargetPosition; // ï¿½ï¿½Â¼ï¿½ï¿½Ò»ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Î»ï¿½ï¿½
+        private BeamType previousBeamType; // ï¿½ï¿½Â¼ï¿½ï¿½Ò»ï¿½Îµï¿½ beamType
 
         private void Awake()
         {
@@ -51,7 +51,7 @@ namespace LaserBeams
                 previousBeamType = beamType;
             }
         }
-
+        
         public void InstantiateLaserBeam(BeamType _beamType, GameObject _laserBeamPrefab)
         {
             DestroyLaserBeam();
@@ -65,27 +65,36 @@ namespace LaserBeams
             InstantiateLaserBeam(startPos, targetPosition, beamType);
         }
 
-        // ÊµÀı»¯¼¤¹âÊøÌØĞ§µÄ·½·¨
-        void InstantiateLaserBeam(Vector3 _startPos, Vector3 _endPosition, BeamType _beamType)
-        {
-            startPos = _startPos;
-            targetPosition = _endPosition;
-            beamType = _beamType;
-            if (laserBeamInstance == null && laserBeamPrefab != null)
-            {
-                GameObject laserBeamObj = Instantiate(laserBeamPrefab, startPos, Quaternion.identity);
-                laserBeamInstance = laserBeamObj.GetComponent<LaserBeam>();
-                if (laserBeamInstance != null)
+        // ë ˆì´ì €ë¹”ì„ ìƒì„±í•¨, ì´ë¯¸ ìƒì„±ë˜ì—ˆë‹¤ë©´ ì‹œì‘, ë„ì°©ìœ„ì¹˜ë§Œ ì¬ì„¤ì •í•¨
+                public void InstantiateLaserBeam(Vector3 _startPos, Vector3 _endPosition, BeamType _beamType)
                 {
-                    laserBeamInstance.Init(startPos, targetPosition, beamType);
+                    startPos = _startPos;
+                    targetPosition = _endPosition;
+                    beamType = _beamType;
+                    if (laserBeamInstance == null)
+                    {
+                        if (laserBeamPrefab != null)
+                        {
+                            GameObject laserBeamObj = Instantiate(laserBeamPrefab, startPos, Quaternion.identity);
+                            laserBeamInstance = laserBeamObj.GetComponent<LaserBeam>();
+                            if (laserBeamInstance != null)
+                            {
+                                laserBeamInstance.Init(startPos, targetPosition, beamType);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        laserBeamInstance.gameObject.SetActive(true);
+                        laserBeamInstance.transform.position = startPos;
+                        laserBeamInstance.UpdateBeam(startPos, targetPosition, beamType);
+                    }
+                
                     previousStartPos = startPos;
                     previousTargetPosition = targetPosition;
                     previousBeamType = beamType;
                 }
-            }
-        }
-
-        // Ïú»Ù¼¤¹âÊøÌØĞ§µÄ·½·¨
+        // ï¿½ï¿½ï¿½Ù¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½Ä·ï¿½ï¿½ï¿½
         void DestroyLaserBeam()
         {
             if (laserBeamInstance != null)

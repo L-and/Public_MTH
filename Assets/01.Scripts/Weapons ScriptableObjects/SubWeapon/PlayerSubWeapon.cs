@@ -63,8 +63,17 @@ namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon
         /// </summary>
         public void ExecuteSubWeapon()
         {
+            // 왼손이 사용중인지 검사
+            if (playerController.IsUsingSubWeapon || playerController.IsUsingEmission) return;
+            
+            // 재장전중인지 검사
+            if (playerController.IsReloading) return;
+            
             // 쿨타임 검사
             if (isCooldown) return;
+            
+            // 보조무기 사용상태로 전환 TODO 구조개선필요
+            playerController.SubWeaponState = EPlayerStates.SubWeaponState.Using;
             
             // 보조무기 사용 애니메이션 실행
             playerController.CharacterAnimController.SubWeaponAnimation();
@@ -79,6 +88,8 @@ namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon
             playerController.CharacterAnimController.OnShieldUsingDone();
             _subWeaponGO.SetActive(false);
             isCooldown = true;
+            // 보조무기 사용종료임을 알림 TODO 구조개선필요
+            playerController.SubWeaponState = EPlayerStates.SubWeaponState.Ready;
 
             StartCoroutine(CoolDownRoutine());
         }
@@ -87,6 +98,7 @@ namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon
         {
             yield return new WaitForSeconds(data.coolDown);
             isCooldown = false;
+            
         }
     }
 }

@@ -17,6 +17,7 @@ namespace _01.Scripts.Weapons_ScriptableObjects.Emission
         public Transform PlayerCamera { get; private set; }
 
         private GameObject _emissionGO;
+        public GameObject EmissionGO => _emissionGO;
         
         /// <summary>
         /// 선택된 방출SO를 사용해 초기설정을 진행하는 메서드

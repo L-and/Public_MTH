@@ -39,15 +39,18 @@ public class SceneManagerEx : MonoBehaviour
   // 2) 다음층으로 넘어갈때 (GameScene 다시 로드) 플레이어를 다시 생성하지 않고 위치만 이동
   public void PlayerSpawn()
   {
-    if (!_isPlayerSpawn)
-    {
-      _curPlayer = Instantiate(_playerPrefab, _startPoint.transform.position, _startPoint.transform.rotation);
-      _isPlayerSpawn = true;
-    }
-    else
-    {
-      _curPlayer.transform.position = _startPoint.transform.position;
-    }
+    // if (!_isPlayerSpawn)
+    // {
+    //   _curPlayer = Instantiate(_playerPrefab, _startPoint.transform.position, _startPoint.transform.rotation);
+    //   _isPlayerSpawn = true;
+    // }
+    // else
+    // {
+    //   _curPlayer.transform.position = _startPoint.transform.position;
+    // }
+    
+    // PlayerManager에 플레이어 생성 시작
+    GameManager.PlayerManager.PlayerSpawn(_startPoint.transform.position);
   }
 
   /// <summary>

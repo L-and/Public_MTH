@@ -10,6 +10,7 @@ using _01.Scripts.Weapons_ScriptableObjects.SubWeapon;
 using _01.Scripts.Weapons_ScriptableObjects.Weapon;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 using WeaponBehaviour = _01.Scripts.Weapon.WeaponBehaviour;
 
@@ -22,7 +23,6 @@ namespace _01.Scripts.PlayerControll
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour, IDamageableZone
     {
-        
         # region 플레이어 스탯 필드/프로퍼티
         
         /// <summary>
@@ -54,7 +54,7 @@ namespace _01.Scripts.PlayerControll
                 if (MovementFSM.CurrentState is SlidingState)
                     return Stat.SlidingAcc;
 
-                return Stat.BaseAcc;
+                 return Stat.BaseAcc;
             }
         }
         
@@ -66,12 +66,15 @@ namespace _01.Scripts.PlayerControll
         # endregion
         
         # region 컴포넌트/클래스 참조 프로퍼티
-        
+  
         // 상태 머신 참조
-        public MovementStateMachine MovementFSM { get; private set; }
-        public SubWeaponStateMachine SubWeaponFSM { get; private set; }
+        public MovementStateMachine MovementFSM { get; private set; } // 사용X
+        public SubWeaponStateMachine SubWeaponFSM { get; private set; } // 사용X
         public EmissionStateMachine EmissionFSM { get; private set; }
 
+        // Enum 상태필드
+        public EPlayerStates.SubWeaponState SubWeaponState;
+        
         // 컴포넌트 참조 프로퍼티
         public CapsuleCollider CapsuleCollider { get; private set; }
         public PlayerInput PlayerInput { get; private set; }
@@ -86,7 +89,7 @@ namespace _01.Scripts.PlayerControll
         /// 캐릭터 팔 애니메이션 스크립트
         /// </summary>
         public CharacterAnimationController CharacterAnimController { get; private set; }
-
+        public Animator GunAnimController  { get; private set; }
 
         // PlayerInput 입력값 프로퍼티
         public Vector2 MoveInput { get; private set; }
@@ -185,43 +188,11 @@ namespace _01.Scripts.PlayerControll
         }
         
         #endregion
-        
-        
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = IsGrounded ? Color.green : Color.red;
 
-            Gizmos.DrawRay(groundCheckPivot.position, -transform.up * 10f);
-        }
+        #region 플레이어 초기설정(장비, 스탯) 메서드
         
-        private void Awake()
-        {
-            // 컴포넌트 초기화
-            CapsuleCollider = GetComponent<CapsuleCollider>();
-            PlayerInput = GetComponent<PlayerInput>();
-            Rb = GetComponent<Rigidbody>();
-            PlayerCamera = Camera.main.transform;
-            CharacterAnimController = transform.GetComponentInChildren<CharacterAnimationController>();
-            
-            // private 컴포넌트 캐싱
-            _recoil = transform.GetComponentInChildren<Recoil>(); // 반동 컴포넌트
-        }
-
-        private void Start()
-        {
-            // 상태 머신 생성
-            MovementFSM = new MovementStateMachine(this);
-            SubWeaponFSM = new SubWeaponStateMachine(this);
-            EmissionFSM = new EmissionStateMachine(this);
-            
-            // 각 상태 머신의 초기 상태 설정
-            MovementFSM.Initialize(MovementFSM.IdleState);
-            SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
-            EmissionFSM.Initialize(EmissionFSM.ReadyState);
-        }
-
         /// <summary>
-        /// PlayerManager에 의해 호출되어 플레이어의 스탯과 장비를 설정합니다.
+        /// PlayerManager에 의해 호출되어 플레이어의 스탯,장비를 설정합니다.
         /// </summary>
         public void Initialize(PlayerStat stat, PlayerLoadout loadout) // Overload for PlayerManager
         {
@@ -232,10 +203,13 @@ namespace _01.Scripts.PlayerControll
             playerSubWeapon = GetComponent<PlayerSubWeapon>();
             
             // 무기, 보조무기, 방출 초기설정 진행
-            
             SetupMainWeapon(loadout.Weapon);
             SetupEmission(loadout.Emission);
             SetupSubWeapon(loadout.SubWeapon);
+            
+            // 무기에 맞는 캐릭터 애니메이터 적용
+            CharacterAnimController.Animator.runtimeAnimatorController =
+                loadout.Weapon.characterAnimator;
         }
 
         /// <summary>
@@ -263,6 +237,8 @@ namespace _01.Scripts.PlayerControll
                 Debug.LogWarning($"[총기: {weaponData.name}] WeaponBehaviour이 없습니다!");
                 return;
             }
+
+            GunAnimController = equippedWeapon.GetAnimator();
 
             UpdateMainWeaponData(weaponData); // 총기 속성값 적용
         }
@@ -331,15 +307,51 @@ namespace _01.Scripts.PlayerControll
             playerEmission.InitializeEmission(this);
         }
 
+        #endregion
 
         #region Unity Functions
 
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = IsGrounded ? Color.green : Color.red;
+
+            Gizmos.DrawRay(groundCheckPivot.position, -transform.up * 10f);
+        }
+        
+        private void Awake()
+        {
+            // 컴포넌트 초기화
+            CapsuleCollider = GetComponent<CapsuleCollider>();
+            PlayerInput = GetComponent<PlayerInput>();
+            Rb = GetComponent<Rigidbody>();
+            PlayerCamera = Camera.main.transform;
+            CharacterAnimController = transform.GetComponentInChildren<CharacterAnimationController>();
+            
+            // private 컴포넌트 캐싱
+            _recoil = transform.GetComponentInChildren<Recoil>(); // 반동 컴포넌트
+        }
+
+        private void Start()
+        {
+            // 상태 머신 생성
+            MovementFSM = new MovementStateMachine(this);
+            SubWeaponFSM = new SubWeaponStateMachine(this);
+            EmissionFSM = new EmissionStateMachine(this);
+
+            SubWeaponState = EPlayerStates.SubWeaponState.Ready;
+            
+            // 각 상태 머신의 초기 상태 설정
+            MovementFSM.Initialize(MovementFSM.IdleState);
+            SubWeaponFSM.Initialize(SubWeaponFSM.ReadyState);
+            EmissionFSM.Initialize(EmissionFSM.ReadyState);
+        }
+        
         private void Update()
         {
             // 애니메이터에 필요한 값 전달
             CharacterAnimController.movementVelocity = Rb.linearVelocity;
             
-            // 무기발사 (코드이동 필요)
+            // 무기발사 (TODO 코드이동 필요)
             if (_holdingFire)
             {
                 if (Time.time - _lastShotTime > 60.0f / equippedWeapon.GetRateOfFire())
@@ -477,23 +489,6 @@ namespace _01.Scripts.PlayerControll
                     break;
             }
         }
-
-        /// <summary>
-        /// 방출키 입력
-        /// </summary>
-        public void OnTryEmission(InputAction.CallbackContext context)
-        {
-            switch (context)
-            {
-                case {phase: InputActionPhase.Started}:
-                    // TODO
-                    // EmissionFSM의 EmissionUsingState.Enter에서
-                    // 애니메이션과 동작이 실행되도록 수정해야 함
-                    // emission.ExecuteEmission(emissiondata);
-                    break;
-            }
-        }
-        
         
         # endregion
 
@@ -504,8 +499,14 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         private void Fire()
         {
-            _lastShotTime = Time.time;
-
+            if (!equippedWeapon) return;
+            if (equippedWeapon.WeaponState == EPlayerStates.WeaponState.Reload) return; // 재장전중일땐 발사못하도록 막음
+            
+            _lastShotTime = Time.time; // 연사를 위해 발사된 시각 저장
+            
+            // 발사상태(격발/공격발)에 따라 캐릭터 애니메이션 재생
+            CharacterAnimController.FireAnimation(equippedWeapon.HasAmmunition());
+            
             equippedWeapon.Fire();
         }
 
@@ -514,6 +515,9 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         private void Reload()
         {
+            // 재장전 진행중이라면 캔슬못하도록 실행막기
+            if (equippedWeapon.WeaponState == EPlayerStates.WeaponState.Reload) return;
+            
             CharacterAnimController.ReloadAnimation(!equippedWeapon.HasAmmunition());
             equippedWeapon.Reload();
         }
@@ -536,8 +540,9 @@ namespace _01.Scripts.PlayerControll
         
         #region Coordinator (중재자) 역할
         // 다른 상태 머신이 현재 상태를 쉽게 조회할 수 있도록 프로퍼티 제공
-        public bool IsUsingSubWeapon => SubWeaponFSM.CurrentState is SubWeaponUsingState;
+        public bool IsUsingSubWeapon => SubWeaponState is EPlayerStates.SubWeaponState.Using;
         public bool IsUsingEmission => EmissionFSM.CurrentState is EmissionUsingState;
+        public bool IsReloading => equippedWeapon.WeaponState is EPlayerStates.WeaponState.Reload;
         // 두 왼손 액션 중 하나라도 사용 중인지 확인하는 편의용 프로퍼티
         public bool IsAnyLeftHandActionInUse => IsUsingSubWeapon || IsUsingEmission;
         
@@ -574,7 +579,6 @@ namespace _01.Scripts.PlayerControll
         {
             if (!IsGrounded) return;
             
-            Debug.Log("점프성공!");
             Rb.AddForce(transform.up * Stat.CurrentJumpForce, ForceMode.Impulse);
         }
 
@@ -598,6 +602,39 @@ namespace _01.Scripts.PlayerControll
         }
         # endregion
 
+        # region 애니메이션 SMB 메서드 (장비의 FSM 상태변경을 위함)
+
+        /// <summary>
+        /// 캐릭터 애니메이터에의 Emission 레이어에서 Default State가 실행되면 왼손이 사용종료되었음을 FSM에 알려줌
+        /// </summary>
+        public void SetLeftHandStateCooldown()
+        {
+            Debug.Log("왼손 상태를 CooldownStat로 설정!");
+            EmissionFSM.ChangeState(EmissionFSM.CooldownState);
+            SubWeaponFSM.ChangeState(SubWeaponFSM.CooldownState);
+        }
+        
+        # endregion
+        
+        #region 업그레이드 적용 메서드
+
+        /// <summary>
+        /// 재장전 속도증가 업그레이드를 적용 TODO 업그레이드 적용기능을 담당하는 스크립트를 만들어야할듯
+        /// </summary>
+        /// <param name="value"></param>
+        public void UpgradeReloadSpeed(float value)
+        {
+            GunAnimController.SetFloat("Reload Speed", value); // TODO 직접 총기애니메이터를 참조해서 파라미터를 변경하는거라 리팩터링 필요
+            CharacterAnimController.SetReloadSpeed(value);
+        }
+
+        [ContextMenu("재장전 업그레이드 적용")]
+        public void UpgradeReload()
+        {
+            UpgradeReloadSpeed(1.5f);
+        }
+        
+        #endregion
         /// <summary>
         /// 방출공격 사용
         /// </summary>
@@ -606,11 +643,13 @@ namespace _01.Scripts.PlayerControll
             playerEmission.ExecuteEmission(CurrentEmission);
         }
         
+        // 근접공격
         public void ApplyDamage(float damage)
         {
             if (IsInvincible)
             {
                 // TODO 무적상태에서 피격시 스타일리쉬액션 연동코드 작성
+                Debug.Log("[스타일리쉬 액션] 적 공격 회피!");
                 return;
             }
             Debug.Log("플레이어 피격당함");
@@ -626,14 +665,7 @@ namespace _01.Scripts.PlayerControll
         public bool IsDead => Stat.hp.Value <= 0f;
         public void ApplyHit(float rawDamage, Vector3 hitPoint, HitZones zone)
         {
-            Debug.Log("공격당함!");
-            Stat.hp.Value -= rawDamage;
-
-            if (IsDead)
-            {
-                // TODO: 플레이어 사망처리 코드 작성
-                Debug.Log("## 플레이어 사망 ##");
-            }
+            ApplyDamage(rawDamage);
         }
     }
 }

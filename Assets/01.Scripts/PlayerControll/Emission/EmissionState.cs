@@ -10,7 +10,9 @@ public abstract class EmissionState : IState
     # region 일반적인 상태전환 조건 프로퍼티
 
     protected bool CanReady => controller.Stat.overheat.Value >= controller.CurrentEmission.overheatCost;
-    protected bool CanUsing => controller.PlayerInput.actions["Emission"].WasPressedThisFrame() && controller.Stat.overheat.TryDecrease(controller.CurrentEmission.overheatCost);
+    protected bool CanUsing => controller.PlayerInput.actions["Emission"].WasPressedThisFrame() && 
+                               controller.Stat.overheat.TryDecrease(controller.CurrentEmission.overheatCost) &&
+                               !controller.IsUsingSubWeapon;
     
     # endregion
     

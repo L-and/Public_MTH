@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace _01.Scripts.Weapons_ScriptableObjects.Weapon
@@ -15,6 +16,10 @@ namespace _01.Scripts.Weapons_ScriptableObjects.Weapon
 
         [Tooltip("공격력"), SerializeField] 
         private float damage;
+
+        [Header("캐릭터 애니메이터")] 
+        public AnimatorOverrideController characterAnimator;
+        
         public float Damage
         {
             get => damage;
