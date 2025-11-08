@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 8568e984fca90b348b212f393286dc43
   m_currentHash:
     serializedVersion: 2
-    Hash: 42c0feec8712092d5807f6a3d871edc4
+    Hash: fb9b21a89c3ab8191af16bb418374e4f
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -64,6 +64,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c77248d5482fcaf4f8347d99def35c05, type: 2}
   - {fileID: 11400000, guid: 03d4f801c35d9794cad4956d7733652d, type: 2}
   - {fileID: 11400000, guid: 38ea73de63abcab42bb117c16c3fb0b7, type: 2}
+  - {fileID: 11400000, guid: 93295906af3de724291cfc8f4f5c0643, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -107,8 +108,8 @@ MonoBehaviour:
     - Player
     - Enemy
     - Elevator
-    - Audio
-    - Map_UndergroundPrison
+    - Sound
+    - Anim_Controller
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 40336b3589b6f7c4997e3287706c0a50, type: 2}

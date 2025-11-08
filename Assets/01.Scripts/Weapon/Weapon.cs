@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using _01.Scripts.PlayerControll;
 using InfimaGames.LowPolyShooterPack;
 using UnityEngine;
 
@@ -66,6 +68,8 @@ namespace _01.Scripts.Weapon
         
         #region FIELDS
 
+        
+        
         /// <summary>
         /// 현재 장탄수
         /// </summary>
@@ -131,13 +135,36 @@ namespace _01.Scripts.Weapon
 
             #endregion
 
+            // PlayerController에서 직접 관리하므로 주석처리
             //Max Out Ammo.
-            _ammunitionCurrent = _magazineBehaviour.GetAmmunitionTotal();
+            // _ammunitionCurrent = _magazineBehaviour.GetAmmunitionTotal();
+        }
+        
+        #endregion
+        
+        #region SETTERS
+
+        public override void SetRateOfFire(int rpm)
+        {
+            roundsPerMinutes = rpm;
+        }
+
+        public override void SetMagazineSize(int amount)
+        {
+            _magazineBehaviour.SetMaxAmount(amount);
+        }
+
+        public override void SetState(EPlayerStates.WeaponState state)
+        {
+            WeaponState = state;
         }
         
         #endregion
         
         #region GETTERS
+        
+        public override EPlayerStates.WeaponState WeaponState { get; protected set; }
+        
         
         public override Animator GetAnimator() => _gunAnimator;
         
@@ -152,6 +179,7 @@ namespace _01.Scripts.Weapon
         public override int GetAmmunitionTotal() => _magazineBehaviour.GetAmmunitionTotal();
 
         public override bool IsAutomatic()  => automatic;
+        
         public override float GetRateOfFire() => roundsPerMinutes;
 
         public override bool IsFull() => _ammunitionCurrent == _magazineBehaviour.GetAmmunitionTotal();
@@ -167,6 +195,10 @@ namespace _01.Scripts.Weapon
 
         public override void Fire(float spreadMultiplier = 1)
         {
+            if (WeaponState == EPlayerStates.WeaponState.Reload) return;
+                
+            SetState(EPlayerStates.WeaponState.Fire);
+            
             //We need a muzzle in order to fire this weapon!
             if (_muzzleBehaviour == null)
                 return;
@@ -216,8 +248,33 @@ namespace _01.Scripts.Weapon
 
         public override void Reload()
         {
+            SetState(EPlayerStates.WeaponState.Reload);
+            
             string animName = HasAmmunition() ? "Reload" : "Reload Empty";
+            // 재장전속도에 맞게 사운드재생을 위해 AudioClip.pitch를 변경 후 복구
             _gunAnimator.Play(animName, 0, 0f);
+            StartCoroutine(PlayReloadSoundCoroutine());
+            
+        }
+
+        /// <summary>
+        /// 재장전속도 업그레이드에 맞춰서 사운드의 속도를 Pitch를 변경하여 재생
+        /// TODO 피치를 수정해서 재생속도를 수정하면 문제가있어서 추후에 전용 사운드 제작필요
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator PlayReloadSoundCoroutine()
+        {
+            // 총기 애니메이터에서 재장전속도를 가져옴
+            float reloadSpeed = _gunAnimator.GetFloat("Reload Speed");
+            
+            // 재장전속도에 맞춰서 사운드재생
+            _audioSource.pitch = reloadSpeed;
+            var source = HasAmmunition() ? GetAudioClipReload() : GetAudioClipReloadEmpty();
+            _audioSource.PlayOneShot(source);
+            yield return new WaitForSeconds(source.length / reloadSpeed);
+            
+            // 사운드재생속도 복원
+            _audioSource.pitch = 1.0f;
         }
         
         // amount가 -1이면 탄약을 전부 충전
@@ -226,8 +283,8 @@ namespace _01.Scripts.Weapon
             _ammunitionCurrent = amount != -1 ? Mathf.Clamp(_ammunitionCurrent + amount, 
                 0, GetAmmunitionTotal()) : _magazineBehaviour.GetAmmunitionTotal();
         }
-
-
+        
+        
         /// <summary>
         /// 탄피 배출
         /// </summary>
@@ -236,7 +293,24 @@ namespace _01.Scripts.Weapon
             if(prefabCasing != null && socketEjection != null)
                 Instantiate(prefabCasing, socketEjection.position, socketEjection.rotation);
         }
-        
+
+
         #endregion
+        
+       
+        
+        public override void Initialize()
+        {
+            // 총기 상태설정
+            WeaponState = EPlayerStates.WeaponState.Idle;
+            
+            //Get Magazine.
+            _magazineBehaviour = _attachmentManager.GetEquippedMagazine();
+            //Get Muzzle.
+            _muzzleBehaviour = _attachmentManager.GetEquippedMuzzle();
+            
+            // 탄약설정
+            _ammunitionCurrent = _magazineBehaviour.GetAmmunitionTotal();
+        }
     }
 }

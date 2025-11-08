@@ -1,3 +1,4 @@
+using _01.Scripts.PlayerControll;
 using InfimaGames.LowPolyShooterPack;
 using UnityEngine;
 
@@ -25,6 +26,14 @@ namespace _01.Scripts.Weapon
         /// Late Update.
         /// </summary>
         protected virtual void LateUpdate(){}
+        #endregion
+        
+        #region SETTERS
+        
+        public abstract void SetRateOfFire(int rpm);
+        public abstract void SetMagazineSize(int amount);
+        public abstract void SetState(EPlayerStates.WeaponState state);
+        
         #endregion
         
         #region GETTERS
@@ -94,6 +103,11 @@ namespace _01.Scripts.Weapon
         #region METHODS
 
         /// <summary>
+        /// 총기관련 설정값들을 초기화한다
+        /// </summary>
+        public abstract void Initialize();
+        
+        /// <summary>
         /// 무기를 발사한다
         /// Fires the weapon.
         /// </summary>
@@ -114,6 +128,12 @@ namespace _01.Scripts.Weapon
         /// Ejects a casing from the weapon. This is commonly called from animation events, but can be called from anywhere.
         /// </summary>
         public abstract void EjectCasing();
+
+        #endregion
+        
+        #region 총기 상태관련 필드/메서드
+
+        public abstract EPlayerStates.WeaponState WeaponState { get; protected set; }
 
         #endregion
     }

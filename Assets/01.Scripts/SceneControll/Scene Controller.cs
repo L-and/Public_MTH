@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -13,20 +13,21 @@ public class CutsceneController : MonoBehaviour
         public Sprite image;
         [TextArea] public string text;
         public float fadeDuration = 1f;
-        public bool isPanEffect = false;  //  4¹ø ÄÆ¿ë ¿É¼Ç
-        public Vector2 panOffset = new Vector2(0, 800f); // 4¹ø pan ¿òÁ÷ÀÏ °Å¸®
+        public bool isPanEffect = false;  //  4ë²ˆ ì»·ìš© ì˜µì…˜
+        public Vector2 panOffset = new Vector2(0, 800f); // 4ë²ˆ pan ì›€ì§ì¼ ê±°ë¦¬
     }
 
-    [Header("UI ¿¬°á")]
-    public Image cutImage;   // ÀÏ¹İ ÄÆ (1500x550)
-    public Image cutImageLarge;  //4¹ø ÄÆ (1500x1357) 
+    [Header("UI ì—°ê²°")]
+    public Image cutImage;   // ì¼ë°˜ ì»· (1500x550)
+    public Image cutImageLarge;  //4ë²ˆ ì»· (1500x1357) 
     public TextMeshProUGUI cutText;
-    public GameObject MainMenu;
+    public TextMeshProUGUI nextArrowText; // â–¼ ì•„ì´ì½˜ ì´ë¯¸ì§€ ì—°ê²°
     
     public Cut[] cuts;
 
     private bool isTyping = false;
     private bool nextPressed = false;
+    private Coroutine blinkCoroutine; //ê¹œë¹¡ì„ ì½”ë£¨í‹´ ì œì–´ìš©
     
 
     void Start()
@@ -36,7 +37,7 @@ public class CutsceneController : MonoBehaviour
 
     void Update()
     {
-        // À¯Àú°¡ Enter(È¤Àº Space) ÀÔ·ÂÇÏ¸é ÇÃ·¡±× ¼¼ÆÃ
+        // ìœ ì €ê°€ Enter(í˜¹ì€ Space) ì…ë ¥í•˜ë©´ í”Œë˜ê·¸ ì„¸íŒ…
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
         {
             nextPressed = true;
@@ -50,38 +51,50 @@ public class CutsceneController : MonoBehaviour
             Cut cut = cuts[i];
             bool isPan = cut.isPanEffect;
 
-            // ¾î¶² ÀÌ¹ÌÁö ¾µÁö ¼±ÅÃ
+            // ì–´ë–¤ ì´ë¯¸ì§€ ì“¸ì§€ ì„ íƒ
             Image activeImage = isPan ? cutImageLarge : cutImage;
             cutImage.gameObject.SetActive(!isPan);
             cutImageLarge.gameObject.SetActive(isPan);
 
-            // ÃÊ±â ¼¼ÆÃ
+            // ì´ˆê¸° ì„¸íŒ…
             activeImage.sprite = cut.image;
             cutText.text = "";
             SetAlpha(activeImage, 0);
             SetAlpha(cutText, 0);
+            SetArrowAlpha(0);
 
-            // ÆäÀÌµå ÀÎ
+            // í˜ì´ë“œ ì¸
             yield return FadeBoth(activeImage, cutText,0, 1, cut.fadeDuration);
 
-            // 4¹ø ÄÆ pan È¿°ú
+            // 4ë²ˆ ì»· pan íš¨ê³¼
             if (isPan)
             {
                 yield return StartCoroutine(PanUp(cutImageLarge.rectTransform, cut.panOffset, 4f));
             }
-            // ÅØ½ºÆ® Å¸ÀÌÇÎ
+            // í…ìŠ¤íŠ¸ íƒ€ì´í•‘
             yield return StartCoroutine(TypeText(cut.text));
 
-            
-            // ¿£ÅÍ ÀÔ·Â ±â´Ù¸®±â
+            // í…ìŠ¤íŠ¸ê°€ ë‹¤ ë‚˜ì™”ìœ¼ë©´ â–¼ ì•„ì´ì½˜ ê¹œë¹¡ì´ê¸° ì‹œì‘
+             blinkCoroutine = StartCoroutine(BlinkArrow());
+
+            // ì—”í„° ì…ë ¥ ê¸°ë‹¤ë¦¬ê¸°
             yield return new WaitUntil(() => nextPressed);
             nextPressed = false;
 
-            //ÆäÀÌµå ¾Æ¿ô
+            // ê¹œë¹¡ì„ ë©ˆì¶¤
+            if (blinkCoroutine != null)
+            {
+                StopCoroutine(blinkCoroutine);
+                blinkCoroutine = null;
+            }
+            SetArrowAlpha(0);
+
+
+            //í˜ì´ë“œ ì•„ì›ƒ
             yield return FadeBoth(activeImage, cutText, 1, 0, cut.fadeDuration);
         }
 
-        // ÄÆ¾À ³¡ ¡æ ´ÙÀ½ ¾À ÀÌµ¿
+        // ì»·ì”¬ ë â†’ ë‹¤ìŒ ì”¬ ì´ë™
         GameManager.SceneEx.LoadScene(Constants.MAINMENU);
     }
 
@@ -109,6 +122,11 @@ public class CutsceneController : MonoBehaviour
         g.color = c;
     }
 
+    void SetArrowAlpha(float a)
+    { 
+        if (nextArrowText) SetAlpha(nextArrowText, a);
+    }
+
     IEnumerator TypeText(string text)
     {
         isTyping = true;
@@ -118,7 +136,7 @@ public class CutsceneController : MonoBehaviour
         {
             cutText.text += c;
 
-            // À¯Àú°¡ Enter¸¦ ºü¸£°Ô ´­·¶´Ù¸é Áï½Ã ÀüÃ¼ ÅØ½ºÆ® Ç¥½Ã
+            // ìœ ì €ê°€ Enterë¥¼ ë¹ ë¥´ê²Œ ëˆŒë €ë‹¤ë©´ ì¦‰ì‹œ ì „ì²´ í…ìŠ¤íŠ¸ í‘œì‹œ
             if (nextPressed)
             {
                 cutText.text = text;
@@ -126,8 +144,8 @@ public class CutsceneController : MonoBehaviour
                 break;
             }
 
-            // ±ÛÀÚ ´ç ¼Óµµ
-            yield return new WaitForSeconds(0.3f);
+            // ê¸€ì ë‹¹ ì†ë„
+            yield return new WaitForSeconds(0.1f);
         }
         isTyping = false;
     }
@@ -146,5 +164,33 @@ public class CutsceneController : MonoBehaviour
             yield return null;
         }
         rect.anchoredPosition = end;
+    }
+
+    // â–¼ ì•„ì´ì½˜ ê¹œë¹¡ì„ íš¨ê³¼
+    IEnumerator BlinkArrow()
+    {
+        float duration = 0.8f; // í•œ ë²ˆ ê¹œë¹¡ì´ëŠ” ì‹œê°„
+         while (true)
+        {
+            // ì„œì„œíˆ ë‚˜íƒ€ë‚¨
+            float t = 0f;
+            while (t < duration)
+            {
+                float alpha = Mathf.Sin( t / duration * Mathf.PI*0.5f);
+                SetArrowAlpha(alpha);
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            // ì„œì„œíˆ ì‚¬ë¼ì§
+            t = 0f;
+            while (t < duration)
+            {
+                float alpha = Mathf.Sin((1- (t /duration)) * Mathf.PI * 0.5f);
+                SetArrowAlpha(alpha);
+                t += Time.deltaTime;
+                yield return null;
+            }
+        }
     }
 }

@@ -21,5 +21,7 @@ namespace InfimaGames.LowPolyShooterPack
         public abstract Sprite GetSprite();
 
         #endregion
+
+        public abstract void SetMaxAmount(int amount);
     }
 }

@@ -60,12 +60,6 @@ namespace _01.Scripts.Weapon
 			//
 			//If destroy on impact is false, start 
 			//coroutine with random destroy timer
-
-			if (collision.gameObject.CompareTag("Wall"))
-			{
-				// var enemy = collision.gameObject.GetComponent<IDamageable>();
-				// enemy.Hit();
-			}
 			
 			if (!destroyOnImpact)
 			{
@@ -77,6 +71,17 @@ namespace _01.Scripts.Weapon
 				Destroy(gameObject);
 			}
 
+			//If bullet collides with "Untagged" tag
+			if (collision.transform.tag == "Untagged")
+			{
+				//Instantiate random impact prefab from array
+				Instantiate(metalImpactPrefabs[Random.Range
+						(0, bloodImpactPrefabs.Length)], transform.position,
+					Quaternion.LookRotation(collision.contacts[0].normal));
+				//Destroy bullet object
+				Destroy(gameObject);
+			}
+			
 			//If bullet collides with "Blood" tag
 			if (collision.transform.tag == "Blood")
 			{
