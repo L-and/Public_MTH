@@ -25,10 +25,7 @@ public class ResourceManager : MonoBehaviour
   // 핸들 저장할 변수 (다수)
   private AsyncOperationHandle<IList<GameObject>> _mapPrefabLoadHandle;   // 맵
   private AsyncOperationHandle<IList<GameObject>> _enemyPrefabLoadHandle; // 몬스터
-    private AsyncOperationHandle<IList<AudioClip>> _SoundLoadHandle;     // 사운드
-                                                                            // 핸들 저장할 변수 (단일)
-    private AsyncOperationHandle<GameObject> _playerPrefabLoadHandle;       // 플레이어
-  private AsyncOperationHandle<GameObject> _elevatorPrefabLoadHandle;     // 엘리베이터
+  private AsyncOperationHandle<IList<AudioClip>> _SoundLoadHandle;     // 사운드
   private AsyncOperationHandle<IList<GameObject>> _elevatorPrefabLoadHandle;     // 엘리베이터
   // 핸들 저장할 변수 (단일)
   private AsyncOperationHandle<GameObject> _playerPrefabLoadHandle;       // 플레이어
@@ -37,10 +34,7 @@ public class ResourceManager : MonoBehaviour
   // 리소스 데이터를 가지고 있는 변수 (다수)
   public Dictionary<string, GameObject> mapPrefabDict { get; private set; }   // 맵
   public Dictionary<string, GameObject> enemyPrefabDict { get; private set; } // 몬스터
-    public Dictionary<string, AudioClip> SoundDict { get; private set; } // 사운드
-
-    // 리소스 데이터를 가지고 있는 변수 (단일)
-    public GameObject playerPrefab { get; private set; }    // 플레이어
+  public Dictionary<string, AudioClip> SoundDict { get; private set; } // 사운드
   public GameObject elevatorPrefab { get; private set; }  // 엘리베이터
   private Dictionary<string, GameObject> _elevatorPrefabDict; // 엘리베이터 Dictionary
   // 리소스 데이터를 가지고 있는 변수 (단일)
@@ -261,53 +255,50 @@ public class ResourceManager : MonoBehaviour
       elevatorPrefab = null;
     }
   }
-    #endregion
+  #endregion
 
-    #region 사운드 리소스 
-    public async Task LoadSounds()
+  #region 사운드 리소스 
+  public async Task LoadSounds()
+  {
+    // 0) 있을 수 있는 핸들 해제
+    ReleaseSounds();
+    // 1) 리소스 데이터 받을 변수 초기화
+    SoundDict = new Dictionary<string, AudioClip>();
+
+    // 2) 리소스 데이터 검색할 핸들 가져오기 (key(Label 값), 콜백 null)
+    _SoundLoadHandle = Addressables.LoadAssetsAsync<AudioClip>(Constants.SOUND, null);
+
+    // 3) 비동기로 불러오기
+    await _SoundLoadHandle.Task;
+
+    // 4) 잘 가져왔는지 체크
+    if (_SoundLoadHandle.Status == AsyncOperationStatus.Succeeded)
     {
-        // 0) 있을 수 있는 핸들 해제
-        ReleaseSounds();
-        // 1) 리소스 데이터 받을 변수 초기화
-        SoundDict = new Dictionary<string, AudioClip>();
-
-        // 2) 리소스 데이터 검색할 핸들 가져오기 (key(Label 값), 콜백 null)
-        _SoundLoadHandle = Addressables.LoadAssetsAsync<AudioClip>(Constants.SOUND, null);
-
-        // 3) 비동기로 불러오기
-        await _SoundLoadHandle.Task;
-
-        // 4) 잘 가져왔는지 체크
-        if (_SoundLoadHandle.Status == AsyncOperationStatus.Succeeded)
-        {
-            // 5-1) 잘 가져왔으면 리소스 데이터 변수에 하나씩 추가 (여러개 일 경우)
-            foreach (AudioClip sound in _SoundLoadHandle.Result)
-                SoundDict.Add(sound.name, sound);
-        }
-        else
-        {
-            // 5-2) 가져오기 실패 했을 때
-            Debug.Log("사운드 로딩에 실패했습니다.");
-        }
+      // 5-1) 잘 가져왔으면 리소스 데이터 변수에 하나씩 추가 (여러개 일 경우)
+      foreach (AudioClip sound in _SoundLoadHandle.Result)
+        SoundDict.Add(sound.name, sound);
     }
-
-    // 리소스 해제 함수
-    public void ReleaseSounds()
+    else
     {
-        // 1) 핸들 값을 가지고 있는지 체크
-        if (_SoundLoadHandle.IsValid())
-        {
-            // 2) 핸들 해제
-            Addressables.Release(_SoundLoadHandle);
-            // 3) 해당 핸들과 연동된 데이터 변수 초기화
-            SoundDict.Clear();
-        }
+      // 5-2) 가져오기 실패 했을 때
+      Debug.Log("사운드 로딩에 실패했습니다.");
     }
-    #endregion
-      _elevatorPrefabDict.Clear();
+  }
+
+  // 리소스 해제 함수
+  public void ReleaseSounds()
+  {
+    // 1) 핸들 값을 가지고 있는지 체크
+    if (_SoundLoadHandle.IsValid())
+    {
+      // 2) 핸들 해제
+      Addressables.Release(_SoundLoadHandle);
+      // 3) 해당 핸들과 연동된 데이터 변수 초기화
+      SoundDict.Clear();
     }
   }
   #endregion
+
 
   // 엘리베이터 프리팹 내보내는 함수
   public GameObject GetElevatorPrefab(string mapConceptName)
@@ -331,7 +322,7 @@ public class ResourceManager : MonoBehaviour
     return null;
   }
 
-    void OnDestroy()
+  void OnDestroy()
   {
     ReleaseMapPrefabs();
     ReleaseEnemyPrefabs();
