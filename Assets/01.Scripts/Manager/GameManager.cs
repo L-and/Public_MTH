@@ -1,5 +1,13 @@
 using _01.Scripts.Manager;
+using UnityEngine;
 
+[
+  RequireComponent(typeof(SceneManagerEx)),
+  RequireComponent(typeof(ResourceManager)),
+  RequireComponent(typeof(DataManager)),
+  RequireComponent(typeof(PlayerManager)),
+  RequireComponent(typeof(SoundManager))
+]
 public class GameManager : Singleton<GameManager>
 {
   //////////////////////////////////////////////////////////////////////////////
@@ -14,12 +22,16 @@ public class GameManager : Singleton<GameManager>
   DataManager _dataManager;
   PlayerManager _playerManager;
   SoundManager _soundManager;
+  StyleManager _styleManager; // StyleManager이 붙여진 오브젝트가 생성되면 그쪽에서 할당해 줌
 
   public static SceneManagerEx SceneEx { get { return Instance._sceneManagerEx; } }
   public static ResourceManager ResourceEx { get { return Instance._resourceManager; } }
   public static DataManager GameData { get { return Instance._dataManager; } }
   public static PlayerManager PlayerManager { get { return Instance._playerManager; } }
   public static SoundManager Sound { get { return Instance._soundManager; } }
+  public static StyleManager Style { get; private set; }
+
+  public void RegisterStyleManager(StyleManager styleManager) { Style = styleManager; }
   #endregion  
 
   protected override void Awake()

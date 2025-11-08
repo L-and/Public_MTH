@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class ExplosionScript : MonoBehaviour {
 
@@ -15,11 +17,24 @@ public class ExplosionScript : MonoBehaviour {
 	public AudioClip[] explosionSounds;
 	public AudioSource audioSource;
 
-	private void Start () {
+	[Header("Particles")]
+	public ParticleSystem[] particles;
+
+	private void Awake()
+	{
+		particles = transform.GetComponentsInChildren<ParticleSystem>();
+	}
+
+	public void StartEffect () {
 		//Start the coroutines
 		StartCoroutine (DestroyTimer ());
 		StartCoroutine (LightFlash ());
 
+		// 파티클 재생
+		foreach (var particleSystem in particles)
+		{
+			particleSystem.Play();
+		}
 		//Get a random impact sound from the array
 		audioSource.clip = explosionSounds
 			[Random.Range(0, explosionSounds.Length)];

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c843f09a01e0be141a2a6a76b132ed87, type: 3}
+  m_Name: "\uD14C\uC2A4\uD2B8\uC6A9 \uB85C\uB4DC\uC544\uC6C3"
+  m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.ScriptableObjects.Loadout.PlayerLoadoutSO
+  weapons:
+  - {fileID: 11400000, guid: 17cfa501f9b5c4f4c850951f60d9f28a, type: 2}
+  - {fileID: 11400000, guid: 17cfa501f9b5c4f4c850951f60d9f28a, type: 2}
+  - {fileID: 11400000, guid: 17cfa501f9b5c4f4c850951f60d9f28a, type: 2}
+  subWeapons:
+  - {fileID: 11400000, guid: 288e0b24bd5c99b48b94fb893a4e6709, type: 2}
+  - {fileID: 11400000, guid: 288e0b24bd5c99b48b94fb893a4e6709, type: 2}
+  - {fileID: 11400000, guid: 288e0b24bd5c99b48b94fb893a4e6709, type: 2}
+  emissions:
+  - {fileID: 11400000, guid: a1a1f7de08d6f134c8b3042dec133199, type: 2}
+  - {fileID: 11400000, guid: a1a1f7de08d6f134c8b3042dec133199, type: 2}
+  - {fileID: 11400000, guid: a1a1f7de08d6f134c8b3042dec133199, type: 2}

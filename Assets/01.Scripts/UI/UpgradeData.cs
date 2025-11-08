@@ -14,5 +14,7 @@ public class UpgradeData : ScriptableObject
         public string Type;
         public string Feature;
         public string Flavour;
+        public string Effect;  //연주 -  효과 스크립트
+        public Sprite Icon;
     }
 }

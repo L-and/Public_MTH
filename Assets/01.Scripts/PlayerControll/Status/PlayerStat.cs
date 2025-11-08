@@ -12,6 +12,11 @@ namespace _01.Scripts.PlayerControll.Status
         // 복사 생성자
         public PlayerStat(PlayerStat other)
         {
+            this.UpgradeSlot1ID =  other.UpgradeSlot1ID;
+            this.UpgradeSlot2ID =  other.UpgradeSlot2ID;
+            this.UpgradeSlot3ID =  other.UpgradeSlot3ID;
+            this.UpgradeNumber =  other.UpgradeNumber;
+            
             this.hp = new Stat(other.hp);
             this.stamina = new Stat(other.stamina);
             this.overheat = new Stat(other.overheat);
@@ -29,6 +34,12 @@ namespace _01.Scripts.PlayerControll.Status
             this.mouseSensitivity = other.mouseSensitivity;
             this.jumpForce = other.jumpForce;
         }
+
+        [Header("업그레이드 슬롯")] // 0~20까지의 ID 값, -1은 null을 의미
+        [SerializeField] public int UpgradeSlot1ID = -1;
+        [SerializeField] public int UpgradeSlot2ID = -1;
+        [SerializeField] public int UpgradeSlot3ID = -1;
+        [SerializeField] public int UpgradeNumber = 0;
         
         [Header("체력/스테미너/과열")] 
         [SerializeField] public Stat hp;

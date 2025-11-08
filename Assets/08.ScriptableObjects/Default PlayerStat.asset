@@ -21,7 +21,7 @@ MonoBehaviour:
       value: 1
     overheat:
       maxValue: 100
-      value: 87
+      value: 0
     bulletDamage: 10
     maxSpeed: 10
     dashMaxSpeed: 15
@@ -32,6 +32,6 @@ MonoBehaviour:
     slidingAcc: 5
     dashPower: 30
     slidingPower: 100
-    dashDurationTime: 0.5
+    dashDurationTime: 2
     mouseSensitivity: 0.5
     jumpForce: 10
