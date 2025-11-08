@@ -7,16 +7,17 @@ using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Michsky.MUIP;
 
 public class UIManager : MonoBehaviour
 {
 
     public GameObject hud;
     public GameObject gameover;
-    public Slider hpBar;
-    public Slider ohBar;
+    public ProgressBar hpBar;
+    public ProgressBar ohBar;
     public TextMeshProUGUI ohBarText;
-    public Slider stmBar;
+    public ProgressBar stmBar;
     public Image hpBarFill;
     public Image ohBarFill;
     public Image stmBarFill;
@@ -85,14 +86,19 @@ public class UIManager : MonoBehaviour
         }
         PlayerStat.hp.Value = Mathf.Clamp(value, 0, PlayerStat.hp.maxValue);
         hpBar.maxValue = PlayerStat.hp.maxValue;
-        hpBar.value = PlayerStat.hp.Value;
+        hpBar.currentPercent = PlayerStat.hp.Value;
     }
     public void SetOh(float value)
     {
+        if (PlayerStat.overheat.Value < value)
+        {
+            GameManager.Sound.PlaySFX("Overheat_Up");
+        }
+
         PlayerStat.overheat.Value = value;
         ohBar.maxValue = PlayerStat.overheat.maxValue;
         ohBarText.text = PlayerStat.overheat.Value + "%";
-        ohBar.value = PlayerStat.overheat.Value;
+        ohBar.currentPercent = PlayerStat.overheat.Value;
         Color color2;
         ColorUtility.TryParseHtmlString("#FF8D00", out color2);
         ohBarFill.color = Color.Lerp(ohBarFillColor, color2, PlayerStat.overheat.Value / 100);
@@ -106,6 +112,7 @@ public class UIManager : MonoBehaviour
         if (!ohFulled && PlayerStat.overheat.Value >= PlayerStat.overheat.maxValue)
         {
             ohFulled = true;
+            GameManager.Sound.PlaySFX("Overheat_Full");
             DOTween.Kill(ohBarFill);
             ohBarFill.color = color2;
             ohBarFill.DOColor(Color.white, 0.8f).SetLoops(2, LoopType.Yoyo);
@@ -116,12 +123,13 @@ public class UIManager : MonoBehaviour
     {
         PlayerStat.stamina.Value = value;
         stmBar.maxValue = PlayerStat.stamina.maxValue;
-        stmBar.value = PlayerStat.stamina.Value;
+        stmBar.currentPercent = PlayerStat.stamina.Value;
 
         if (PlayerStat.stamina.Value < PlayerStat.stamina.maxValue) stmFulled = false;
         if (!stmFulled && PlayerStat.stamina.Value >= PlayerStat.stamina.maxValue)
         {
             stmFulled = true;
+            GameManager.Sound.PlaySFX("Stemina_Full");
             DOTween.Kill(stmBarFill);
             stmBarFill.color = stmBarFillColor;
             stmBarFill.DOColor(Color.white, 0.15f).SetLoops(2, LoopType.Yoyo);
@@ -145,6 +153,7 @@ public class UIManager : MonoBehaviour
     public void GameOver()
     {
         isGameover = true;
+        GameManager.Sound.PlayMusic("BGM_Game_Over");
         hud.SetActive(false);
         gameover.SetActive(true);
     }

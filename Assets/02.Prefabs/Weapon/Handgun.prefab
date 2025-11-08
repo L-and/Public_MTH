@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 3048473527119098281}
   - component: {fileID: 5805063541093059364}
   m_Layer: 10
-  m_Name: HandGun
+  m_Name: Handgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -255,8 +255,9 @@ MonoBehaviour:
     type: 3}
   prefabProjectile: {fileID: 1086664671600574, guid: 8f04021a9c7fba34e8af0b56399945ed,
     type: 3}
-  audioClipReload: {fileID: 0}
-  audioClipReloadEmpty: {fileID: 0}
+  audioClipReload: {fileID: 8300000, guid: 2412e083e2cfbba4d8607acc8fb73d1a, type: 3}
+  audioClipReloadEmpty: {fileID: 8300000, guid: f62c409d8d6e70440a4d9d8d19ca01cb,
+    type: 3}
   audioClipFireEmpty: {fileID: 8300000, guid: 0c187ee2790c74c4e9985aa1ee1a12d5, type: 3}
 --- !u!114 &6867622377158469481
 MonoBehaviour:

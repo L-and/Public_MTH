@@ -20,7 +20,8 @@ public static class Constants
   public const string PLAYER = "Player";
   public const string ENEMY = "Enemy";
   public const string ELEVATOR = "Elevator";
+    public const string SOUND = "Sound";
 
-  // Scene 이름 구분
-  public const string GAMESCENE = "Game Scene";
+    // Scene 이름 구분
+    public const string GAMESCENE = "Game Scene";
 }

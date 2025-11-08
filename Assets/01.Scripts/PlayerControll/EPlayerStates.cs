@@ -14,7 +14,7 @@ namespace _01.Scripts.PlayerControll
             Jump
         }
 
-        public enum RightHandState
+        public enum WeaponState
         {
             Idle,
             Fire,

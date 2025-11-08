@@ -8,7 +8,8 @@ public class EmissionReadyState : EmissionState
 
     public override void OnUpdate()
     {
-        if (CanUsing)
+        if (controller.equippedWeapon?.WeaponState != EPlayerStates.WeaponState.Reload && 
+            CanUsing)
         {
             stateMachine.ChangeState(stateMachine.UsingState);
         }

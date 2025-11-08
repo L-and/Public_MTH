@@ -12,17 +12,6 @@ public class StartOptionManager : MonoBehaviour
         transform.DOScaleY(1, 0.2f).SetUpdate(true);
     }
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SetText(string name, string feature)
     {
         nameText.text = name; 

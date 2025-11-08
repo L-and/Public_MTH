@@ -69,23 +69,15 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
         // 피격 위치 저장(사망 시 사용할 수 있음)
         lastHitPoint = hitPoint;
 
-        // 연주 - 약점 명중시 배율 적용
-        BodyPartDamageModifier.ProcessHit(ref rawDamage, zone);
-
-        if (zone == HitZones.Weak)
-        {
-            Debug.Log("Bullseye!");
-            health -= 3*(Mathf.Max(0f, rawDamage));
-        }
-
-        health -= Mathf.Max(0f, rawDamage);
+        // 약점여부 따라 데미지계산
+        var damage = zone == HitZones.Weak ? rawDamage * 3 : rawDamage;
+        health -= 3*(Mathf.Max(0f, damage)); // 데미지 적용
+        
         if(health <= 0)
         {
-            Kill();
+            Kill(zone);
+            
         }
-        //EnemyHealth -= rawDamage;
-        // if (bodyHitCount >= bodyHitsToDie)
-        //     Kill();
     }
 
     /// <summary>Projectile에서 충돌 직전에 호출. 총알 진행 방향을 넘겨줘야 자연스러운 튕김.</summary>
@@ -99,11 +91,14 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
     // ────────────────────────────────────────────────────────────────────────────
     #region Death / Ragdoll
-    private void Kill()
+    private void Kill(HitZones zone)
     {
         if (IsDead) return;
         IsDead = true;
-
+        // 스타일리쉬 액션 이벤트 실행
+        var styleType = zone == HitZones.Weak ? EStyleType.HeadshotKill : EStyleType.EnemyKill;
+        StyleEventManager.TriggerStyleAction(styleType);
+        
         /// 사망시 스포너에게 알리는 구문
         // 현재 방을 가르키는 변수 null 체크
         if (myRoom != null)
