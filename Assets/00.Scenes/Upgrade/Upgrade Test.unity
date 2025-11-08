@@ -523,6 +523,10 @@ GameObject:
   - component: {fileID: 250205235}
   - component: {fileID: 250205234}
   - component: {fileID: 250205233}
+  - component: {fileID: 250205239}
+  - component: {fileID: 250205238}
+  - component: {fileID: 250205237}
+  - component: {fileID: 250205236}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -542,8 +546,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c3c37744515034cb619b1e263aa75c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.Manager.PlayerManager
-  _playerPrefab: {fileID: 8545972391412665673, guid: 928c9debda3e2eb43b91256b04f99023,
-    type: 3}
   playerStatSo: {fileID: 11400000, guid: 6d3c04a636b54bc4680c341feb96a855, type: 2}
   loadoutsSo: {fileID: 11400000, guid: 125e38be2021bcb41a0d05aca6acfd4b, type: 2}
   currentLoadout:
@@ -577,6 +579,9 @@ MonoBehaviour:
     dashDurationTime: 0
     mouseSensitivity: 0
     jumpForce: 0
+  autoSpawn: 1
+  playerPrefab: {fileID: 5456434453428423699, guid: 9512e0d16021f1e42b955162bc2f43a7,
+    type: 3}
 --- !u!114 &250205234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,6 +609,64 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &250205236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250205232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58cb3fd3f7ce6e541b2a17a9e6ccee06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+--- !u!114 &250205237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250205232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16ca3182b2c1bd469ff32fe88938bd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DataManager
+  currentFloor: 0
+  _roomCount: 5
+  _sewerMapMaxFloor: 1
+  _prototypeMapMaxFloor: 2
+  _prototype2MapMaxFloor: 3
+  _bossFloor: 4
+  _currentWeaponId: 0
+  _currentSideWeaponId: 0
+  _currentEmissionId: 0
+  thisMapConcept: 
+--- !u!114 &250205238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250205232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b495126dbfcbbd488507fa38ead867a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+--- !u!114 &250205239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250205232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d9ae35e48cd59e4fb029c221928c8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneManagerEx
 --- !u!1 &271144239
 GameObject:
   m_ObjectHideFlags: 0

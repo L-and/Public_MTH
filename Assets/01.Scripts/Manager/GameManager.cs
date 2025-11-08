@@ -1,5 +1,13 @@
 using _01.Scripts.Manager;
+using UnityEngine;
 
+[
+  RequireComponent(typeof(SceneManagerEx)),
+  RequireComponent(typeof(ResourceManager)),
+  RequireComponent(typeof(DataManager)),
+  RequireComponent(typeof(PlayerManager)),
+  RequireComponent(typeof(SoundManager))
+]
 public class GameManager : Singleton<GameManager>
 {
   //////////////////////////////////////////////////////////////////////////////

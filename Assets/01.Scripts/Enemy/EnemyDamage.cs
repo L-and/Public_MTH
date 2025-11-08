@@ -1,3 +1,4 @@
+using _01.Scripts.Enums;
 using UnityEngine;
 using UnityEngine.AI;
 
