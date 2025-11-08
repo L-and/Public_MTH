@@ -70,7 +70,7 @@ public class UpgradePersistence : MonoBehaviour
         // 씬 바뀔 때마다 재적용 시도
         StartCoroutine(ReapplyWhenPlayerReady());
 
-
+         
     }
 
     private IEnumerator ReapplyWhenPlayerReady()
