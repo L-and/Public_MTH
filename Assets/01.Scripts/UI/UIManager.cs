@@ -23,6 +23,11 @@ public class UIManager : MonoBehaviour
     public Image stmBarFill;
     public TextMeshProUGUI levelInfo;
     public GameObject pauseMenu;
+    public TextMeshProUGUI statText;
+    public Image upgradeSlot1;
+    public Image upgradeSlot2;
+    public Image upgradeSlot3;
+
 
     Color hpBarFillColor;
     Color ohBarFillColor;
@@ -131,6 +136,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void SetUpgradeSlot()
+    {
+        Image[] upgradeSlots = new Image[3] { upgradeSlot1, upgradeSlot2, upgradeSlot3 };
+
+        for (int i = 0; i < upgradeSlots.Length; i++)
+        { 
+            if (i <= PlayerStat.UpgradeNumber - 1) upgradeSlots[i].gameObject.SetActive(true);
+            else upgradeSlots[i].gameObject.SetActive(false);
+        }
+
+
+    }
+
 
     public void GameOver()
     {
@@ -178,6 +196,14 @@ public class UIManager : MonoBehaviour
         SetHp(PlayerStat.hp.Value);
         SetOh(PlayerStat.overheat.Value);
         SetStm(PlayerStat.stamina.Value);
+        SetStatText();
+        SetUpgradeSlot();
+    }
+
+    void SetStatText()
+    {
+        statText.text = "HP : " + PlayerStat.hp.Value + "\nMaxHP : " + PlayerStat.hp.maxValue + "\nOverheat : " + PlayerStat.overheat.Value +
+            "\nMaxOverheat : " + PlayerStat.overheat.maxValue + "\nStemina : " + PlayerStat.stamina.Value + "\nMaxStemina : " + PlayerStat.stamina.maxValue;
     }
 
     #endregion
