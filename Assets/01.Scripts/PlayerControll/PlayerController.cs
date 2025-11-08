@@ -611,8 +611,8 @@ namespace _01.Scripts.PlayerControll
         public void SetLeftHandStateCooldown()
         {
             Debug.Log("왼손 상태를 CooldownStat로 설정!");
-            EmissionFSM.ChangeState(EmissionFSM.CooldownState);
-            SubWeaponFSM.ChangeState(SubWeaponFSM.CooldownState);
+            EmissionFSM?.ChangeState(EmissionFSM.CooldownState);
+            SubWeaponFSM?.ChangeState(SubWeaponFSM.CooldownState);
         }
         
         # endregion

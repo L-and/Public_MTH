@@ -276,6 +276,7 @@ GameObject:
   - component: {fileID: 101155863}
   - component: {fileID: 101155862}
   - component: {fileID: 101155867}
+  - component: {fileID: 101155868}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -397,9 +398,21 @@ MonoBehaviour:
     dashDurationTime: 0
     mouseSensitivity: 0
     jumpForce: 0
-  autoSpawn: 1
+  autoSpawn: 0
   playerPrefab: {fileID: 5456434453428423699, guid: 9512e0d16021f1e42b955162bc2f43a7,
     type: 3}
+--- !u!114 &101155868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101155861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58cb3fd3f7ce6e541b2a17a9e6ccee06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundManager
 --- !u!1 &101663859
 GameObject:
   m_ObjectHideFlags: 0

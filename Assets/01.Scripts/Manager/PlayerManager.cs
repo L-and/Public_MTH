@@ -81,10 +81,10 @@ namespace _01.Scripts.Manager
                     return;
                 }
 
-                // 플레이어 생성,씬로드 후 파괴 안되도록 설정
+                // 플레이어 생성
                 _playerInstance = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
-                DontDestroyOnLoad(_playerInstance);
-
+                // stroyOnLoad(_playerInstance); // 게임진행중 타이틀이동시 플레이어가 안사라지는 문제가 있어서 주석처리함
+                
                 // 필요한 컴포넌트 캐싱
                 if (_playerInstance.TryGetComponent<PlayerController>(out var pc))
                 {

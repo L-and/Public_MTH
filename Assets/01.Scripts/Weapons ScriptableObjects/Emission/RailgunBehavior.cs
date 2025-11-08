@@ -18,7 +18,7 @@ namespace _01.Scripts.Weapons_ScriptableObjects.Emission
         public GameObject railgunProjectile;
         
         private GameObject _muzzleEffectInstance;
-        public float projectileImpulse = 100;
+        public float projectileImpulse = 30;
         
         public override void Execute(PlayerEmission handler, Transform playerCamera, EmissionAbilityData data)
         {
