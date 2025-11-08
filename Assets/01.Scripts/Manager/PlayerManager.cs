@@ -66,7 +66,9 @@ namespace _01.Scripts.Manager
                 // 플레이어 프리팹 로드
                 // TODO 테스트를 위한 코드임으로 수정이 필요할 수 있음
                 // (GameManager.ResourceEx.playerPrefab이 준비되지 않았으면 테스트용 프리팹으로 생성)
-                var playerPrefab = GameManager.ResourceEx ? GameManager.ResourceEx.playerPrefab : playerInstance;
+                var playerPrefab = GameManager.ResourceEx.playerPrefab ? GameManager.ResourceEx.playerPrefab : playerInstance;
+                
+                Debug.Log(playerPrefab);
                 if (!playerPrefab)
                 {
                     var variableInfo = GameManager.ResourceEx.playerPrefab
@@ -79,10 +81,10 @@ namespace _01.Scripts.Manager
                     return;
                 }
 
-                // 플레이어 생성,씬로드 후 파괴 안되도록 설정
+                // 플레이어 생성
                 _playerInstance = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
-                DontDestroyOnLoad(_playerInstance);
-
+                // stroyOnLoad(_playerInstance); // 게임진행중 타이틀이동시 플레이어가 안사라지는 문제가 있어서 주석처리함
+                
                 // 필요한 컴포넌트 캐싱
                 if (_playerInstance.TryGetComponent<PlayerController>(out var pc))
                 {

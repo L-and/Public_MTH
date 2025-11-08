@@ -101,7 +101,7 @@ public class MeleeAttack : MonoBehaviour, IEnemyAttack
         }
         if (hasHit)
         {
-            Debug.Log("hasHit doing wrong");
+            // Debug.Log("hasHit doing wrong");
             return;
         }
 

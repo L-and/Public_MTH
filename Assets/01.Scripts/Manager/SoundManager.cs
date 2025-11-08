@@ -7,9 +7,9 @@ using UnityEngine.InputSystem;
 public class SoundManager : MonoBehaviour
 {
     [Header("Audio Sources")]
-    [Tooltip("»ç¿îµå ÀÌÆåÆ®(SFX) Àç»ı¿¡ »ç¿ëÇÒ ¿Àµğ¿À ¼Ò½º")]
+    [Tooltip("ì‚¬ìš´ë“œ ì´í™íŠ¸(SFX) ì¬ìƒì— ì‚¬ìš©í•  ì˜¤ë””ì˜¤ ì†ŒìŠ¤")]
     private AudioSource sfxSource;
-    [Tooltip("¹è°æ À½¾Ç(BGM) Àç»ı¿¡ »ç¿ëÇÒ ¿Àµğ¿À ¼Ò½º")]
+    [Tooltip("ë°°ê²½ ìŒì•…(BGM) ì¬ìƒì— ì‚¬ìš©í•  ì˜¤ë””ì˜¤ ì†ŒìŠ¤")]
     private AudioSource musicSource;
 
     private AudioClip sfxClip;
@@ -30,21 +30,21 @@ public class SoundManager : MonoBehaviour
     {
         sfxSource = gameObject.AddComponent<AudioSource>();
 
-        sfxSource.playOnAwake = false; // ±âº»ÀûÀ¸·Î ÀÚµ¿ Àç»ı ²ô±â
-        sfxSource.spatialBlend = 0;    // 2D »ç¿îµå·Î ¼³Á¤
+        sfxSource.playOnAwake = false; // ê¸°ë³¸ì ìœ¼ë¡œ ìë™ ì¬ìƒ ë„ê¸°
+        sfxSource.spatialBlend = 0;    // 2D ì‚¬ìš´ë“œë¡œ ì„¤ì •
 
         musicSource = gameObject.AddComponent<AudioSource>();
 
-        musicSource.playOnAwake = false; // ±âº»ÀûÀ¸·Î ÀÚµ¿ Àç»ı ²ô±â
-        musicSource.loop = true;         // ·çÇÁ È°¼ºÈ­
-        musicSource.spatialBlend = 0;    // 2D »ç¿îµå·Î ¼³Á¤
+        musicSource.playOnAwake = false; // ê¸°ë³¸ì ìœ¼ë¡œ ìë™ ì¬ìƒ ë„ê¸°
+        musicSource.loop = true;         // ë£¨í”„ í™œì„±í™”
+        musicSource.spatialBlend = 0;    // 2D ì‚¬ìš´ë“œë¡œ ì„¤ì •
     }
     public void PlaySFX(string soundName)
     {
         GameManager.ResourceEx.SoundDict.TryGetValue(soundName, out AudioClip sfxClip);
         if (sfxClip == null)
         {
-            Debug.Log(soundName + " È¿°úÀ½ ÆÄÀÏÀ» Ã£À» ¼ö ¾øÀ½");
+            Debug.Log(soundName + " íš¨ê³¼ìŒ íŒŒì¼ì„ ì°¾ì„ ìˆ˜ ì—†ìŒ");
             return;
         }
         sfxSource.PlayOneShot(sfxClip);

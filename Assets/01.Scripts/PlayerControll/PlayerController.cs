@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using _01.Scripts.Enums;
 using _01.Scripts.PlayerControll.Animation;
 using _01.Scripts.PlayerControll.Status;
 using _01.Scripts.Weapons_ScriptableObjects.Emission;
@@ -610,13 +611,25 @@ namespace _01.Scripts.PlayerControll
         public void SetLeftHandStateCooldown()
         {
             Debug.Log("왼손 상태를 CooldownStat로 설정!");
-            EmissionFSM.ChangeState(EmissionFSM.CooldownState);
-            SubWeaponFSM.ChangeState(SubWeaponFSM.CooldownState);
+            EmissionFSM?.ChangeState(EmissionFSM.CooldownState);
+            SubWeaponFSM?.ChangeState(SubWeaponFSM.CooldownState);
         }
         
         # endregion
         
-        #region 업그레이드 적용 메서드
+        #region 업그레이드 적용 관련
+
+        // 슬라이딩 업그레이드 시 몇초당 과열게이지를 충전할지를 판단하는 변수
+        public float getOverHeatSecWithUpgrade = 2f;
+        // [업그레이드] 슬라이딩 업그레이드 플래그
+        public  bool IsSlidingUpgrade { get; private set; }
+        
+        // 슬라이딩 업그레이드
+        [ContextMenu("슬라이딩 업그레이드")]
+        public void SlidingUpgrade()
+        {
+            IsSlidingUpgrade = true;
+        }
 
         /// <summary>
         /// 재장전 속도증가 업그레이드를 적용 TODO 업그레이드 적용기능을 담당하는 스크립트를 만들어야할듯
@@ -643,16 +656,16 @@ namespace _01.Scripts.PlayerControll
             playerEmission.ExecuteEmission(CurrentEmission);
         }
         
-        // 근접공격
+        // 데미지 적용
         public void ApplyDamage(float damage)
         {
+            Debug.Log("플레이어 피격");
+            // 대쉬중에는 데미지적용 X, 스타일리쉬 액션 실행
             if (IsInvincible)
             {
-                // TODO 무적상태에서 피격시 스타일리쉬액션 연동코드 작성
-                Debug.Log("[스타일리쉬 액션] 적 공격 회피!");
+                StyleEventManager.TriggerStyleAction(EStyleType.Dodge);
                 return;
             }
-            Debug.Log("플레이어 피격당함");
             Stat.hp.Value -= damage;
 
             if (Stat.hp.Value <= 0f)

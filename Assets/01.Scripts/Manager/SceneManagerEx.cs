@@ -50,6 +50,7 @@ public class SceneManagerEx : MonoBehaviour
     // }
     
     // PlayerManager에 플레이어 생성 시작
+    
     GameManager.PlayerManager.PlayerSpawn(_startPoint.transform.position);
   }
 

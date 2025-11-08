@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf6580a193b420284c122e819ca51c4, type: 3}
+  m_Name: "\uD14C\uC2A4\uD2B8\uC6A9 SMG"
+  m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.Weapons_ScriptableObjects.Weapon.WeaponData
+  weaponName: "\uD14C\uC2A4\uD2B8\uC6A9 SMG"
+  description: 
+  damage: 300
+  characterAnimator: {fileID: 22100000, guid: 82bd6ed01fefe904da6e755a18a88862, type: 2}
+  magazineSize: 30
+  rpm: 900
+  verticalRecoil: -2
+  horizontalRecoil: 0
+  prefab: {fileID: 503142545494572066, guid: d46522113aa2842458263385823f9d19, type: 3}

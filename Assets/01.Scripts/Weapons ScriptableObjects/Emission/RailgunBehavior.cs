@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using _01.Scripts.Enums;
 using LaserBeams;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ namespace _01.Scripts.Weapons_ScriptableObjects.Emission
         public GameObject railgunProjectile;
         
         private GameObject _muzzleEffectInstance;
-        public float projectileImpulse = 100;
+        public float projectileImpulse = 30;
         
         public override void Execute(PlayerEmission handler, Transform playerCamera, EmissionAbilityData data)
         {
@@ -85,8 +86,18 @@ namespace _01.Scripts.Weapons_ScriptableObjects.Emission
                 damageableZone.ApplyHit(data.damage, hit.point, bodyPart.zone); // 적에게 데미지 적용
                 damagedTarget.Add(damageableZone); // 같은적에게 중복계산 방지를위해 해시셋에 저장
                 
+                // 스타일액션 이벤트 호출 (레일건처치)
+                StyleEventManager.TriggerStyleAction(EStyleType.RailgunKill);
+                
                 Debug.Log($"[{hit.collider.gameObject.transform.root.name}]공격 성공!");
             }
+            
+            // 스타일액션 이벤트 호출 (동시처치)
+            for (var i = 0; i < damagedTarget.Count; i++)
+            {
+                StyleEventManager.TriggerStyleAction(EStyleType.MultiKill);
+            }
+            
         }
     }
 }
