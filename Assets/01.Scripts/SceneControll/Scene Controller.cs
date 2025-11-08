@@ -24,7 +24,6 @@ public class CutsceneController : MonoBehaviour
     public TextMeshProUGUI nextArrowText; // ▼ 아이콘 이미지 연결
     
     public Cut[] cuts;
-    public string nextSceneName = "MainMenu";
 
     private bool isTyping = false;
     private bool nextPressed = false;
@@ -96,7 +95,7 @@ public class CutsceneController : MonoBehaviour
         }
 
         // 컷씬 끝 → 다음 씬 이동
-        SceneManager.LoadScene(nextSceneName);
+        GameManager.SceneEx.LoadScene(Constants.MAINMENU);
     }
 
     IEnumerator FadeBoth(Graphic img, Graphic txt, float start, float end, float duration)

@@ -17,23 +17,45 @@ public class MapManager : MonoBehaviour
   private Transform _mapRoot;             // 맵 생성 부모
   private Transform _attachPoint;         // 현재 진행 Anchor
 
+  private GameObject _startElevator;
+
   private bool _isCheck;
   private bool _isCount;
 
   async void Start()
   {
+    // 재시작 or 다음층 넘어가는지 체크
     if (!_isCount)
     {
       GameManager.GameData.currentFloor++;
       _isCount = true;
     }
-    
-    var curFloor = GameManager.GameData.currentFloor;
-    var thisFloor = GameManager.GameData.SewerMapMaxFloor();
 
-    // 현재층이 해당 컨셉 최대 층 보다 높을 경우
-    if (curFloor > thisFloor)
-      await GameManager.ResourceEx.LoadMapPrefabs(Constants.MAP_PROTOTYPE);
+    var mapConceptName = GameManager.GameData.GetMapConceptForFloor();
+
+    var elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab(mapConceptName);
+
+    // 엘리베이터 프리팹이 null이면 다시 불러옴.
+    if (elevatorPrefab == null)
+    {
+      Debug.LogWarning("맵을 생성하는 과정에서 Elevator Prefab이 Null 이어서 맵을 제대로 생성하지 못했습니다.");
+
+      // 리소스 다시 불러오기
+      await GameManager.ResourceEx.LoadElevatorPrefabs();
+
+      elevatorPrefab = GameManager.ResourceEx.GetElevatorPrefab(mapConceptName);
+
+      if (elevatorPrefab == null)
+      {
+        Debug.LogWarning("Elevator Prefab을 찾을 수 없습니다.");
+        return;
+      }
+    }
+
+    _elevatorPrefab = elevatorPrefab;
+
+    // 맵 불러오기
+    await GameManager.ResourceEx.LoadMapPrefabs(mapConceptName);
 
     StartCoroutine(SetupMap());
   }
@@ -48,7 +70,7 @@ public class MapManager : MonoBehaviour
     // 2) 프리팹 초기화 
     _normalRoomPrefabs = new List<GameObject>();
     _connectorPrefab = null;
-    _elevatorPrefab = GameManager.ResourceEx.elevatorPrefab;
+
     _mapRoot = new GameObject("Map").transform;
 
     // 3) 맵 리소스 데이터를 전체 순회 하면서 프리팹별로 나눔.
@@ -67,7 +89,10 @@ public class MapManager : MonoBehaviour
     CreateFloor();
 
     // 플레이어 생성
-    GameManager.SceneEx.PlayerSpawn();
+    GameManager.PlayerSpawn.PlayerSpawn();
+
+    // 엘리베이터 문이 열림.
+    _startElevator.GetComponent<ElevatorController>().DoorsOpen(1f);
   }
 
   // 방 초기화하고 생성하는 함수
@@ -77,12 +102,12 @@ public class MapManager : MonoBehaviour
     var thisFloorInfo = Constants.NORMAL_ROOM;
 
     // 2) 시작 엘리베이터 생성 (플레이어 시작 위치)
-    var startElevator = Instantiate(_elevatorPrefab, _mapRoot);
-    startElevator.transform.position = Vector3.zero;
-    startElevator.transform.rotation = Quaternion.identity;
-    var startAnchor = startElevator.GetComponent<ElevatorAnchor>();
+    _startElevator = Instantiate(_elevatorPrefab, _mapRoot);
+    _startElevator.transform.position = Vector3.zero;
+    _startElevator.transform.rotation = Quaternion.identity;
+    var startAnchor = _startElevator.GetComponent<ElevatorAnchor>();
     _attachPoint = startAnchor.elevatorAnchor;   // 출구를 기준으로 다음 연결 시작
-    startElevator.GetComponent<ElevatorController>().SetupForStart();
+    _startElevator.GetComponent<ElevatorController>().SetupForStart();
 
     switch (thisFloorInfo)
     {

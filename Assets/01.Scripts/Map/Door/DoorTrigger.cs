@@ -3,25 +3,24 @@ using UnityEngine;
 public class DoorTrigger : MonoBehaviour
 {
   [Header("이 Collider에 Trigger 될 시 열릴 문 Object")]
-  [SerializeField] GameObject doorController;
+  [SerializeField] private GameObject _doorController;
 
-  private bool isOpen = false;
+  [Header("양 문일 경우 (오른쪽 Object)")]
+  [SerializeField] private GameObject _doorController2;
+
+  private bool _isOpen = false;
 
   private void OnTriggerEnter(Collider other)
   {
-    if (other.CompareTag("Player") && !isOpen)
+    if (other.CompareTag("Player") && !_isOpen)
     {
-      isOpen = true;
+      _doorController.GetComponent<Door>().Open();
 
-      doorController.GetComponent<Door>().Open();
+      if (_doorController2 != null) _doorController2.GetComponent<Door>().Open();
+
+      _isOpen = true;
+
+      gameObject.SetActive(false);
     }
-  }
-
-  private void OnTriggerExit(Collider other)
-  {
-    var collider = GetComponent<BoxCollider>();
-    collider.enabled = false;
-
-    isOpen = false;
   }
 }
