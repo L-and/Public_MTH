@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject hud;
     public GameObject gameover;
+    public GameObject gameWon;
     public ProgressBar hpBar;
     public ProgressBar ohBar;
     public TextMeshProUGUI ohBarText;
@@ -23,6 +24,7 @@ public class UIManager : MonoBehaviour
     public Image stmBarFill;
     public TextMeshProUGUI levelInfo;
     public GameObject pauseMenu;
+    private AudioSource ohFullKeepSound;
     public TextMeshProUGUI statText;
     public Image upgradeSlot1;
     public Image upgradeSlot2;
@@ -49,6 +51,7 @@ public class UIManager : MonoBehaviour
         ohBarFillColor = ohBarFill.color;
         stmBarFillColor = stmBarFill.color;
         StartCoroutine(ShowLevelInfoCoroutine());
+        ohFullKeepSound = ohBar.GetComponent<AudioSource>();
         if (!GameManager.PlayerManager)
         {
             Debug.LogWarning("GameManager.PlayerManager가 정의되지 않았습니다!");
@@ -64,7 +67,7 @@ public class UIManager : MonoBehaviour
         // 플레이어 게임오버 처리 TODO 수정필요
         if (Input.GetKeyDown(KeyCode.G) && !isGameover)
         {
-            GameOver();
+            GameWon();
         }
         
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -103,16 +106,18 @@ public class UIManager : MonoBehaviour
         ColorUtility.TryParseHtmlString("#FF8D00", out color2);
         ohBarFill.color = Color.Lerp(ohBarFillColor, color2, PlayerStat.overheat.Value / 100);
 
-        if (PlayerStat.overheat.Value < PlayerStat.overheat.maxValue)
+        if (ohFulled && PlayerStat.overheat.Value < PlayerStat.overheat.maxValue)
         { 
             ohFulled = false;
             DOTween.Kill(ohBarText.rectTransform);
             ohBarText.rectTransform.localScale = Vector3.one;
+            ohFullKeepSound.Stop();
         }
         if (!ohFulled && PlayerStat.overheat.Value >= PlayerStat.overheat.maxValue)
         {
             ohFulled = true;
             GameManager.Sound.PlaySFX("Overheat_Full");
+            ohFullKeepSound.Play();
             DOTween.Kill(ohBarFill);
             ohBarFill.color = color2;
             ohBarFill.DOColor(Color.white, 0.8f).SetLoops(2, LoopType.Yoyo);
@@ -156,6 +161,11 @@ public class UIManager : MonoBehaviour
         GameManager.Sound.PlayMusic("BGM_Game_Over");
         hud.SetActive(false);
         gameover.SetActive(true);
+    }
+    public void GameWon()
+    {
+        hud.SetActive(false);
+        gameWon.SetActive(true);
     }
 
     void Restart()
