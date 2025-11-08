@@ -2627,6 +2627,30 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 5969aaed0c81c5b4d8a8c0e7fcbd978b, type: 3}
+--- !u!114 &829753177 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -8894924734619150259, guid: 5969aaed0c81c5b4d8a8c0e7fcbd978b,
+    type: 3}
+  m_PrefabInstance: {fileID: 829753176}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 005f9785f24ff8f43b1a9cd97fe04ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElevatorController
+--- !u!1 &829753178 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1223266469794650848, guid: 5969aaed0c81c5b4d8a8c0e7fcbd978b,
+    type: 3}
+  m_PrefabInstance: {fileID: 829753176}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &829753179 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1398501980863936377, guid: 5969aaed0c81c5b4d8a8c0e7fcbd978b,
+    type: 3}
+  m_PrefabInstance: {fileID: 829753176}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &842022071
 Mesh:
   m_ObjectHideFlags: 0
@@ -7058,6 +7082,97 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74a605ae687dc6d41a2dbda4638b6cce, type: 3}
+--- !u!1001 &4479334195620284890
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -67.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339226694257028165, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2868466337965387740, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: _doorController
+      value: 
+      objectReference: {fileID: 829753179}
+    - target: {fileID: 2868466337965387740, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: _doorController2
+      value: 
+      objectReference: {fileID: 829753178}
+    - target: {fileID: 2868466337965387740, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: _elevatorController
+      value: 
+      objectReference: {fileID: 829753177}
+    - target: {fileID: 7341803288821145234, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      propertyPath: m_Name
+      value: Elevator_Boss
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3622781197633582295, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7086990622522073087, guid: 7a313d30d9a25cf46a9968f01b67b4b6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+  m_SourcePrefab: {fileID: 100100000, guid: 7a313d30d9a25cf46a9968f01b67b4b6, type: 3}
 --- !u!1001 &4858219623003173882
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7207,6 +7322,7 @@ SceneRoots:
   - {fileID: 1441886340}
   - {fileID: 1160136371}
   - {fileID: 829753176}
+  - {fileID: 4479334195620284890}
   - {fileID: 1666358897}
   - {fileID: 1769895353}
   - {fileID: 943503630}

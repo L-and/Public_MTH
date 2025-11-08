@@ -59,11 +59,6 @@ public class MapManager : MonoBehaviour
 
     StartCoroutine(SetupMap());
   }
-  
-  private void MapSelectAndLoad()
-  {
-    
-  }
 
   private IEnumerator SetupMap()
   {
