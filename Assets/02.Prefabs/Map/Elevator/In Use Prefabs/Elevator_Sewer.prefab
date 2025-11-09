@@ -227,7 +227,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 655c7b7963e86aa4a84dc84636c1894f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorTrigger
-  doorController: {fileID: 4429957564378441368}
+  _doorController: {fileID: 4429957564378441368}
+  _doorController2: {fileID: 0}
 --- !u!1 &1358522673673003289
 GameObject:
   m_ObjectHideFlags: 0
