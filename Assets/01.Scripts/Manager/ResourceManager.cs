@@ -41,7 +41,7 @@ public class ResourceManager : MonoBehaviour
   public GameObject playerPrefab { get; private set; }    // 플레이어
 
   // 엘리베이터 관리
-  [Header("Mapping List")]
+  [Header("맵과 엘리베이터 String으로 연결하는 Mapping List")]
   [SerializeField] private List<StringMapping> mapNameMappingList;
 
   private Dictionary<string, string> mappingDict;
