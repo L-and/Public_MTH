@@ -7,20 +7,20 @@ public class MapManager : MonoBehaviour
 {
   private Dictionary<string, GameObject> _mapPrefabs; // 현재 층의 맵 리소스가 전부 들어있는 변수
 
-  private List<GameObject> _normalRoomPrefabs; // 방 프리팹만 가지고 있는 리스트 변수
+  private List<GameObject> _roomPrefabs; // 방 프리팹만 가지고 있는 리스트 변수
   // private List<GameObject> connectorPrefabs;
-  private GameObject _connectorPrefab;
-  private GameObject _boosRoomPrefab;
-  private GameObject _elevatorPrefab;
+  private GameObject _connectorPrefab;  // 통로 프리팹
+  private GameObject _elevatorPrefab;   // 엘리베이터 프리팹
 
   private TextMeshProUGUI floorCountText; // 현재 층 표시하는 TextUI
   private Transform _mapRoot;             // 맵 생성 부모
   private Transform _attachPoint;         // 현재 진행 Anchor
 
-  private GameObject _startElevator;
+  private GameObject _startElevator;  // 시작부분 엘리베이터 Object
 
-  private bool _isCheck;
-  private bool _isCount;
+  private bool _isAllUsed;    // 맵 리스트 전부 훑었는지 체크
+  private bool _isCount;      // 재시작하는건지 다음층 넘어가는건지 체크
+  private bool _isBossLevel;  // 
 
   async void Start()
   {
@@ -63,12 +63,12 @@ public class MapManager : MonoBehaviour
   private IEnumerator SetupMap()
   {
     // GameScene에서 시작하기 위해 테스트용
-    yield return new WaitForSeconds(3f);
+    // yield return new WaitForSeconds(3f);
 
     // 1) 씬이 시작되면 맵 리소스 데이터 전체를 가져옴.
     _mapPrefabs = GameManager.ResourceEx.mapPrefabDict;
     // 2) 프리팹 초기화 
-    _normalRoomPrefabs = new List<GameObject>();
+    _roomPrefabs = new List<GameObject>();
     _connectorPrefab = null;
 
     _mapRoot = new GameObject("Map").transform;
@@ -80,7 +80,7 @@ public class MapManager : MonoBehaviour
       GameObject prefab = pair.Value;
 
       if (key.StartsWith(Constants.ROOM))
-        _normalRoomPrefabs.Add(prefab);
+        _roomPrefabs.Add(prefab);
       else if (key.StartsWith(Constants.CONNECTOR))
         _connectorPrefab = prefab;
     }
@@ -93,13 +93,15 @@ public class MapManager : MonoBehaviour
 
     // 엘리베이터 문이 열림.
     _startElevator.GetComponent<ElevatorController>().DoorsOpen(1f);
+
+    yield return null;
   }
 
   // 방 초기화하고 생성하는 함수
   public void CreateFloor()
   {
-    //TODO: 현재층이 보스층인지 아니면 일반층인지 구분
-    var thisFloorInfo = Constants.NORMAL_ROOM;
+    // 1) 현재 층이 무슨 컨셉의 층인지 가져움.
+    var thisFloorConcept = GameManager.GameData.GetMapConceptForFloor();
 
     // 2) 시작 엘리베이터 생성 (플레이어 시작 위치)
     _startElevator = Instantiate(_elevatorPrefab, _mapRoot);
@@ -109,12 +111,16 @@ public class MapManager : MonoBehaviour
     _attachPoint = startAnchor.elevatorAnchor;   // 출구를 기준으로 다음 연결 시작
     _startElevator.GetComponent<ElevatorController>().SetupForStart();
 
-    switch (thisFloorInfo)
+    // 3) 현재 레벨(층)이 보스인지 일반레벨인지 체크
+    switch (thisFloorConcept)
     {
-      case Constants.NORMAL_ROOM:
+      case Constants.MAP_PROTOTYPE:
+      case Constants.MAP_SEWER:
+      case Constants.MAP_UNDERGROUNDPRISON:
+      case Constants.MAP_ICECAVE:
         NormalMapSetting();
         break;
-      case Constants.BOSS_ROOM:
+      case Constants.MAP_BOSS:
         BossMapSetting();
         break;
     }
@@ -123,8 +129,8 @@ public class MapManager : MonoBehaviour
   // 일반적인 맵 생성
   private void NormalMapSetting()
   {
-    // 방 목록 섞기
-    var candidates = new List<GameObject>(_normalRoomPrefabs);
+    // 1) 방 목록 섞기
+    var candidates = new List<GameObject>(_roomPrefabs);
     var roomCount = GameManager.GameData.RoomCount();
     Shuffle(candidates);
 
@@ -132,9 +138,9 @@ public class MapManager : MonoBehaviour
     int placed = 0;
     while (placed < roomCount)
     {
-      if (placed > candidates.Count && !_isCheck)
+      if (placed > candidates.Count && !_isAllUsed)
       {
-        _isCheck = true;
+        _isAllUsed = true;
         Shuffle(candidates);
       }
         
@@ -166,8 +172,8 @@ public class MapManager : MonoBehaviour
   // 보스방이 있는 맵 생성
   private void BossMapSetting()
   {
-    // 2) 복도복도 보스방 복도복도 배치
-    for (int i = 0; i < 2; i++)
+    // 1) 복도 먼저 생성 (총 3개)
+    for (int i = 0; i < 3; i++)
     {
       var connector = Instantiate(_connectorPrefab, _mapRoot);
       var cn = connector.GetComponent<ConnectorAnchor>();
@@ -177,33 +183,10 @@ public class MapManager : MonoBehaviour
       _attachPoint = cn.exitAnchor;
     }
 
-    var room = Instantiate(_boosRoomPrefab, _mapRoot);
+    // 2) 보스방 생성
+    var room = Instantiate(_roomPrefabs[0], _mapRoot);
     var ra = room.GetComponent<RoomAnchor>();
     AlignAtoB(room.transform, ra.entryAnchor, _attachPoint);
-
-    _attachPoint = ra.exitAnchor;
-
-    for (int i = 0; i < 2; i++)
-    {
-      var connector = Instantiate(_connectorPrefab, _mapRoot);
-      var cn = connector.GetComponent<ConnectorAnchor>();
-      AlignAtoB(connector.transform, cn.entryAnchor, _attachPoint);
-
-      // 통로 마지막에 진행 포인트 갱신
-      _attachPoint = cn.exitAnchor;
-    }
-
-    // 3) 마지막 엘리베이터 생성 (다음 층으로 이동하는 출구)
-    if (_elevatorPrefab != null && _attachPoint != null)
-    {
-      var endElevator = Instantiate(_elevatorPrefab, _mapRoot);
-      endElevator.transform.Rotate(0f, 180f, 0f, Space.Self);      // 엘리베이터 프리팹 회전
-
-      var ea = endElevator.GetComponent<ElevatorAnchor>();
-      AlignAtoB(endElevator.transform, ea.elevatorAnchor, _attachPoint);
-
-      //endElevator.GetComponent<ElevatorController>().SetupForEnd();
-    }
   }
 
   // 복도와 방 배치하는 함수

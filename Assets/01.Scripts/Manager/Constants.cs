@@ -17,6 +17,13 @@ public static class Constants
   public const string MAP_ICECAVE = "Map_IceCave";
   public const string MAP_BOSS = "Map_Boss";
 
+  // 엘리베이터 구분
+  public const string ELEVATOR_PROTOTYPE = "Elevator_Prototype";
+  public const string ELEVATOR_SEWER = "Elevator_Sewer";
+  public const string ELEVATOR_UNDERGROUNDPRISON = "Elevator_UndergroundPrison";
+  public const string ELEVATOR_ICECAVE = "Elevator_IceCave";
+  public const string ELEVATOR_BOSS = "Elevator_Boss";
+  
   // Room 구분
   public const string NORMAL_ROOM = "Normal Room";
   public const string BOSS_ROOM = "Boss Room";
@@ -29,17 +36,11 @@ public static class Constants
   public const string PLAYER = "Player";
   public const string ENEMY = "Enemy";
   public const string ELEVATOR = "Elevator";
-    public const string SOUND = "Sound";
+  public const string SOUND = "Sound";
 
   // Scene 이름 구분
   public const string CUTSCENE = "CutScene Test";
   public const string MAINMENU = "MainMenu";
   public const string GAMESCENE = "Game Scene";
-
-  // 엘리베이터 구분
-  public const string ELEVATOR_PROTOTYPE = "Elevator_Prototype";
-  public const string ELEVATOR_SEWER = "Elevator_Sewer";
-  public const string ELEVATOR_UNDERGROUNDPRISON = "Elevator_UndergroundPrison";
-  public const string ELEVATOR_ICECAVE = "Elevator_IceCave";
-  public const string ELEVATOR_BOSS = "Elevator_Boss";
 }
+

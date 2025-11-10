@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2848720149500852907}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -686,7 +686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorRoomTrigger
   _doorController: {fileID: 3350937328319776821}
   _doorController2: {fileID: 3247474413106700062}
-  _elevatorController: {fileID: 0}
+  _elevatorController: {fileID: 8212659676315712926}
 --- !u!1 &8880909210156481410
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,6 +781,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor_straight Variant_5
       objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -854,6 +859,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1076,6 +1086,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant_10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1818,6 +1833,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor_straight Variant_8
       objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1975,6 +1995,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2223,6 +2248,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor_straight Variant_14
       objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2455,6 +2485,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor_straight Variant_15
       objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2602,6 +2637,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant_16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2983,6 +3023,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor_straight Variant_6
       objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3057,6 +3102,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor_straight Variant_9
       objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3130,6 +3180,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3278,6 +3333,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant_13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3954,6 +4014,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant_12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4887,7 +4952,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwingDoorController
   doorMoveSpeed: 1
-  _maxOpenAngle: 297
+  _maxOpenAngle: 117
 --- !u!1001 &6827525960544776000
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4950,6 +5015,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant_7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5098,6 +5168,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant_11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5494,6 +5569,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor_straight Variant_1
       objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5651,6 +5731,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor_straight Variant_4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357817287124843126, guid: 0c54cb30e2c0fd7458d7a17c712a948c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -16,6 +16,9 @@ public class MainMenuUIManager : MonoBehaviour
  
   private void Start()
   {
+    // 메인메뉴로 돌아오면 항상 층 초기화 (저장 기능 추가할 경우 수정)
+    GameManager.GameData.currentFloor = 0;
+
     ButtonsOn();
         StartCoroutine(PlayMainMusic());
   }
