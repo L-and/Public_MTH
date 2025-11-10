@@ -63,7 +63,7 @@ public class MapManager : MonoBehaviour
   private IEnumerator SetupMap()
   {
     // GameScene에서 시작하기 위해 테스트용
-    yield return new WaitForSeconds(3f);
+    // yield return new WaitForSeconds(3f);
 
     // 1) 씬이 시작되면 맵 리소스 데이터 전체를 가져옴.
     _mapPrefabs = GameManager.ResourceEx.mapPrefabDict;
@@ -93,6 +93,8 @@ public class MapManager : MonoBehaviour
 
     // 엘리베이터 문이 열림.
     _startElevator.GetComponent<ElevatorController>().DoorsOpen(1f);
+
+    yield return null;
   }
 
   // 방 초기화하고 생성하는 함수
