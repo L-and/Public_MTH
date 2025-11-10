@@ -34,19 +34,21 @@ public class PlayerSpawnManager : MonoBehaviour
     if (!_isPlayerSpawn)
     {
       SetupGameScene();
-      _curPlayer = Instantiate(_playerPrefab, _startPoint.transform.position, _startPoint.transform.rotation);
-      DontDestroyOnLoad(_curPlayer.gameObject);
+      // _curPlayer = Instantiate(_playerPrefab, _startPoint.transform.position, _startPoint.transform.rotation);
+      // DontDestroyOnLoad(_curPlayer.gameObject);
       _isPlayerSpawn = true;
     }
-    else
-    {
-      _curPlayer.SetActive(false);
-      
-      // 2. 위치 회전값 초기화.
-      _curPlayer.transform.position = _startPoint.transform.position;
-      _curPlayer.transform.rotation = _startPoint.transform.rotation;
+    // else
+    // {
+    //   _curPlayer.SetActive(false);
 
-      _curPlayer.SetActive(true);
-    }
+    //   // 2. 위치 회전값 초기화.
+    //   _curPlayer.transform.position = _startPoint.transform.position;
+    //   _curPlayer.transform.rotation = _startPoint.transform.rotation;
+
+    //   _curPlayer.SetActive(true);
+    // }
+
+    GameManager.PlayerManager.PlayerSpawn(_startPoint.transform.position);
   }
 }

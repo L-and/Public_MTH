@@ -23,6 +23,7 @@ public static class Constants
   public const string ELEVATOR_UNDERGROUNDPRISON = "Elevator_UndergroundPrison";
   public const string ELEVATOR_ICECAVE = "Elevator_IceCave";
   public const string ELEVATOR_BOSS = "Elevator_Boss";
+  
   // Room 구분
   public const string NORMAL_ROOM = "Normal Room";
   public const string BOSS_ROOM = "Boss Room";

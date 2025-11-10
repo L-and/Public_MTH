@@ -217,10 +217,9 @@ public class UIManager : MonoBehaviour
         SetHp(PlayerStat.hp.Value);
         SetOh(PlayerStat.overheat.Value);
         SetStm(PlayerStat.stamina.Value);
-        SetStatText();
         SetUpgradeSlot();
     }
-
+    
     void SetStatText()
     {
         statText.text = "HP : " + PlayerStat.hp.Value + "\nMaxHP : " + PlayerStat.hp.maxValue + "\nOverheat : " + PlayerStat.overheat.Value +

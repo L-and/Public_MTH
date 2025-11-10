@@ -6,7 +6,8 @@ using UnityEngine;
   RequireComponent(typeof(ResourceManager)),
   RequireComponent(typeof(DataManager)),
   RequireComponent(typeof(PlayerManager)),
-  RequireComponent(typeof(SoundManager))
+  RequireComponent(typeof(SoundManager)),
+  RequireComponent(typeof(PlayerSpawnManager))
 ]
 public class GameManager : Singleton<GameManager>
 {
@@ -69,7 +70,6 @@ public class GameManager : Singleton<GameManager>
     _dataManager = gameObject.GetComponent<DataManager>();
     _playerManager = gameObject.GetComponent<PlayerManager>();
     _soundManager = gameObject.GetComponent<SoundManager>();
-    _playerManager = gameObject.AddComponent<PlayerManager>();
     _playerSpawnManager = gameObject.GetComponent<PlayerSpawnManager>();
     #endregion
   }

@@ -277,6 +277,7 @@ GameObject:
   - component: {fileID: 101155862}
   - component: {fileID: 101155867}
   - component: {fileID: 101155868}
+  - component: {fileID: 101155869}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -308,7 +309,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b495126dbfcbbd488507fa38ead867a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
-  mapNameMappingList: []
+  mapNameMappingList:
+  - key: Map_Prototype
+    value: Elevator_Prototype
+  - key: Map_Sewer
+    value: Elevator_Sewer
+  - key: Map_UndergroundPrison
+    value: Elevator_UndergroundPrison
+  - key: Map_Boss
+    value: Elevator_Boss
 --- !u!114 &101155864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +331,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DataManager
   currentFloor: 0
-  _floorDataList: []
+  _floorDataList:
+  - startFloor: 1
+    endFloor: 1
+    concept: 0
+  - startFloor: 2
+    endFloor: 2
+    concept: 1
+  - startFloor: 3
+    endFloor: 3
+    concept: 2
   _roomCount: 5
   _currentWeaponId: 0
   _currentSideWeaponId: 0
@@ -414,6 +432,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58cb3fd3f7ce6e541b2a17a9e6ccee06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+--- !u!114 &101155869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101155861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16d2e45c824ff4f4cafb73cb4aef0bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawnManager
 --- !u!1 &101663859
 GameObject:
   m_ObjectHideFlags: 0
@@ -22491,7 +22521,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2078852179}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
