@@ -69,7 +69,6 @@ public class GameManager : Singleton<GameManager>
     _dataManager = gameObject.GetComponent<DataManager>();
     _playerManager = gameObject.GetComponent<PlayerManager>();
     _soundManager = gameObject.GetComponent<SoundManager>();
-    _playerManager = gameObject.AddComponent<PlayerManager>();
     _playerSpawnManager = gameObject.GetComponent<PlayerSpawnManager>();
     #endregion
   }
