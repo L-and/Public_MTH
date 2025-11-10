@@ -114,10 +114,13 @@ public class MapManager : MonoBehaviour
     // 3) 현재 레벨(층)이 보스인지 일반레벨인지 체크
     switch (thisFloorConcept)
     {
-      case Constants.NORMAL_ROOM:
+      case Constants.MAP_PROTOTYPE:
+      case Constants.MAP_SEWER:
+      case Constants.MAP_UNDERGROUNDPRISON:
+      case Constants.MAP_ICECAVE:
         NormalMapSetting();
         break;
-      case Constants.BOSS_ROOM:
+      case Constants.MAP_BOSS:
         BossMapSetting();
         break;
     }
