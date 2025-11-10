@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Animator Controllers
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Animator Controllers
+  m_GUID: 9dbd02e4e64f5504b9c373e6c1b31ee7
+  m_SerializeEntries:
+  - m_GUID: 82bd6ed01fefe904da6e755a18a88862
+    m_Address: "Assets/06.Animations/Player/\uD14C\uC2A4\uD2B8\uC6A9/SMG Character
+      Anim Controller.overrideController"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Anim_Controller
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d933547750333d640ba59b2faea6b493
+    m_Address: "Assets/06.Animations/Player/\uD14C\uC2A4\uD2B8\uC6A9/HandGun Character
+      Anim Controller.overrideController"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Anim_Controller
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d052d267c79038248913c8d46e16d215, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 573aa564a052d9746af8b6ae46dc5714, type: 2}
+    - {fileID: 11400000, guid: 5e546c82842152245bd4e23a8deff086, type: 2}

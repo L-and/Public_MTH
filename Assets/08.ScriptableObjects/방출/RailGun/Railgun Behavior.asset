@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b199809a5206425e8f61f1b1f825cb53, type: 3}
+  m_Name: Railgun Behavior
+  m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.Emission.RailgunBehavior
+  range: 100
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  railgunProjectile: {fileID: 1086664671600574, guid: 32f005af8a11f18408842f8618a202c1,
+    type: 3}
+  projectileImpulse: 100
