@@ -111,6 +111,7 @@ public class RangeProjectile: MonoBehaviour
                 return;
             }
             Debug.Log("Player got hit");
+            Debug.Log("Player add 10 Heat");            
             playerDamageableZone.ApplyHit(10, other.GetContact(0).point, HitZones.Body);
         }
         HandleHit(other.collider, other.GetContact(0).point);
@@ -133,7 +134,7 @@ public class RangeProjectile: MonoBehaviour
         // TODO 김민서: 이부분은 튕겨난 투사체가 적에게 적중했을 때 과열게이지를 충전하는식으로 변경하면 될듯함
         //if (hitCol.TryGetComponent<IDamageableZone>(out var dmg))
         //    dmg.ApplyHit(damage, hitPoint, HitZones.Body);
-        
-        // Destroy(gameObject);
+
+        Destroy(gameObject);
     }
 }

@@ -33,6 +33,7 @@ public class BodyPart : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
+        Debug.Log($"{name} < {collision.collider.name}({collision.gameObject.layer})");
         // 공격물이 지정 레이어가 아니면 무시 (선택)
         if ((hitFrom.value & (1 << collision.gameObject.layer)) == 0)
             return;

@@ -61,7 +61,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5140eb4d4ae0fd048a92136c9c690d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_01.Scripts.Weapon.Projectile
-  destroyAfter: 30
+  destroyAfter: 5
   destroyOnImpact: 1
   minDestroyTime: 0.01
   maxDestroyTime: 0.05
@@ -230,6 +230,10 @@ MonoBehaviour:
   - {fileID: 4587651611338842, guid: 5e02303289b3c494e8e185be0fbbd405, type: 3}
   concreteImpactPrefabs:
   - {fileID: 4587651611338842, guid: 5e02303289b3c494e8e185be0fbbd405, type: 3}
+  enemyImpactPrefabs:
+  - {fileID: 4689794589044040, guid: 4440c454967734e43aa9202d75b9da32, type: 3}
+  bossImpactPrefabs:
+  - {fileID: 4000011382548710, guid: 745a8484d6f114f408e16769763561e4, type: 3}
 --- !u!114 &-983760303742680866
 MonoBehaviour:
   m_ObjectHideFlags: 0
