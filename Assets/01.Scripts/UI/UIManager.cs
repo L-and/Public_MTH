@@ -25,7 +25,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI levelInfo;
     public GameObject pauseMenu;
     private AudioSource ohFullKeepSound;
-    public TextMeshProUGUI statText;
     public Image upgradeSlot1;
     public Image upgradeSlot2;
     public Image upgradeSlot3;
@@ -219,13 +218,6 @@ public class UIManager : MonoBehaviour
         SetStm(PlayerStat.stamina.Value);
         SetUpgradeSlot();
     }
-    
-    void SetStatText()
-    {
-        statText.text = "HP : " + PlayerStat.hp.Value + "\nMaxHP : " + PlayerStat.hp.maxValue + "\nOverheat : " + PlayerStat.overheat.Value +
-            "\nMaxOverheat : " + PlayerStat.overheat.maxValue + "\nStemina : " + PlayerStat.stamina.Value + "\nMaxStemina : " + PlayerStat.stamina.maxValue;
-    }
-
     #endregion
 }
 
