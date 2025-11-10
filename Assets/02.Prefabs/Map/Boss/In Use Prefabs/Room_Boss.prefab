@@ -113,7 +113,6 @@ GameObject:
   - component: {fileID: 3086196410688309752}
   - component: {fileID: 1830692741313579939}
   - component: {fileID: 1970878836504886724}
-  - component: {fileID: 3523582603055203005}
   m_Layer: 0
   m_Name: Room_Boss
   m_TagString: Untagged
@@ -188,22 +187,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de83e6918e7b06e4496e7cd3ff023cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossRoomController
-  _entryDoor: {fileID: 8025830721984945528}
-  _entryDoor2: {fileID: 5615645982823937421}
---- !u!114 &3523582603055203005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 696638580949822137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37cc7c28c53375a46b14cd4c5dd09151, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RoomAnchor
-  entryAnchor: {fileID: 2964159902871059379}
-  exitAnchor: {fileID: 0}
+  _entryDoor: {fileID: 0}
+  _exitDoor: {fileID: 0}
+  _entryDoor2: {fileID: 0}
+  _exitDoor2: {fileID: 0}
 --- !u!1 &1092800858527793021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1266,7 +1253,7 @@ GameObject:
   - component: {fileID: 1121753159643290624}
   - component: {fileID: 8958872484417843930}
   - component: {fileID: 8074863797713156618}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Plane_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2167,7 +2154,7 @@ GameObject:
   - component: {fileID: 6505967596013903172}
   - component: {fileID: 1155202365943088909}
   - component: {fileID: 9034181903178258433}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Plane_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3681,7 +3668,7 @@ GameObject:
   - component: {fileID: 892023575559700989}
   - component: {fileID: 6673694839035003816}
   - component: {fileID: 7546353182564413887}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6182,8 +6169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 655c7b7963e86aa4a84dc84636c1894f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorTrigger
-  _doorController: {fileID: 8025830721984945528}
-  _doorController2: {fileID: 5615645982823937421}
+  _doorController: {fileID: 3742131158944627250}
+  _doorController2: {fileID: 1715958707198249437}
 --- !u!1001 &15686906371251121
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9791,10 +9778,6 @@ PrefabInstance:
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_Name
       value: concrete_stairs_small_fill_14
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
@@ -19278,10 +19261,6 @@ PrefabInstance:
       value: concrete_stairs_small_fill_6
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -20259,7 +20238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwingDoorController
   doorMoveSpeed: 1
-  _maxOpenAngle: -90
+  _maxOpenAngle: 120
 --- !u!4 &8030531349977372278 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8556020218060912481, guid: 419af4edc0e6e6240bf6a14b38abcb07,
@@ -21178,10 +21157,6 @@ PrefabInstance:
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_Name
       value: concrete_stairs_small_fill
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
@@ -27031,10 +27006,6 @@ PrefabInstance:
       value: concrete_stairs_small_fill_8
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -31232,10 +31203,6 @@ PrefabInstance:
       value: concrete_stairs_small_fill_3
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -34452,10 +34419,6 @@ PrefabInstance:
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_Name
       value: concrete_stairs_small_fill_7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
@@ -37906,10 +37869,6 @@ PrefabInstance:
       value: concrete_stairs_small_fill_2
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -39036,7 +38995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwingDoorController
   doorMoveSpeed: 1
-  _maxOpenAngle: 90
+  _maxOpenAngle: 60
 --- !u!4 &5619823245437943427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8556020218060912481, guid: 419af4edc0e6e6240bf6a14b38abcb07,
@@ -39054,10 +39013,6 @@ PrefabInstance:
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_Name
       value: concrete_stairs_small_fill_12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
@@ -61380,7 +61335,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwingDoorController
   doorMoveSpeed: 1
-  _maxOpenAngle: 117
+  _maxOpenAngle: 297
 --- !u!1001 &7027516151917594492
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -64257,10 +64212,6 @@ PrefabInstance:
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_Name
       value: concrete_stairs_small_fill_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
@@ -70095,10 +70046,6 @@ PrefabInstance:
       value: concrete_stairs_small_fill_10
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -70396,10 +70343,6 @@ PrefabInstance:
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_Name
       value: concrete_stairs_small_fill_5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive
@@ -74742,10 +74685,6 @@ PrefabInstance:
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_Name
       value: concrete_stairs_small_fill_4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
-      propertyPath: m_Layer
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1187624007492690, guid: 008bba7481c762f40a3438107fced22d, type: 3}
       propertyPath: m_IsActive

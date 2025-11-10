@@ -10,15 +10,14 @@ public class MainMenuUIManager : MonoBehaviour
   public TextMeshProUGUI title;
   public RectTransform buttons;
   public GameObject options;
-  public GameObject startOption;
+    public GameObject startOption;
   // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-
+ 
   private void Start()
   {
-    GameManager.GameData.currentFloor = 0;
     ButtonsOn();
-    StartCoroutine(PlayMainMusic());
+        StartCoroutine(PlayMainMusic());
   }
 
   public void ButtonsOn()
@@ -39,25 +38,25 @@ public class MainMenuUIManager : MonoBehaviour
     ButtonsOn();
     options.SetActive(false);
   }
-  public void OpenStartOption()
-  {
-    ButtonsOff();
-    startOption.SetActive(true);
-  }
-  public void CloseStartOption()
-  {
-    ButtonsOn();
-    startOption.SetActive(false);
-  }
+    public void OpenStartOption()
+    {
+        ButtonsOff();
+        startOption.SetActive(true);
+    }
+    public void CloseStartOption()
+    {
+        ButtonsOn();
+        startOption.SetActive(false);
+    }
 
-  IEnumerator PlayMainMusic()
-  {
-    yield return new WaitForSeconds(3);
-    GameManager.Sound.PlayMusic("bgm_cold_dawn");
-  }
+    IEnumerator PlayMainMusic()
+    {
+        yield return new WaitForSeconds(3);
+        GameManager.Sound.PlayMusic("bgm_cold_dawn");
+    }
 
 
-  public void Quit()
+    public void Quit()
   {
     Application.Quit();
   }
