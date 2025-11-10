@@ -24,6 +24,8 @@ namespace _01.Scripts.Weapon
 		public Transform[] metalImpactPrefabs;
 		public Transform[] dirtImpactPrefabs;
 		public Transform[] concreteImpactPrefabs;
+		public Transform[] enemyImpactPrefabs;
+		public Transform[] bossImpactPrefabs;
 		
 		private void Start()
 		{
@@ -114,6 +116,24 @@ namespace _01.Scripts.Weapon
 				//Destroy bullet object
 				Destroy(gameObject);
 			}
+
+			// 적에게 명중 시 피격 이펙트
+			if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+			{
+				Instantiate(enemyImpactPrefabs[Random.Range
+						(0, enemyImpactPrefabs.Length)], transform.position,
+					Quaternion.LookRotation(collision.contacts[0].normal));
+				Destroy(gameObject);
+			}
+			
+			// 보스에게 명중 시 피격 이펙트
+			if(collision.transform.tag == "Boss")
+            {
+				Instantiate(bossImpactPrefabs[Random.Range
+						(0, bossImpactPrefabs.Length)], transform.position,
+					Quaternion.LookRotation(collision.contacts[0].normal));
+				Destroy(gameObject);
+            }
 
 			//If bullet collides with "Concrete" tag
 			if (collision.transform.tag == "Concrete")
