@@ -73,50 +73,6 @@ namespace _01.Scripts.Weapon
 				Destroy(gameObject);
 			}
 
-			//If bullet collides with "Untagged" tag
-			if (collision.transform.tag == "Untagged")
-			{
-				//Instantiate random impact prefab from array
-				Instantiate(metalImpactPrefabs[Random.Range
-						(0, bloodImpactPrefabs.Length)], transform.position,
-					Quaternion.LookRotation(collision.contacts[0].normal));
-				//Destroy bullet object
-				Destroy(gameObject);
-			}
-			
-			//If bullet collides with "Blood" tag
-			if (collision.transform.tag == "Blood")
-			{
-				//Instantiate random impact prefab from array
-				Instantiate(bloodImpactPrefabs[Random.Range
-						(0, bloodImpactPrefabs.Length)], transform.position,
-					Quaternion.LookRotation(collision.contacts[0].normal));
-				//Destroy bullet object
-				Destroy(gameObject);
-			}
-
-			//If bullet collides with "Metal" tag
-			if (collision.transform.tag == "Metal")
-			{
-				//Instantiate random impact prefab from array
-				Instantiate(metalImpactPrefabs[Random.Range
-						(0, bloodImpactPrefabs.Length)], transform.position,
-					Quaternion.LookRotation(collision.contacts[0].normal));
-				//Destroy bullet object
-				Destroy(gameObject);
-			}
-
-			//If bullet collides with "Dirt" tag
-			if (collision.transform.tag == "Ground")
-			{
-				//Instantiate random impact prefab from array
-				Instantiate(dirtImpactPrefabs[Random.Range
-						(0, bloodImpactPrefabs.Length)], transform.position,
-					Quaternion.LookRotation(collision.contacts[0].normal));
-				//Destroy bullet object
-				Destroy(gameObject);
-			}
-
 			// 적에게 명중 시 피격 이펙트
 			if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
 			{
@@ -135,43 +91,13 @@ namespace _01.Scripts.Weapon
 				Destroy(gameObject);
             }
 
-			//If bullet collides with "Concrete" tag
-			if (collision.transform.tag == "Concrete")
+			// [Untagged] 기본 명중이팩트 
+			if (collision.transform.tag == "Untagged")
 			{
 				//Instantiate random impact prefab from array
 				Instantiate(concreteImpactPrefabs[Random.Range
-						(0, bloodImpactPrefabs.Length)], transform.position,
+						(0, concreteImpactPrefabs.Length)], transform.position,
 					Quaternion.LookRotation(collision.contacts[0].normal));
-				//Destroy bullet object
-				Destroy(gameObject);
-			}
-
-			//If bullet collides with "Target" tag
-			if (collision.transform.tag == "Target")
-			{
-				//Toggle "isHit" on target object
-				collision.transform.gameObject.GetComponent
-					<TargetScript>().isHit = true;
-				//Destroy bullet object
-				Destroy(gameObject);
-			}
-
-			//If bullet collides with "ExplosiveBarrel" tag
-			if (collision.transform.tag == "ExplosiveBarrel")
-			{
-				//Toggle "explode" on explosive barrel object
-				collision.transform.gameObject.GetComponent
-					<ExplosiveBarrelScript>().explode = true;
-				//Destroy bullet object
-				Destroy(gameObject);
-			}
-
-			//If bullet collides with "GasTank" tag
-			if (collision.transform.tag == "GasTank")
-			{
-				//Toggle "isHit" on gas tank object
-				collision.transform.gameObject.GetComponent
-					<GasTankScript>().isHit = true;
 				//Destroy bullet object
 				Destroy(gameObject);
 			}
