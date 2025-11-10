@@ -1,6 +1,11 @@
 using UnityEngine;
 
-public class RangedAttack : MonoBehaviour, IEnemyAttack
+public interface IAttackTunable
+{
+    void SetGlobalCoolDownMul(float mul);
+}
+
+public class RangedAttack : MonoBehaviour, IEnemyAttack, IAttackTunable
 {
     [SerializeField] private float _minRange = 4f; // 원거리 공격 최소 사거리
     [SerializeField] private float _maxRange = 15;
@@ -13,6 +18,12 @@ public class RangedAttack : MonoBehaviour, IEnemyAttack
     [SerializeField] private float projectileSpeed = 20f;
     [SerializeField] private LayerMask obstacleMask = ~0;
 
+    [Header("원거리 공격 애니메이션")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private string shootTrigger;
+
+    private float gloablCdMul = 1f; // 탱커형 적 분노버프용
+
     private float _cd; //쿨다운
     public AttackKind Kind => AttackKind.Ranged;
 
@@ -22,13 +33,13 @@ public class RangedAttack : MonoBehaviour, IEnemyAttack
 
     public bool RequireLOS => _requireLOS;
 
-    public bool IsAttacking {get; private set;}
+    public bool IsAttacking { get; private set; }
 
     public bool IsOnCooldown => _cd > 0f;
 
     private void Update()
     {
-        if( _cd > 0f)
+        if (_cd > 0f)
         {
             _cd -= Time.deltaTime;
         }
@@ -56,7 +67,7 @@ public class RangedAttack : MonoBehaviour, IEnemyAttack
             dir /= len;
 
             // 막는 레이어만 대상으로 raycast. 뭔가 맞으면 가려진 것
-            if(Physics.Raycast(origin, dir, len, obstacleMask))
+            if (Physics.Raycast(origin, dir, len, obstacleMask))
             {
                 return false;
             }
@@ -76,11 +87,14 @@ public class RangedAttack : MonoBehaviour, IEnemyAttack
 
     public void Attack(Transform target)
     {
+        if (animator && !string.IsNullOrEmpty(shootTrigger))
+            animator.SetTrigger(shootTrigger);
+
         if (!CanAttack(target))
         {
             return;
         }
-        _cd = _coolDown;
+        _cd = _coolDown * gloablCdMul;
         IsAttacking = true;
 
         Vector3 origin = firePoint ? firePoint.position : transform.position + Vector3.up * 1.5f;
@@ -97,4 +111,5 @@ public class RangedAttack : MonoBehaviour, IEnemyAttack
 
     private void End() => IsAttacking = false;
 
+    public void SetGlobalCoolDownMul(float mul) => gloablCdMul = Mathf.Max(0.1f, mul);
 }

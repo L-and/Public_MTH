@@ -1,4 +1,3 @@
-using _01.Scripts.Enums;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,7 +8,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
     [Header("애니메이터")]
     [SerializeField] private Animator animator;
-    [SerializeField] private string deathTrigger = "Die";
+    [SerializeField] private string deathTrigger = "isDead";
 
     [Header("Cleanup (Alive → Dead 전환 시 끌 것들)")]
     [SerializeField] private NavMeshAgent agent;
@@ -22,13 +21,16 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
     [SerializeField] private Animator animForRagdoll;     // 보통 animator와 동일
     [SerializeField] private Rigidbody[] ragdollBodies;   // Pelvis/Spine/Head/팔/다리 등 본 RB
     [SerializeField] private Collider[] ragdollColliders; // 본 콜라이더들(평소 OFF, 사망 시 ON)
-    [SerializeField] private float deathImpulse = 50f;    // 튕기는 힘 세기
+    private float deathImpulse = 10f;    // 튕기는 힘 세기
+    [SerializeField] private EnemySound enemySound;         // 래그돌 효과 적용 시 사망용 사운드
 
     [Header("Corpse / Collision")]
     [SerializeField] private bool changeLayerOnDeath = true;
     [SerializeField] private string corpseLayer = "Dead";    // Projectile과 충돌하지 않는 레이어
     [SerializeField] private float corpseDisableDelay = 1.2f;  // 튕긴 뒤 래그돌 정리까지 지연
 
+    // 탱커형 적 분노모드용
+    public float HealthRatio => Mathf.Approximately(EnemyHealth, 0f) ? 0f : Mathf.Clamp01(health / EnemyHealth);    
     private float health;         // 현재 체력
     public bool IsDead { get; private set; }
 
@@ -62,6 +64,29 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
         }
 
         health = EnemyHealth;
+
+        // ★ 래그돌 RB/Collider 안전 기본값 강제
+        if (ragdollBodies != null)
+        {
+            foreach (var rb in ragdollBodies)
+            {
+                if (!rb) continue;
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                rb.collisionDetectionMode = CollisionDetectionMode.Continuous; // 뚫림 방지
+                rb.interpolation = RigidbodyInterpolation.Interpolate;        // 안정화
+                rb.mass = Mathf.Clamp(rb.mass, 1f, 8f);
+            }
+        }
+        if (ragdollColliders != null)
+        {
+            foreach (var col in ragdollColliders)
+            {
+                if (!col) continue;
+                col.enabled = false;     // 평소 OFF
+                col.isTrigger = false;   // 반드시 비트리거
+            }
+        }
     }
     public void ApplyHit(float rawDamage, Vector3 hitPoint, HitZones zone)
     {
@@ -70,16 +95,26 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
         // 피격 위치 저장(사망 시 사용할 수 있음)
         lastHitPoint = hitPoint;
 
-        // 약점여부 따라 데미지계산
-        var damage = zone == HitZones.Weak ? rawDamage * 3 : rawDamage;
-        health -= 3*(Mathf.Max(0f, damage)); // 데미지 적용
-        
-        if(health <= 0)
+        if (zone == HitZones.Weak)
         {
-            Kill(zone);
-            
+            Debug.Log("Bullseye!");
+            health -= 3 * (Mathf.Max(0f, rawDamage));
         }
+        if (animator)
+        {
+            animator.SetTrigger("Damaged");
+        }
+        health -= Mathf.Max(0f, rawDamage);
+
+        if (health <= 0)
+        {            
+            Kill();
+        }
+        //EnemyHealth -= rawDamage;
+        // if (bodyHitCount >= bodyHitsToDie)
+        //     Kill();
     }
+    
 
     /// <summary>Projectile에서 충돌 직전에 호출. 총알 진행 방향을 넘겨줘야 자연스러운 튕김.</summary>
     public void CacheImpact(Vector3 point, Vector3 direction)
@@ -92,14 +127,11 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
     // ────────────────────────────────────────────────────────────────────────────
     #region Death / Ragdoll
-    private void Kill(HitZones zone)
+    private void Kill()
     {
         if (IsDead) return;
         IsDead = true;
-        // 스타일리쉬 액션 이벤트 실행
-        var styleType = zone == HitZones.Weak ? EStyleType.HeadshotKill : EStyleType.EnemyKill;
-        StyleEventManager.TriggerStyleAction(styleType);
-        
+
         /// 사망시 스포너에게 알리는 구문
         // 현재 방을 가르키는 변수 null 체크
         if (myRoom != null)
@@ -128,6 +160,8 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
         if (useRagdoll)
         {
+            enemySound.PlayDeath();
+            animator.enabled = false;
             // 래그돌 ON
             EnableRagdoll(true);
 
@@ -138,7 +172,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
             if (bone != null)
             {
-                Vector3 dir = (lastHitDir.sqrMagnitude > 0.01f ? lastHitDir : transform.forward).normalized;
+                Vector3 dir = (lastHitDir.sqrMagnitude > 0.001f ? lastHitDir : transform.forward).normalized;
                 Vector3 forcePoint = lastHitPoint;
                 Debug.Log($"💥 Applying force to {bone.name} at {forcePoint}");
                 bone.AddForceAtPosition(dir * deathImpulse, forcePoint, ForceMode.Impulse);
@@ -151,11 +185,15 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
             Destroy(gameObject, 6f);
             return;
         }
+        else
+        {
+            
+        }
 
         // 애니메이션 사망 루트
         if (animator)
         {
-            animator.SetTrigger(deathTrigger);
+            animator.SetBool(deathTrigger, true);
             StartCoroutine(WaitDeathAndDespawn());
         }
         else Destroy(gameObject, 2f);

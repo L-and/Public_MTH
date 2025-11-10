@@ -11,13 +11,15 @@ public class BossMove : MonoBehaviour
     [Header("공격 대상")]
     [SerializeField] private Transform player;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private MonoBehaviour meleeComp;   // BossMelee
+    [SerializeField] private MonoBehaviour spikeComp;   // BossSpike
     [SerializeField] private MonoBehaviour rangeComp;   // BossRange
     [SerializeField] private MonoBehaviour summonComp;  // BossSummon
+    [SerializeField] private MonoBehaviour beamComp;    // BossBeam
 
     private IMeleeAttacker melee;
     private IRangedAttacker ranged;
     private ISummonAttacker summoner;
+    private IRangedAttacker beamed;
 
     [Header("보스 시야")]
     [SerializeField] private float sightRange = 40f;
@@ -44,14 +46,25 @@ public class BossMove : MonoBehaviour
     private void Awake()
     {
         if (!agent) agent = GetComponent<NavMeshAgent>();
-        melee = meleeComp as IMeleeAttacker;
+
+        agent.updatePosition = false;
+        agent.updateRotation = false;
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+        agent.autoRepath = false;
+        melee = spikeComp as IMeleeAttacker;
         ranged = rangeComp as IRangedAttacker;
-        summoner = summonComp as ISummonAttacker;        
+        summoner = summonComp as ISummonAttacker;
+        beamed = beamComp as IRangedAttacker;
+        FindPlayerByTage();
     }
 
     private void Update()
     {
-        if (!player) { _state = State.Idle; return; }
+        // if (!player) { _state = State.Idle; return; }
+        if(player == null)
+        {
+            FindPlayerByTage();
+        }
 
         float dist = Vector3.Distance(transform.position, player.position);
         bool see = CanSeePlayer();
@@ -59,46 +72,27 @@ public class BossMove : MonoBehaviour
         switch (_state)
         {
             case State.Idle:
-                agent.isStopped = true;
+                if (agent) { agent.isStopped = true; agent.ResetPath(); agent.velocity = Vector3.zero; }
                 if (see) _state = State.Combat;
                 break;
 
             case State.Combat:
-                // 1) 이동 결정: 카이팅
-                Vector3 tgt = transform.position;
 
-                if (dist < desiredMin) // Too close → back off
-                {
-                    Vector3 dir = (transform.position - player.position).normalized;
-                    tgt = transform.position + dir * (desiredMin - dist + 2f);
-                }
-                else if (dist <= desiredMax) // In pocket → strafe
-                {
-                    if (Time.time >= _nextSwitch) { _strafeSign *= -1f; _nextSwitch = Time.time + strafeSwitchTime; }
-                    Vector3 right = Vector3.Cross(Vector3.up, (player.position - transform.position).normalized);
-                    tgt = player.position + right * _strafeSign * strafeRadius; // 원주 따라 선회
-                }
-                else // Too far → soft approach
-                {
-                    if (dist > softApproachStop) tgt = player.position;
-                    else tgt = transform.position; // 충분히 가깝다면 멈춰서 사격
-                }
+                if (agent) { agent.isStopped = true; agent.ResetPath(); agent.velocity = Vector3.zero; }
+                //FaceTarget3D(player.position, 8f);
 
-                agent.isStopped = false;
-                agent.SetDestination(tgt);
-                FaceTarget3D(player.position, 8f);
-
-                // 2) 능력 사용 우선순위: 원거리 > 소환 > 근접
-                if (ranged != null && ranged.CanUse(player, dist)) { agent.isStopped = true; ranged.Execute(player); break; }
-                if (summoner != null && summoner.CanUse(player, dist)) { agent.isStopped = true; summoner.Execute(player); break; }
-                if (melee != null && dist <= desiredMin && melee.CanUse(player, dist))
-                { agent.isStopped = true; melee.Execute(player); }
+                // 2) 능력 사용 우선순위대로 나열
+                if (melee != null && melee.CanUse(player, dist)) { melee.Execute(player); }
+                if (ranged != null && ranged.CanUse(player, dist)) { ranged.Execute(player); break; }
+                if (beamed != null && beamed.CanUse(player, dist)) { beamed.Execute(player); break; }
+                if (summoner != null && summoner.CanUse(player, dist)) { summoner.Execute(player); break; }
                 break;
 
             case State.Stop:
-                agent.isStopped = true;
+                if (agent) { agent.isStopped = true; agent.ResetPath(); agent.velocity = Vector3.zero; }
                 break;
         }
+        if (agent) agent.nextPosition = transform.position;
     }
     private bool CanSeePlayer()
     {
@@ -117,12 +111,21 @@ public class BossMove : MonoBehaviour
     //     transform.rotation = Quaternion.Slerp(transform.rotation, look, Time.deltaTime * turnSpeed);
     // }
 
-    private void FaceTarget3D(Vector3 world, float turnSpeed) 
+    private void FaceTarget3D(Vector3 world, float turnSpeed)
     {
         var dir = (world - transform.position).normalized;
         if (dir.sqrMagnitude < 0.0001f) return;
         var look = Quaternion.LookRotation(dir);
         transform.rotation = Quaternion.Slerp(transform.rotation, look, Time.deltaTime * turnSpeed);
+    }
+    
+    private void FindPlayerByTage()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if(playerObj != null)
+        {
+            player = playerObj.transform;
+        }
     }
 
     // 외부(패턴/이벤트)에서 강제 정지/재개할 수 있게 공개 메서드

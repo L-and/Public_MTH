@@ -5,6 +5,7 @@ using UnityEngine.AI;
 public class EnemyMove : MonoBehaviour
 {
     public enum Tactic { Default, Kite }
+    private enum State { Roam, Chase, Stop }
 
     [Header("타겟")]
     [SerializeField] private Transform target;
@@ -38,7 +39,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private string speedParam = "moveSpeed";
     [SerializeField] private float speedDamp = 0.1f;
-    [SerializeField] private string meleeTrigger = "Attack"; // ← 근접용 트리거 이름
+    [SerializeField] private string meleeTrigger = "Attack"; // 근접 트리거
 
     [Header("공격")]
     [SerializeField] private MonoBehaviour[] attackBehaviours; // IEnemyAttack들
@@ -49,7 +50,9 @@ public class EnemyMove : MonoBehaviour
 
     [Header("기타 링크")]
     [SerializeField] private EnemyDamage enemyDamage;
+    
 
+    // --- 내부 상태 ---
     private NavMeshAgent agent;
     private int speedHash;
     private float repathTimer;
@@ -57,8 +60,8 @@ public class EnemyMove : MonoBehaviour
     private float roamWaitTimer;
     private float roamWaitTarget;
     private IEnemyAttack _lastBest;
+   
 
-    private enum State { Roam, Chase, Stop }
     private State state = State.Roam;
 
     private void Awake()
@@ -67,23 +70,22 @@ public class EnemyMove : MonoBehaviour
         if (!animator) animator = GetComponentInChildren<Animator>();
         if (!enemyDamage) enemyDamage = GetComponent<EnemyDamage>();
 
+        // IEnemyAttack 캐스팅
         if (attackBehaviours != null && attackBehaviours.Length > 0)
         {
             _attacks = new IEnemyAttack[attackBehaviours.Length];
             for (int i = 0; i < attackBehaviours.Length; i++)
                 _attacks[i] = attackBehaviours[i] as IEnemyAttack;
         }
-        else
-        {
-            _attacks = System.Array.Empty<IEnemyAttack>();
-        }
+        else _attacks = System.Array.Empty<IEnemyAttack>();
 
-        if (!target)
-        {
-            var p = GameObject.FindGameObjectWithTag(playerTag);
-            if (p) target = p.transform;
-        }
+        // 타겟 자동 할당
+        FindPlayerByTage();
+        // var p = GameObject.FindGameObjectWithTag(playerTag);
+        // if (p) target = p.transform;
+        
         speedHash = Animator.StringToHash(speedParam);
+        if (animator) animator.applyRootMotion = false; // Agent 이동이면 보통 끔
     }
 
     private void OnEnable() => EnsureOnNavMesh();
@@ -101,46 +103,44 @@ public class EnemyMove : MonoBehaviour
 
     private void Update()
     {
+        if (target == null)
+        {
+            FindPlayerByTage();
+        }
+        
+        // 사망/에이전트 보호
         if (enemyDamage && enemyDamage.IsDead) { SafeStopAgent(); SetSpeed(0f); return; }
-
         if (!agent || !agent.isActiveAndEnabled) { SetSpeed(0f); return; }
         if (!agent.isOnNavMesh && !EnsureOnNavMesh()) { SetSpeed(0f); return; }
 
         bool canSee = CanSeeTarget();
         float dist = DistanceToTarget();
         var best = SelectBestAttack(canSee, dist);
-        _lastBest = best ?? _lastBest;
+        if (best != null) _lastBest = best;
 
         switch (state)
         {
             case State.Roam:
-                if (!useRoam) { state = State.Stop; break; }
-                if (canSee) state = (dist > stopDistance) ? State.Chase : State.Stop;
-                break;
+                if (!useRoam) { state = State.Stop; SetSpeed(0f); break; }
 
-            case State.Chase:
-                if (TryExecute(best)) { state = State.Stop; break; }
-                if (!canSee) state = useRoam ? State.Roam : State.Stop;
-                else if (dist <= stopDistance) state = State.Stop;
-                break;
-
-            case State.Stop:
-                if (!TryExecute(best))
+                if (canSee)
                 {
-                    if (canSee) state = (dist > stopDistance) ? State.Chase : State.Stop;
-                    else state = useRoam ? State.Roam : State.Stop;
+                    state = (dist > stopDistance) ? State.Chase : State.Stop;
+                    break;
                 }
-                break;
-        }
 
-        switch (state)
-        {
-            case State.Roam:
                 RoamTick();
                 SetSpeed(agent.velocity.magnitude);
                 break;
 
             case State.Chase:
+                // 타겟을 더 이상 못 보면 배회/정지로 복귀
+                if (!canSee)
+                {
+                    state = useRoam ? State.Roam : State.Stop;
+                    break;
+                }
+
                 if (tactic == Tactic.Kite && _lastBest != null && target)
                 {
                     KiteMove(dist, _lastBest);
@@ -156,21 +156,40 @@ public class EnemyMove : MonoBehaviour
                         agent.SetDestination(target.position);
                         repathTimer = repathInterval;
                     }
+
+                    if (dist <= stopDistance) state = State.Stop;
                     SetSpeed(agent.velocity.magnitude);
                 }
                 break;
 
             case State.Stop:
+                 // 1) 먼저 타겟 바라보기
+                if (target) { FaceTarget(target.position); }
+
+                // 2) 사거리 밖이면 Chase로 복귀
+                if (DistanceToTarget() > stopDistance && CanSeeTarget())
+                {
+                    state = State.Chase;
+                    break;
+                }
+
+                // 3) 그 다음에 공격 시도
                 if (TryExecute(best))
                 {
                     SafeStopAgent();
-                    if (target) FaceTarget(target.position);
                     SetSpeed(0f);
+                }
+                else
+                {
+                    // 공격 선택 실패 시 로직
+                    if (CanSeeTarget()) state = (DistanceToTarget() > stopDistance) ? State.Chase : State.Stop;
+                    else state = useRoam ? State.Roam : State.Stop;
                 }
                 break;
         }
     }
 
+    // === 카이팅 ===
     private void KiteMove(float dist, IEnemyAttack atk)
     {
         if (!agent || !target) return;
@@ -184,9 +203,11 @@ public class EnemyMove : MonoBehaviour
             Vector3 goal = transform.position + away * Mathf.Max(kiteStep, (min - dist) * 0.6f);
             if (NavMesh.SamplePosition(goal, out var hit, 2.0f, agent.areaMask))
             {
-                agent.speed *= kiteRetreatSpeedMul;
+                float original = agent.speed;
+                agent.speed = original * Mathf.Max(0.01f, kiteRetreatSpeedMul);
                 agent.isStopped = false;
                 agent.SetDestination(hit.position);
+                agent.speed = original; // 한 틱 후 원복
             }
         }
         else if (dist > max)
@@ -206,6 +227,7 @@ public class EnemyMove : MonoBehaviour
         }
     }
 
+    // === 시야 ===
     private bool CanSeeTarget()
     {
         if (!target) return false;
@@ -217,11 +239,16 @@ public class EnemyMove : MonoBehaviour
 
         Vector3 eye = transform.position + Vector3.up * 1.6f;
         if (Physics.Raycast(eye, to.normalized, out var hit, sightRange, ~0))
-            if ((obstacleMask.value & (1 << hit.collider.gameObject.layer)) != 0) return false;
+        {
+            // 장애물 레이어에 맞으면 시야 차단
+            if ((obstacleMask.value & (1 << hit.collider.gameObject.layer)) != 0)
+                return false;
+        }
 
         return true;
     }
 
+    // === 배회 ===
     private void RoamTick()
     {
         if (!useRoam) { SafeStopAgent(); return; }
@@ -261,6 +288,7 @@ public class EnemyMove : MonoBehaviour
         return transform.position;
     }
 
+    // === 공용 유틸 ===
     private void SafeStopAgent()
     {
         if (!agent || !agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
@@ -288,11 +316,24 @@ public class EnemyMove : MonoBehaviour
         animator.SetFloat(speedHash, norm, speedDamp, Time.deltaTime);
     }
 
-    private void FaceTarget(Vector3 pos)
+    private void FindPlayerByTage()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag(playerTag);
+        if (playerObj != null)
+        {
+            target = playerObj.transform;
+        }
+    }
+
+    private void FaceTarget(Vector3 pos, float turnSpeed = 12f)
     {
         Vector3 dir = pos - transform.position; dir.y = 0f;
         if (dir.sqrMagnitude < 0.0001f) return;
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 12f * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            Quaternion.LookRotation(dir),
+            Time.deltaTime * turnSpeed
+        );
     }
 
     private float DistanceToTarget() =>
@@ -333,25 +374,27 @@ public class EnemyMove : MonoBehaviour
     private bool TryExecute(IEnemyAttack best)
     {
         if (best == null || target == null) return false;
-        if (!IsFacingTarget(target, attackFacingDot)) return false;
-        if (best.MinRange > DistanceToTarget() || DistanceToTarget() > best.MaxRange) return false;
 
+        // 먼저 제자리에서 타겟을 향하게 함
         SafeStopAgent();
         FaceTarget(target.position);
         SetSpeed(0f);
 
+        float d = DistanceToTarget();
+        if (d < best.MinRange || d > best.MaxRange) return false;
+
+        // 각도 요건 완화 (0.2~0.3 추천) 또는 검사 자체를 공격 직전에
+        if (!IsFacingTarget(target, attackFacingDot * 0.5f)) return false;
+
         if (best.Kind == AttackKind.Melee)
         {
-            // 근접: Move가 애니 트리거만 건다
-            animator.SetTrigger(meleeTrigger);
-
-            // 쿨다운/내부 상태는 근접판정 스크립트에 알려줌
-            if (best is MeleeAttack melee) melee.StartSwing(); // ← 아래 MeleeAttack에 추가됨
+            if (animator && !string.IsNullOrEmpty(meleeTrigger))
+                animator.SetTrigger(meleeTrigger);
+            if (best is MeleeAttack melee) melee.StartSwing();
             return true;
         }
         else
         {
-            // 원거리: 기존처럼 스스로 발사
             best.Attack(target);
             return true;
         }

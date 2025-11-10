@@ -4,6 +4,22 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider))]
 public class BossPhase : MonoBehaviour
 {
+    [System.Serializable]
+    public class PhasePattern
+    {
+        [Header("이 페이즈에서 켜고/끄는 컴포넌트")]
+        public MonoBehaviour[] enableThese;   // 활성화할 스크립트들
+        public MonoBehaviour[] disableThese;  // 비활성화할 스크립트들
+
+        [Header("이 페이즈에서 켜고/끄는 오브젝트")]
+        public GameObject[] enableObjects;    // SetActive(true)
+        public GameObject[] disableObjects;   // SetActive(false)
+
+        [Header("애니메이터/이펙트/사운드 등")]
+        public UnityEvent onEnter;            // 페이즈 진입 시 1회 호출
+        public UnityEvent onExit;             // 다음 페이즈로 넘어갈 때 1회 호출
+    }
+
     [Header("보스 체력 (페이즈 순서대로)")]
     [SerializeField] public int[] phaseMaxHp = { 50, 80, 100 };
 
@@ -11,17 +27,24 @@ public class BossPhase : MonoBehaviour
     [Tooltip("플레이어 총알이 속한 레이어를 인스펙터에서 체크하세요.")]
     [SerializeField] private LayerMask playerProjectile;
 
-    [Header("이벤트")]
+    [Header("패턴(페이즈 설정)")]
+    [Tooltip("phaseMaxHp 길이와 동일하게 맞추는 걸 추천")]
+    [SerializeField] private PhasePattern[] phasePatterns;
+
+    [Header("이벤트 (선택)")]
     public UnityEvent<int> onPhaseStarted;       // 0=1페, 1=2페, 2=3페
     public UnityEvent<float, float> onDamage;    // (current, max) UI 갱신용
     public UnityEvent onBossDead;
-    public BossMove _bossMove;
+
+    [Header("연결(선택)")]
+    public BossMove _bossMove;                   // 죽을 때 끄고 싶으면 넣기
 
     // ─ 상태 ─
     private int _phaseIndex;
     private float _currentHp;
     private float _currentMax;
     private bool _isDead;
+    private PhasePattern _prevPattern;           // 이전 페이즈 저장
 
     // ─ UI/외부 접근 편의 ─
     public int CurrentPhaseIndex => _isDead ? phaseMaxHp.Length - 1 : _phaseIndex;
@@ -40,7 +63,6 @@ public class BossPhase : MonoBehaviour
 
         _currentHp = Mathf.Max(0f, _currentHp - dmg);
         onDamage?.Invoke(_currentHp, _currentMax);
-        // Debug.Log($"[BossPhase] Damage {dmg} → {_currentHp}/{_currentMax}");
 
         if (_currentHp <= 0f)
         {
@@ -57,13 +79,48 @@ public class BossPhase : MonoBehaviour
 
     private void BeginPhase(int nextIndex)
     {
+        // 이전 페이즈 onExit 호출
+        if (_prevPattern != null)
+            _prevPattern.onExit?.Invoke();
+
         _phaseIndex = Mathf.Clamp(nextIndex, 0, phaseMaxHp.Length - 1);
         _currentMax = Mathf.Max(1, phaseMaxHp[_phaseIndex]);
         _currentHp  = _currentMax;
 
+        // 이번 페이즈 패턴 적용
+        var cfg = GetPattern(_phaseIndex);
+        ApplyPattern(cfg);
+        _prevPattern = cfg;
+
         onPhaseStarted?.Invoke(_phaseIndex);
         onDamage?.Invoke(_currentHp, _currentMax);
         Debug.Log($"[BossPhase] Phase start → {(_phaseIndex + 1)} ({_currentHp}/{_currentMax})");
+    }
+
+    private PhasePattern GetPattern(int index)
+    {
+        if (phasePatterns == null || phasePatterns.Length == 0) return null;
+        if (index < 0 || index >= phasePatterns.Length) return null;
+        return phasePatterns[index];
+    }
+
+    private void ApplyPattern(PhasePattern cfg)
+    {
+        if (cfg == null) return;
+
+        // 오브젝트/컴포넌트 on/off
+        if (cfg.disableThese != null)
+            foreach (var c in cfg.disableThese) if (c) c.enabled = false;
+        if (cfg.disableObjects != null)
+            foreach (var go in cfg.disableObjects) if (go) go.SetActive(false);
+
+        if (cfg.enableThese != null)
+            foreach (var c in cfg.enableThese)  if (c) c.enabled = true;
+        if (cfg.enableObjects != null)
+            foreach (var go in cfg.enableObjects) if (go) go.SetActive(true);
+
+        // 사용자 정의 이벤트 (애니 트리거, 이펙트 재생 등)
+        cfg.onEnter?.Invoke();
     }
 
     private void Die()
@@ -72,20 +129,18 @@ public class BossPhase : MonoBehaviour
         _isDead = true;
         Debug.Log("[BossPhase] Boss dead");
         onBossDead?.Invoke();
-        // 필요하면 여기서 Destroy(gameObject) 등 연출 처리
-        _bossMove.enabled = false;
+        if (_bossMove) _bossMove.enabled = false;
+        // 필요 시 Destroy(gameObject) 또는 연출 코루틴
     }
 
     // ─ 충돌/트리거 양쪽 지원 ─
     private void OnCollisionEnter(Collision c)
     {
-        // 충돌체에서 첫 접점 사용
         TryDealDamageFrom(c.collider, c.GetContact(0).point);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // 트리거일 땐 위치가 없으니 대략 중심 사용
         TryDealDamageFrom(other, transform.position);
     }
 
@@ -97,26 +152,27 @@ public class BossPhase : MonoBehaviour
         if ((playerProjectile.value & (1 << col.gameObject.layer)) == 0)
             return;
 
-        // 탄에서 데미지 꺼내기 (HitSource가 탄/부모 어디에 붙어 있어도 커버)
-        float damage = 0f;
-
+        // 데미지 획득(예: GameManager에서 총알 데미지)
         if (!GameManager.PlayerManager)
         {
-            Debug.LogWarning("GameManager.PlayerManager 가 존재하지않습니다.");
+            Debug.LogWarning("GameManager.PlayerManager 가 존재하지 않습니다.");
             return;
         }
-        
-        damage = GameManager.PlayerManager.PlayerStat.bulletDamage;
-        // if (col.TryGetComponent<HitSource>(out var hs))
-        //     damage = Mathf.Max(0f, hs.damage);
-        // else if (col.GetComponentInParent<HitSource>() is HitSource hs2)
-        //     damage = Mathf.Max(0f, hs2.damage);
-
+        float damage = GameManager.PlayerManager.PlayerStat.bulletDamage;
         if (damage <= 0f) return;
 
         ApplyDamage(damage, hitPoint, col);
-
-        // 탄 파괴는 탄 스크립트(Projectile.cs)가 맡고 있다면 여기서 굳이 제거 안 해도 됨.
-        // 즉시 지우고 싶다면: Destroy(col.gameObject);
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        // 품질 체크: 길이 안 맞으면 경고만
+        if (phasePatterns != null && phasePatterns.Length != phaseMaxHp.Length)
+        {
+            // 길이를 꼭 맞출 필요는 없지만, 맞추면 관리가 편함
+            // Debug.LogWarning($"[BossPhase] phasePatterns({phasePatterns.Length}) 길이가 phaseMaxHp({phaseMaxHp.Length})와 다릅니다.");
+        }
+    }
+#endif
 }
