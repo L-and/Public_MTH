@@ -1357,6 +1357,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4291546958323049687, guid: 22f6a83e82375904a8cbf90ba642e3b1,
         type: 3}
+      propertyPath: deathSpawnOffset.z
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291546958323049687, guid: 22f6a83e82375904a8cbf90ba642e3b1,
+        type: 3}
       propertyPath: onPhaseStarted.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
