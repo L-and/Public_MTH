@@ -14,6 +14,8 @@ namespace _01.Scripts.Weapons_ScriptableObjects.SubWeapon.Shield
 
         public override void ExecuteOnTrigger(Collider other, PlayerSubWeapon handler, Transform playerCamera, SubWeaponData data)
         {
+            GameManager.Sound.PlaySFX("Parry_Success(Paid)");
+
             StyleEventManager.TriggerStyleAction(EStyleType.Parry);
             
             // 쉴드 튕겨내기 애니메이션 실행

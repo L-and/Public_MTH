@@ -308,6 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b495126dbfcbbd488507fa38ead867a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+  mapNameMappingList: []
 --- !u!114 &101155864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,15 +322,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DataManager
   currentFloor: 0
+  _floorDataList: []
   _roomCount: 5
-  _sewerMapMaxFloor: 1
-  _prototypeMapMaxFloor: 2
-  _prototype2MapMaxFloor: 3
-  _bossFloor: 4
   _currentWeaponId: 0
   _currentSideWeaponId: 0
   _currentEmissionId: 0
-  thisMapConcept: 
 --- !u!114 &101155865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,6 +373,10 @@ MonoBehaviour:
     SubWeapon: {fileID: 0}
     Emission: {fileID: 0}
   _playerStat:
+    UpgradeSlot1ID: 0
+    UpgradeSlot2ID: 0
+    UpgradeSlot3ID: 0
+    UpgradeNumber: 0
     hp:
       maxValue: 0
       value: 0
@@ -22490,7 +22491,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2078852179}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}

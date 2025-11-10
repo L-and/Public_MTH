@@ -28,6 +28,7 @@ public class UpgradeUIManager : MonoBehaviour
     {
         // 0~21 id랜덤 제시 ->  UpgradeUI 반영
         SetDataID();
+        GameManager.Sound.PlaySFX("Upgrade_Show");
     }
 
     public void SetDataID()

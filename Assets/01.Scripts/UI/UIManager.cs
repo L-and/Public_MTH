@@ -64,11 +64,10 @@ public class UIManager : MonoBehaviour
     void Update()
     {
 
-        // 플레이어 게임오버 처리 TODO 수정필요
-        if (Input.GetKeyDown(KeyCode.G) && !isGameover)
-        {
-            GameWon();
-        }
+//        if (Input.GetKeyDown(KeyCode.G) && !isGameover)
+//        {
+//            GameWon();
+//        }
         
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -158,12 +157,14 @@ public class UIManager : MonoBehaviour
     public void GameOver()
     {
         isGameover = true;
+        PlayerController.DeactivePlayerInput();
         GameManager.Sound.PlayMusic("BGM_Game_Over");
         hud.SetActive(false);
         gameover.SetActive(true);
     }
     public void GameWon()
     {
+        PlayerController.DeactivePlayerInput();
         hud.SetActive(false);
         gameWon.SetActive(true);
     }
@@ -175,6 +176,16 @@ public class UIManager : MonoBehaviour
 
     IEnumerator ShowLevelInfoCoroutine()
     {
+        switch (GameManager.GameData.currentFloor)
+        {
+            case 1:
+                levelInfo.text = "Level 1\n하수구"; break;
+            case 2:
+                levelInfo.text = "Level 2\n지하도시"; break;
+            case 3:
+                levelInfo.text = "Level 3\n세상의 중심"; break;
+        }
+            
         levelInfo.DOFade(0, 0);
         levelInfo.DOFade(1, 1);
         yield return new WaitForSeconds(5);

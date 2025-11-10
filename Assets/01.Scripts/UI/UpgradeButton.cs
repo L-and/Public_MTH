@@ -56,6 +56,7 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             Debug.Log("[UpgradeButton] 버튼 활성화"); 
             SetIstouchable(false);
+            GameManager.Sound.PlaySFX("Upgrade_Select");
             GlobalMethod.Fade(upgradeUi, 0.4f);
             transform.DOLocalMoveX(0, 0.5f).OnComplete(() =>
             {

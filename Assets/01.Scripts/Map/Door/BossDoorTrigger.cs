@@ -12,6 +12,7 @@ public class BossDoorTrigger : MonoBehaviour
         if (other.CompareTag("Player") && !isTriggered)
         {
             isTriggered = true;
+            GameManager.Sound.PlayMusic("BGM_Boss_Battle");
             outside.SetActive(false);
             door.SetActive(true);
         }
