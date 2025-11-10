@@ -386,6 +386,54 @@ Transform:
   - {fileID: 4568803889907562622}
   m_Father: {fileID: 2339226694257028165}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4002328360004181230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5054254549806429070}
+  - component: {fileID: 1856522066267062881}
+  m_Layer: 0
+  m_Name: Elevator Upgrade Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5054254549806429070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4002328360004181230}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.59263, y: 2.66056, z: 0.1291}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2339226694257028165}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1856522066267062881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4002328360004181230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b225ad147a2ad4441bf7a2cd117d5c5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElevatorUpgradeManager
+  upgradeData: {fileID: 11400000, guid: 79b6748b460b4ec489c376075b38702c, type: 2}
+  linkedElevator: {fileID: 6327361441257123193}
+  upgradeUIManager: {fileID: 8177491368735802957, guid: f0eb4a501688d1045ae51cc43bb63391,
+    type: 3}
 --- !u!1 &4509976561313011270
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,6 +559,7 @@ GameObject:
   - component: {fileID: 1990581087280975166}
   - component: {fileID: 8212659676315712926}
   - component: {fileID: 4092568690448880818}
+  - component: {fileID: 6327361441257123193}
   m_Layer: 0
   m_Name: Elevator_Boss
   m_TagString: Untagged
@@ -545,6 +594,7 @@ Transform:
   - {fileID: 7457763179871649037}
   - {fileID: 5258950239365075073}
   - {fileID: 2588984952365910154}
+  - {fileID: 5054254549806429070}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1990581087280975166
@@ -609,6 +659,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorAnchor
   elevatorAnchor: {fileID: 8104219798678229093}
+--- !u!114 &6327361441257123193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7341803288821145234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e7b278a27ab9fb48818134f7866db3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::elevtest3
+  playerTag: Player
+  targetPosition: {fileID: 2261915662852358078}
+  doorFront: {fileID: 8104219798678229093}
+  moveSpeed: 3
+  rotateSpeed: 3
+  upgradeUI: {fileID: 1248932832003197862, guid: f0eb4a501688d1045ae51cc43bb63391,
+    type: 3}
+  gameUI: {fileID: 5143561709884011819, guid: f653ece3382b72c4d8cde9ccf084a054, type: 3}
+  fadeDuration: 1
 --- !u!1 &7437306151725041886
 GameObject:
   m_ObjectHideFlags: 0

@@ -350,6 +350,7 @@ GameObject:
   - component: {fileID: 1249139602622430701}
   - component: {fileID: 2473029416258900090}
   - component: {fileID: 1839152156026653170}
+  - component: {fileID: 1041767792740929831}
   m_Layer: 0
   m_Name: Elevator_Sewer
   m_TagString: Untagged
@@ -442,6 +443,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.444333, y: 2.40749, z: 2.6818976}
   m_Center: {x: 0, y: 1.2417179, z: 0}
+--- !u!114 &1041767792740929831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2187509453647930478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e7b278a27ab9fb48818134f7866db3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::elevtest3
+  playerTag: Player
+  targetPosition: {fileID: 3504143674739134839}
+  doorFront: {fileID: 4838651301384196666}
+  moveSpeed: 3
+  rotateSpeed: 3
+  upgradeUI: {fileID: 1248932832003197862, guid: f0eb4a501688d1045ae51cc43bb63391,
+    type: 3}
+  gameUI: {fileID: 5143561709884011819, guid: f653ece3382b72c4d8cde9ccf084a054, type: 3}
+  fadeDuration: 1
 --- !u!1 &3336664585355287923
 GameObject:
   m_ObjectHideFlags: 0

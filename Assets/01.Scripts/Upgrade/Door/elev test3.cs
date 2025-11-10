@@ -30,15 +30,15 @@ public class elevtest3 : MonoBehaviour
     private PlayerInput playerInput;
     private GameObject currentPlayer;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag(playerTag) && !isMoving)
-        {
-            StartCoroutine(ElevatorEnterSequence(other.gameObject));
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag(playerTag) && !isMoving)
+    //    {
+    //        StartCoroutine(ElevatorEnterSequence(other.gameObject));
+    //    }
+    //}
 
-    private IEnumerator ElevatorEnterSequence(GameObject player)
+    public IEnumerator ElevatorEnterSequence(GameObject player)
     {
         isMoving = true;
 
@@ -125,6 +125,8 @@ public class elevtest3 : MonoBehaviour
     //  업그레이드 UI 페이드인
     private IEnumerator FadeInUpgradeUI()
     {
+        Debug.Log($"{upgradeUI}");
+
         if (upgradeUI == null)
             yield break;
 
