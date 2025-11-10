@@ -1,76 +1,110 @@
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 public class BossDie : MonoBehaviour
 {
-    [Header("VFX & SFX")]
+    [Header("이펙트 & 사운드")]
     [SerializeField] private ParticleSystem explosion;
     [SerializeField] private AudioClip explosionSfx;
     [Range(0f,1f)] [SerializeField] private float sfxVolume = 1f;
 
-    [Header("컷신/연출")]
+    [Header("컷신 설정")]
     [SerializeField] private float descendToY = 0f;
     [SerializeField] private float descendDuration = 3f;
     [SerializeField] private Vector3 camOffset = new Vector3(0f, 3.2f, -6.5f);
-    [SerializeField] private float camApproachTime = 0.4f;      // 컷신 시작시 약간 다가가고
-    [SerializeField] private float lingerAfterExplosion = 1.2f; // 폭발 후 잠시 정지
+    [SerializeField] private float camApproachTime = 0.4f;
+    [SerializeField] private float lingerAfterExplosion = 1.2f;
+
+    [Header("카메라 복귀 설정")]
     [SerializeField] private bool restoreCameraAfter = true;
     [SerializeField] private bool destroyBossAfter = true;
+    [SerializeField] private MonoBehaviour[] cameraControllersToDisable;
 
-    [Header("효과(선택)")]
-    [SerializeField] private bool doShakeOnExplosion = true;
-    [SerializeField] private float shakeDuration = 0.35f;
-    [SerializeField] private float shakeStrength = 0.55f;
-    [SerializeField] private int shakeVibrato = 18;
-    [SerializeField] private float shakeRandomness = 90f;
-    [SerializeField] private Image fadeImage;
-    [SerializeField] private float fadeOutTime = 1f;
+    [Header("입력 관련 (Input System 사용 시)")]
+#if ENABLE_INPUT_SYSTEM
+    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private string cutsceneActionMap = "UI";
+    [SerializeField] private string gameplayActionMap = "Player";
+    private string prevActionMap;
+#endif
 
     [Header("기타")]
     [SerializeField] private GameObject heart;
 
     private Transform cam;
-    private Vector3 prevCamPos;
-    private Quaternion prevCamRot;
+    private Transform oldParent;
+    private Vector3 oldLocalPos;
+    private Quaternion oldLocalRot;
+    private bool[] controllerPrevEnabled;
+    private Transform rig;
     private Sequence seq;
+    private CursorLockMode prevLock;
+    private bool prevCursorVisible;
 
     void Start()
     {
-        cam = Camera.main ? Camera.main.transform : null;
-        if (cam == null)
+        cam = Camera.main?.transform;
+        if (!cam)
         {
-            Debug.LogWarning("[BossDie] MainCamera를 찾지 못했습니다. 메인 카메라 Tag 확인.");
+            Debug.LogWarning("[BossDie] MainCamera를 찾지 못했습니다.");
             return;
         }
 
-        // 플레이어 카메라 컨트롤 끄기(있다면) — 예: 마우스룩 스크립트
-        var playerLook = cam.GetComponent<MonoBehaviour>();
-        // 필요 시 여기서 비활성화 (예: playerLook.enabled = false;)
+        // 카메라 상태 저장
+        oldParent = cam.parent;
+        oldLocalPos = cam.localPosition;
+        oldLocalRot = cam.localRotation;
 
-        prevCamPos = cam.position;
-        prevCamRot = cam.rotation;
+        // 커서 상태 저장 및 컷신용 변경
+        prevLock = Cursor.lockState;
+        prevCursorVisible = Cursor.visible;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
-        // 컷신 시퀀스
-        seq = DOTween.Sequence();
+        // 카메라 제어 스크립트 끄기
+        if (cameraControllersToDisable != null)
+        {
+            controllerPrevEnabled = new bool[cameraControllersToDisable.Length];
+            for (int i = 0; i < cameraControllersToDisable.Length; i++)
+            {
+                if (!cameraControllersToDisable[i]) continue;
+                controllerPrevEnabled[i] = cameraControllersToDisable[i].enabled;
+                cameraControllersToDisable[i].enabled = false;
+            }
+        }
 
-        // 1) 컷신 시작: 카메라를 보스 쪽으로 부드럽게 이동/조준
-        Vector3 startTargetPos = transform.position + camOffset;
-        seq.Append(cam.DOMove(startTargetPos, camApproachTime).SetEase(Ease.InOutSine));
-        seq.Join(cam.DOLookAt(transform.position, camApproachTime));
+        // 액션맵 전환
+#if ENABLE_INPUT_SYSTEM
+        if (playerInput)
+        {
+            prevActionMap = playerInput.currentActionMap?.name;
+            if (!string.IsNullOrEmpty(cutsceneActionMap))
+                playerInput.SwitchCurrentActionMap(cutsceneActionMap);
+        }
+#endif
 
-        // 2) 보스가 내려가는 동안, 매 프레임 카메라를 보스 기준 camOffset만큼 **따라가게** 함
+        // 임시 리그 생성
+        rig = new GameObject("BossDeathCamRig").transform;
+        rig.position = transform.position + camOffset;
+        cam.SetParent(rig, true);
+        cam.DOLocalMove(Vector3.zero, camApproachTime).SetEase(Ease.InOutSine);
+        cam.DOLookAt(transform.position, camApproachTime);
+
+        // 보스 내려가기
         var moveTween = transform.DOMoveY(descendToY, descendDuration).SetEase(Ease.Linear);
         moveTween.OnUpdate(() =>
         {
-            Vector3 followPos = transform.position + camOffset;
-            cam.position = followPos;
+            rig.position = transform.position + camOffset;
             cam.LookAt(transform.position);
         });
 
+        seq = DOTween.Sequence();
         seq.Append(moveTween);
 
-        // 3) 도착 시점 폭발 + 사운드
+        // 폭발 이펙트 + 사운드
         seq.AppendCallback(() =>
         {
             if (heart) Destroy(heart);
@@ -84,40 +118,63 @@ public class BossDie : MonoBehaviour
                 Destroy(vfx.gameObject, main.duration + main.startLifetime.constantMax);
             }
 
-            if (explosionSfx) AudioSource.PlayClipAtPoint(explosionSfx, transform.position, sfxVolume);
-            if (doShakeOnExplosion && cam) cam.DOShakePosition(shakeDuration, shakeStrength, shakeVibrato, shakeRandomness);
+            if (explosionSfx)
+                AudioSource.PlayClipAtPoint(explosionSfx, transform.position, sfxVolume);
         });
 
-        // 4) 잠깐 유지
+        // 잠시 대기 후 복귀
         seq.AppendInterval(lingerAfterExplosion);
-
-        // 5) 페이드 아웃(선택)
-        if (fadeImage)
-        {
-            var c = fadeImage.color; c.a = 0f; fadeImage.color = c;
-            seq.Append(fadeImage.DOFade(1f, fadeOutTime));
-        }
-
-        // 6) 마무리(카메라 복귀/보스 제거)
-        seq.OnComplete(() =>
-        {
-            if (restoreCameraAfter && cam)
-            {
-                cam.DOMove(prevCamPos, 0.45f).SetEase(Ease.InOutSine);
-                cam.DORotateQuaternion(prevCamRot, 0.45f);
-            }
-            if (destroyBossAfter) Destroy(gameObject);
-
-            // 플레이어 카메라 컨트롤 다시 켜기(있다면)
-            // if (playerLook) playerLook.enabled = true;
-        });
+        seq.OnComplete(ReturnCameraAndClean);
     }
 
-    void OnDestroy()
+    private void ReturnCameraAndClean()
+    {
+        // 트윈 정리
+        if (cam) cam.DOKill();
+        if (rig) rig.DOKill();
+
+        // 카메라 복귀
+        if (restoreCameraAfter && cam)
+        {
+            cam.SetParent(oldParent, false);
+            cam.localPosition = oldLocalPos;
+            cam.localRotation = oldLocalRot;
+        }
+
+        // 카메라 컨트롤러 복원
+        if (cameraControllersToDisable != null && controllerPrevEnabled != null)
+        {
+            for (int i = 0; i < cameraControllersToDisable.Length; i++)
+            {
+                if (!cameraControllersToDisable[i]) continue;
+                cameraControllersToDisable[i].enabled = controllerPrevEnabled[i];
+            }
+        }
+
+        // PlayerInput 복귀
+#if ENABLE_INPUT_SYSTEM
+        if (playerInput)
+        {
+            var targetMap = !string.IsNullOrEmpty(prevActionMap) ? prevActionMap : gameplayActionMap;
+            if (!string.IsNullOrEmpty(targetMap))
+                playerInput.SwitchCurrentActionMap(targetMap);
+            if (!playerInput.enabled) playerInput.enabled = true;
+        }
+#endif
+
+        // 커서 잠금 상태 복구
+        Cursor.lockState = prevLock;
+        Cursor.visible = prevCursorVisible;
+
+        // 리그 제거 / 보스 삭제
+        if (rig) Destroy(rig.gameObject);
+        if (destroyBossAfter) Destroy(gameObject);
+    }
+
+    private void OnDestroy()
     {
         if (seq != null && seq.IsActive()) seq.Kill();
-        if (cam != null) cam.DOKill();
-        transform.DOKill();
-        if (fadeImage) fadeImage.DOKill();
+        if (cam) cam.DOKill();
+        if (rig) rig.DOKill();
     }
 }
