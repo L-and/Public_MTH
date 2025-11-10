@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 3086196410688309752}
   - component: {fileID: 1830692741313579939}
   - component: {fileID: 1970878836504886724}
+  - component: {fileID: 7828294816384087591}
   m_Layer: 0
   m_Name: Room_Boss
   m_TagString: Untagged
@@ -187,10 +188,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de83e6918e7b06e4496e7cd3ff023cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossRoomController
-  _entryDoor: {fileID: 0}
-  _exitDoor: {fileID: 0}
-  _entryDoor2: {fileID: 0}
-  _exitDoor2: {fileID: 0}
+  _entryDoor: {fileID: 8025830721984945528}
+  _entryDoor2: {fileID: 5615645982823937421}
+--- !u!114 &7828294816384087591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696638580949822137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37cc7c28c53375a46b14cd4c5dd09151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomAnchor
+  entryAnchor: {fileID: 2964159902871059379}
+  exitAnchor: {fileID: 0}
 --- !u!1 &1092800858527793021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,7 +1266,7 @@ GameObject:
   - component: {fileID: 1121753159643290624}
   - component: {fileID: 8958872484417843930}
   - component: {fileID: 8074863797713156618}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Plane_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6169,8 +6182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 655c7b7963e86aa4a84dc84636c1894f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorTrigger
-  _doorController: {fileID: 3742131158944627250}
-  _doorController2: {fileID: 1715958707198249437}
+  _doorController: {fileID: 8025830721984945528}
+  _doorController2: {fileID: 5615645982823937421}
 --- !u!1001 &15686906371251121
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8430,6 +8443,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8484,6 +8517,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -20238,7 +20276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwingDoorController
   doorMoveSpeed: 1
-  _maxOpenAngle: 120
+  _maxOpenAngle: -90
 --- !u!4 &8030531349977372278 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8556020218060912481, guid: 419af4edc0e6e6240bf6a14b38abcb07,
@@ -25486,6 +25524,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -25540,6 +25598,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -28265,6 +28328,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -28319,6 +28402,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -31418,6 +31506,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -31472,6 +31580,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -35386,6 +35499,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -35440,6 +35573,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -36440,6 +36578,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6544149617824896087, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -36499,6 +36657,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -38995,7 +39158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwingDoorController
   doorMoveSpeed: 1
-  _maxOpenAngle: 60
+  _maxOpenAngle: 90
 --- !u!4 &5619823245437943427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8556020218060912481, guid: 419af4edc0e6e6240bf6a14b38abcb07,
@@ -41638,6 +41801,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -41692,6 +41875,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -44144,6 +44332,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -44203,6 +44411,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -44964,6 +45177,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -45018,6 +45251,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -45342,6 +45580,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -45396,6 +45654,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -47212,6 +47475,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -47266,6 +47549,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
@@ -61335,7 +61623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwingDoorController
   doorMoveSpeed: 1
-  _maxOpenAngle: 297
+  _maxOpenAngle: 117
 --- !u!1001 &7027516151917594492
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68516,6 +68804,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3072331170856813509}
     m_Modifications:
+    - target: {fileID: 3597578042435601277, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3912530717608672852, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503395266284715937, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811881691203589055, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7057477423446969584, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -68570,6 +68878,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: snow_road_6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7690708900820358730, guid: 060e35c695a638a4ab14cfedce2387e4,
         type: 3}

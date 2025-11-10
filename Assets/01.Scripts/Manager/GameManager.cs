@@ -6,7 +6,8 @@ using UnityEngine;
   RequireComponent(typeof(ResourceManager)),
   RequireComponent(typeof(DataManager)),
   RequireComponent(typeof(PlayerManager)),
-  RequireComponent(typeof(SoundManager))
+  RequireComponent(typeof(SoundManager)),
+  RequireComponent(typeof(PlayerSpawnManager))
 ]
 public class GameManager : Singleton<GameManager>
 {
