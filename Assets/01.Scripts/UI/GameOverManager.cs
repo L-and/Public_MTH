@@ -23,30 +23,30 @@ public class GameOverManager : MonoBehaviour
         background.DOFade(0.2f, 0f);
         background.DOFade(1f, 8f);
         GlobalMethod.Fade(gameObject, 5f);
-        StartCoroutine(ShowScore());
+//        StartCoroutine(ShowScore());
     }
 
-    IEnumerator ShowScore()
-    {
-        SetScore(23, 2300, 600, false);
-        yield return new WaitForSeconds(3);
-        kills.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.7f);
-        styles.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.7f);
-        time.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.7f);
-        score.gameObject.SetActive(true);
+//    IEnumerator ShowScore()
+//    {
+//        SetScore(23, 2300, 600, false);
+//        yield return new WaitForSeconds(2.5f);
+//        kills.gameObject.SetActive(true);
+//        yield return new WaitForSeconds(0.7f);
+//        styles.gameObject.SetActive(true);
+//        yield return new WaitForSeconds(0.7f);
+//        time.gameObject.SetActive(true);
+//        yield return new WaitForSeconds(0.7f);
+//        score.gameObject.SetActive(true);
 
-        for (int i = 0; i <= scoreValue; i += (scoreValue - i == 1) ? 1 : 2)
-        {
-            score.text = "점수 : " + i.ToString();
-            yield return new WaitForSeconds(0.000001f);
-        }
+//        for (int i = 0; i <= scoreValue; i += (scoreValue - i == 1) ? 1 : 2)
+//        {
+//            score.text = "점수 : " + i.ToString();
+//            yield return new WaitForSeconds(0.000001f);
+//        }
 
-        yield return new WaitForSeconds(0.3f);
-        menuButton.gameObject.SetActive(true);
-    }
+//        yield return new WaitForSeconds(0.3f);
+//        menuButton.gameObject.SetActive(true);
+//    }
 
     public void SetScore(int killsValue, int stylesValue, int timeValue, bool isBossKilled)
     {
