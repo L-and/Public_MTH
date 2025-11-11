@@ -7,15 +7,18 @@ public class Speedloader_11 : MonoBehaviour,IUpgradeEffect
 
     public void ApplyEffect(PlayerStat playerStat)
     {
-        // Weapon 참조
-        var weapon = GameManager.PlayerManager?.currentLoadout?.Weapon;
+        // PlayerController 참조
+        var pc = GameManager.PlayerManager.PlayerController;
 
-        if (weapon == null)
+        if (pc == null)
         {
-            Debug.LogWarning("Weapon 데이터가 존재하지 않아 스피드로더 효과를 적용할 수 없습니다.");
+            Debug.LogWarning("PlayerController 데이터가 존재하지 않아 스피드로더 효과를 적용할 수 없습니다.");
             return;
         }
-
+        
+        // 재장전 속도증가 적용
+        pc.UpgradeReload();
+        
         // 재장전 속도 증가 메서드 호출
         // 기존 대비 150% (1.5배)
         //float reloadMultiplier = 1.5f;
