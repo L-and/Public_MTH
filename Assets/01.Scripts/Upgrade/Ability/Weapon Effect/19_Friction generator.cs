@@ -27,12 +27,16 @@ public class Frictiongenerator_19 : MonoBehaviour, IUpgradeEffect
             return;
         }
 
+        // [김민서] 마찰 발전기 슬라이딩 업그레이드 적용, TODO 동작하지 않으므로 수정필요
+        // playerController.SlidingUpgrade();
+        
+        // [김민서] 슬라이딩시 과열충전 기능이 제대로 동작하지않아, 주석처리함
         // 중복 방지용 보조 스크립트 부착
-        if (playerController.GetComponent<FrictionGeneratorUpdater>() == null)
-        {
-            var updater = playerController.gameObject.AddComponent<FrictionGeneratorUpdater>();
-            updater.Initialize(playerManager, chargeRate, maxCharge);
-            Debug.Log("마찰 발전기 효과 적용됨! 슬라이딩 중 과열 게이지가 초당 2씩, 최대 30까지 충전됩니다.");
-        }
+        // if (playerController.GetComponent<FrictionGeneratorUpdater>() == null)
+        // {
+        //     var updater = playerController.gameObject.AddComponent<FrictionGeneratorUpdater>();
+        //     updater.Initialize(playerManager, chargeRate, maxCharge);
+        //     Debug.Log("마찰 발전기 효과 적용됨! 슬라이딩 중 과열 게이지가 초당 2씩, 최대 30까지 충전됩니다.");
+        // }
     }
 }
