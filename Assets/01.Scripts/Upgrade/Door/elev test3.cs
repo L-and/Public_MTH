@@ -30,15 +30,17 @@ public class elevtest3 : MonoBehaviour
   private PlayerInput playerInput;
   private GameObject currentPlayer;
 
-  private void OnTriggerEnter(Collider other)
-  {
-    if (other.CompareTag(playerTag) && !isMoving)
-    {
-      StartCoroutine(ElevatorEnterSequence(other.gameObject));
-    }
-  }
+  public static event Action OnUpgradeUIEnable;
 
-  private IEnumerator ElevatorEnterSequence(GameObject player)
+  //private void OnTriggerEnter(Collider other)
+  //{
+  //    if (other.CompareTag(playerTag) && !isMoving)
+  //    {
+  //        StartCoroutine(ElevatorEnterSequence(other.gameObject));
+  //    }
+  //}
+
+  public IEnumerator ElevatorEnterSequence(GameObject player)
   {
     isMoving = true;
 
@@ -125,11 +127,16 @@ public class elevtest3 : MonoBehaviour
   //  업그레이드 UI 페이드인
   private IEnumerator FadeInUpgradeUI()
   {
+    Debug.Log($"{upgradeUI}");
+
     if (upgradeUI == null)
       yield break;
 
+    // UpgradeUI 활성화 이벤트 호출
+    OnUpgradeUIEnable?.Invoke();
+
     //업그레이드 ui버튼 활성화
-    upgradeUI.SetActive(true);
+    // upgradeUI.SetActive(true);
     yield return null;
 
     CanvasGroup upgradeCanvas = upgradeUI.GetComponent<CanvasGroup>();

@@ -43,7 +43,7 @@ public class ElevatorController : MonoBehaviour
   [SerializeField] private GameObject _doorOpenCollider;
 
   private bool _hasBeenTriggered = false;  // Trigger 작동 했는지 체크하는 함수
-
+  
   void Start()
   {
     
@@ -77,7 +77,7 @@ public class ElevatorController : MonoBehaviour
   // 맵 끝에 있는 엘리베이터 방 설정
   public void SetupForEnd()
   {
-    if (_startPoint != null) _startPoint.SetActive(false);
+    if (_startPoint != null) _startPoint.SetActive(true);
 
     var collider = GetComponent<BoxCollider>();
 
@@ -90,19 +90,19 @@ public class ElevatorController : MonoBehaviour
   {
     if (!_hasBeenTriggered && other.CompareTag("Player"))
     {
-      // TODO : 엘리베이터 안에 들어왔을때 발생하는 업그레이드 선택창 관련 추가
-    
+       // TODO : 엘리베이터 안에 들어왔을때 발생하는 업그레이드 선택창 관련 추가
+       StartCoroutine(GetComponent<elevtest3>().ElevatorEnterSequence(other.gameObject));
       // 화살표 내려가는 표시
       SwitchArrows(false, true);
       // Trigger 작동 했기 때문에 더이상 추가 작동되지 않게 하기 위해서 true
       _hasBeenTriggered = true;
       Debug.Log("다음 층으로 내려갑니다.");
       // 실제 엘리베이터 문 닫히기 전에 플레이어가 나가지 않도록 투명 벽 활성화
-      _doorBlocker.SetActive(true);
+      //_doorBlocker.SetActive(true);
       // 엘리베이터 문이 닫히는 함수 호출
-      DoorsClose(1f);
+     // DoorsClose(1f);
       // 문이 다 닫히면 씬 로드 실행
-      GameManager.SceneEx.LoadScene(Constants.GAMESCENE);
+      //GameManager.SceneEx.LoadScene(Constants.GAMESCENE);
     }
   }
 

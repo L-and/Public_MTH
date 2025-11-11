@@ -197,6 +197,7 @@ GameObject:
   - component: {fileID: -4336936973468128836}
   - component: {fileID: -8894924734619150259}
   - component: {fileID: 2949669259221670331}
+  - component: {fileID: 5840592102585739147}
   m_Layer: 0
   m_Name: Elevator_UndergroundPrison
   m_TagString: Untagged
@@ -295,6 +296,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorAnchor
   elevatorAnchor: {fileID: 551607777400547948}
+--- !u!114 &5840592102585739147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2347440267570463432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e7b278a27ab9fb48818134f7866db3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::elevtest3
+  playerTag: Player
+  targetPosition: {fileID: 5341463273312005545}
+  doorFront: {fileID: 551607777400547948}
+  moveSpeed: 3
+  rotateSpeed: 3
+  upgradeUI: {fileID: 1248932832003197862, guid: f0eb4a501688d1045ae51cc43bb63391,
+    type: 3}
+  gameUI: {fileID: 5143561709884011819, guid: f653ece3382b72c4d8cde9ccf084a054, type: 3}
+  fadeDuration: 1
 --- !u!1 &4570401087658227768
 GameObject:
   m_ObjectHideFlags: 0
