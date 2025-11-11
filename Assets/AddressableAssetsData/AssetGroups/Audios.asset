@@ -111,6 +111,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 653d1c04e0718824ba0f36d1841e3187
+    m_Address: ElevatorMove.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 680d1a6bd51fd3541916d41aa5c03364
     m_Address: Boss_Beat_Loop.wav
     m_ReadOnly: 0
@@ -159,6 +165,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f061c6a82cac1544b8ad95e32473db5
+    m_Address: BGM_InGame.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6a7e70ee4f7a6c49bcee6cde1a485bf
+    m_Address: ElevatorDoors.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: acb0e069c9ee7024b89681b677f95baf
     m_Address: Overheat_Full.wav
     m_ReadOnly: 0
@@ -195,6 +213,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d53eddfcefb22fc4cbe2cc4b60657354
+    m_Address: BGM_Boss_Battle.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: da36b66aa2d8613458897194be5e0839
     m_Address: Grab_Success.wav
     m_ReadOnly: 0
@@ -225,6 +249,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee6983d7567bbd2489ba5b81344f7d04
+    m_Address: ElevatorDoorsClose.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eeec8bd79e59743b4bb0a3cb19189c79
     m_Address: Denied(Paid).wav
     m_ReadOnly: 0
@@ -248,24 +278,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sound
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 653d1c04e0718824ba0f36d1841e3187
-    m_Address: Assets/Unity Asset/QA Elevator/Sounds/ElevatorMove.wav
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Audio
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a6a7e70ee4f7a6c49bcee6cde1a485bf
-    m_Address: Assets/Unity Asset/QA Elevator/Sounds/ElevatorDoors.wav
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Audio
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ee6983d7567bbd2489ba5b81344f7d04
-    m_Address: Assets/Unity Asset/QA Elevator/Sounds/ElevatorDoorsClose.wav
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Audio
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d052d267c79038248913c8d46e16d215, type: 2}

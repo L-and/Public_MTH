@@ -46,6 +46,8 @@ public class ElevatorController : MonoBehaviour
   
   void Start()
   {
+    
+
     var curFloor = GameManager.GameData.currentFloor;
 
     if(_elevatorEntranceFloorText != null) _elevatorEntranceFloorText.text = curFloor.ToString();

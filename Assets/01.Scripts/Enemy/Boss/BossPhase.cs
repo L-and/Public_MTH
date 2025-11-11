@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Collider))]
@@ -18,6 +20,7 @@ public class BossPhase : MonoBehaviour
         [Header("애니메이터/이펙트/사운드 등")]
         public UnityEvent onEnter;            // 페이즈 진입 시 1회 호출
         public UnityEvent onExit;             // 다음 페이즈로 넘어갈 때 1회 호출
+        
     }
 
     [Header("보스 체력 (페이즈 순서대로)")]
@@ -39,6 +42,17 @@ public class BossPhase : MonoBehaviour
     [Header("연결(선택)")]
     public BossMove _bossMove;                   // 죽을 때 끄고 싶으면 넣기
 
+    [Header("사망 컷신 프리팹 (BossDie 스크립트 포함)")]
+    [SerializeField] private GameObject bossDeathPrefab;
+    [SerializeField] private Vector3 deathSpawnOffset = Vector3.zero;
+    [SerializeField] private bool inheritRotationOnDeath = true;
+    [SerializeField] private bool inheritScaleOnDeath = false;
+        
+    [Header("사망 시 원본 보스 정리")]
+    [SerializeField] private GameObject bossRootToDestroy; // 비우면 this.gameObject
+    [SerializeField] private bool disableBeforeDestroy = true; // 콜라이더/렌더러/AI 비활성화
+    [SerializeField] private float destroyDelay = 0.05f;
+
     // ─ 상태 ─
     private int _phaseIndex;
     private float _currentHp;
@@ -52,17 +66,21 @@ public class BossPhase : MonoBehaviour
     public float CurrentMax => _currentMax;
     public bool IsDead => _isDead;
 
+    // 보스 죽었을 경우 발생하는 이벤트 등록
+    public static event Action OnBossDefeated;
+
     private void Start()
     {
         BeginPhase(0);
     }
 
     public void ApplyDamage(float dmg, Vector3 hitPoint, Component source = null)
-    {
+    {        
         if (_isDead || dmg <= 0f) return;
 
         _currentHp = Mathf.Max(0f, _currentHp - dmg);
         onDamage?.Invoke(_currentHp, _currentMax);
+        Debug.Log("getting hit!");
 
         if (_currentHp <= 0f)
         {
@@ -130,7 +148,46 @@ public class BossPhase : MonoBehaviour
         Debug.Log("[BossPhase] Boss dead");
         onBossDead?.Invoke();
         if (_bossMove) _bossMove.enabled = false;
+        OnBossDefeated?.Invoke();
         // 필요 시 Destroy(gameObject) 또는 연출 코루틴
+        // 1) 사망 컷신 프리팹 소환
+        if (bossDeathPrefab != null)
+        {
+            Vector3 spawnPos = transform.position + deathSpawnOffset;
+            Quaternion spawnRot = inheritRotationOnDeath ? transform.rotation : Quaternion.identity;
+
+            var cutscene = Instantiate(bossDeathPrefab, spawnPos, spawnRot);
+            if (inheritScaleOnDeath)
+                cutscene.transform.localScale = transform.localScale;
+        }
+        else
+        {
+            Debug.LogWarning("[BossPhase] bossDeathPrefab이 비었습니다. 사망 컷신을 소환하지 않습니다.");
+        }
+         // 2) 기존 보스 정리(렌더/충돌/AI 끄고, 약간 지연 뒤 삭제)
+        var victim = bossRootToDestroy ? bossRootToDestroy : gameObject;
+
+        if (disableBeforeDestroy && victim != null)
+        {
+            // NavMesh/이동 비활성
+            var agent = victim.GetComponentInChildren<NavMeshAgent>(true);
+            if (agent) agent.enabled = false;
+
+            // 콜라이더 OFF
+            var cols = victim.GetComponentsInChildren<Collider>(true);
+            foreach (var c in cols) c.enabled = false;
+
+            // 리지드바디 관성 제거
+            var rbs = victim.GetComponentsInChildren<Rigidbody>(true);
+            foreach (var rb in rbs) rb.isKinematic = true;
+
+            // 렌더러 OFF(바로 안 보이게)
+            var rends = victim.GetComponentsInChildren<Renderer>(true);
+            foreach (var r in rends) r.enabled = false;
+        }
+
+        if (victim != null)
+            Destroy(victim, destroyDelay);
     }
 
     // ─ 충돌/트리거 양쪽 지원 ─
@@ -148,20 +205,48 @@ public class BossPhase : MonoBehaviour
     {
         if (_isDead) return;
 
-        // 레이어 필터: 플레이어 총알 레이어만 통과
-        if ((playerProjectile.value & (1 << col.gameObject.layer)) == 0)
-            return;
+        int l = col.gameObject.layer;
+        bool layerPass = (playerProjectile & (1 << l)) != 0;
 
-        // 데미지 획득(예: GameManager에서 총알 데미지)
+        Debug.Log($"[BossPhase] Hit by {col.name} (layer={l}, name={LayerMask.LayerToName(l)}), " +
+                $"pass={layerPass}, bossObj={name}");
+
+        if (!layerPass) return;
         if (!GameManager.PlayerManager)
         {
-            Debug.LogWarning("GameManager.PlayerManager 가 존재하지 않습니다.");
+            Debug.LogWarning("[BossPhase] GameManager.PlayerManager == null");
             return;
         }
+        if (GameManager.PlayerManager.PlayerStat == null)
+        {
+            Debug.LogWarning("[BossPhase] PlayerManager.PlayerStat == null");
+            return;
+        }
+
         float damage = GameManager.PlayerManager.PlayerStat.bulletDamage;
-        if (damage <= 0f) return;
+        Debug.Log($"[BossPhase] bulletDamage={damage}");
+        if (damage <= 0f)
+        {
+            Debug.LogWarning("[BossPhase] bulletDamage <= 0");
+            return;
+        }
 
         ApplyDamage(damage, hitPoint, col);
+
+        // // 레이어 필터: 플레이어 총알 레이어만 통과
+        // if ((playerProjectile.value & (1 << col.gameObject.layer)) == 0)
+        //     return;
+
+        // // 데미지 획득(예: GameManager에서 총알 데미지)
+        // if (!GameManager.PlayerManager)
+        // {
+        //     Debug.LogWarning("GameManager.PlayerManager 가 존재하지 않습니다.");
+        //     return;
+        // }
+        // float damage = GameManager.PlayerManager.PlayerStat.bulletDamage;
+        // if (damage <= 0f) return;
+
+        // ApplyDamage(damage, hitPoint, col);
     }
 
 #if UNITY_EDITOR

@@ -25,7 +25,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI levelInfo;
     public GameObject pauseMenu;
     private AudioSource ohFullKeepSound;
-    public TextMeshProUGUI statText;
     public Image upgradeSlot1;
     public Image upgradeSlot2;
     public Image upgradeSlot3;
@@ -59,16 +58,27 @@ public class UIManager : MonoBehaviour
 
         UpdateStatus();
     }
+    #region 보스가 죽었을 경우 발생할 이벤트 등록 및 해제
+    void OnEnable()
+    {
+        BossPhase.OnBossDefeated += GameWon;
+    }
+
+    void OnDisable()
+    {
+        BossPhase.OnBossDefeated -= GameWon;
+    }
+    #endregion
+
 
     // Update is called once per frame
     void Update()
     {
 
-        // 플레이어 게임오버 처리 TODO 수정필요
-        if (Input.GetKeyDown(KeyCode.G) && !isGameover)
-        {
-            GameWon();
-        }
+//        if (Input.GetKeyDown(KeyCode.G) && !isGameover)
+//        {
+//            GameWon();
+//        }
         
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -141,29 +151,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetUpgradeSlot()
-    {
-        Image[] upgradeSlots = new Image[3] { upgradeSlot1, upgradeSlot2, upgradeSlot3 };
-
-        for (int i = 0; i < upgradeSlots.Length; i++)
-        { 
-            if (i <= PlayerStat.UpgradeNumber - 1) upgradeSlots[i].gameObject.SetActive(true);
-            else upgradeSlots[i].gameObject.SetActive(false);
-        }
-
-
-    }
-
-
     public void GameOver()
     {
         isGameover = true;
+        PlayerController.DeactivePlayerInput();
         GameManager.Sound.PlayMusic("BGM_Game_Over");
         hud.SetActive(false);
         gameover.SetActive(true);
     }
     public void GameWon()
     {
+        PlayerController.DeactivePlayerInput();
         hud.SetActive(false);
         gameWon.SetActive(true);
     }
@@ -175,6 +173,16 @@ public class UIManager : MonoBehaviour
 
     IEnumerator ShowLevelInfoCoroutine()
     {
+        switch (GameManager.GameData.currentFloor)
+        {
+            case 1:
+                levelInfo.text = "Level 1\n하수구"; break;
+            case 2:
+                levelInfo.text = "Level 2\n지하도시"; break;
+            case 3:
+                levelInfo.text = "Level 3\n세상의 중심"; break;
+        }
+            
         levelInfo.DOFade(0, 0);
         levelInfo.DOFade(1, 1);
         yield return new WaitForSeconds(5);
@@ -183,22 +191,18 @@ public class UIManager : MonoBehaviour
 
     public void Pause()
     {
-        if (!isPause)
-        {
-            pauseMenu.SetActive(true);
-            PlayerController.DeactivePlayerInput();
-            Time.timeScale = 0;
-            isPause = true;
-            return;
-        }
-        else
-        {
-            PlayerController.ActivePlayerInput();
-            pauseMenu.SetActive(false);
-            Time.timeScale = 1;
-            isPause = false;
-            return;
-        }
+        pauseMenu.SetActive(true);
+        PlayerController.DeactivePlayerInput();
+        Time.timeScale = 0;
+        isPause = true;
+    }
+    public void UnPause()
+    {
+        PlayerController.ActivePlayerInput();
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1;
+        isPause = false;
+        return;
     }
 
     void UpdateStatus()
@@ -206,16 +210,7 @@ public class UIManager : MonoBehaviour
         SetHp(PlayerStat.hp.Value);
         SetOh(PlayerStat.overheat.Value);
         SetStm(PlayerStat.stamina.Value);
-        SetStatText();
-        SetUpgradeSlot();
     }
-
-    void SetStatText()
-    {
-        statText.text = "HP : " + PlayerStat.hp.Value + "\nMaxHP : " + PlayerStat.hp.maxValue + "\nOverheat : " + PlayerStat.overheat.Value +
-            "\nMaxOverheat : " + PlayerStat.overheat.maxValue + "\nStemina : " + PlayerStat.stamina.Value + "\nMaxStemina : " + PlayerStat.stamina.maxValue;
-    }
-
     #endregion
 }
 

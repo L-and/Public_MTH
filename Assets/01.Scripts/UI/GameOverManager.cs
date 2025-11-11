@@ -14,7 +14,6 @@ public class GameOverManager : MonoBehaviour
     public TextMeshProUGUI styles;
     public TextMeshProUGUI stylesValue;
     public TextMeshProUGUI score;
-    public Button restartButton;
     public Button menuButton;
 
     private int scoreValue;
@@ -46,7 +45,6 @@ public class GameOverManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.3f);
-        restartButton.gameObject.SetActive(true);
         menuButton.gameObject.SetActive(true);
     }
 
