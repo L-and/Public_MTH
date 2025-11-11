@@ -30,7 +30,8 @@ public class elevtest3 : MonoBehaviour
   private PlayerInput playerInput;
   private GameObject currentPlayer;
 
-  public static event Action OnUpgradeUIEnable;
+  public static event Action OnUpgradeUIEnable; // UpgradeUI 켜지도록 호출 하는 이벤트 변수
+  public static event Action OnDoorClosed;      // 엘리베이터 문이 닫히도록 호출 하는 이벤트 변수
 
   //private void OnTriggerEnter(Collider other)
   //{
@@ -119,6 +120,8 @@ public class elevtest3 : MonoBehaviour
       player.transform.rotation = Quaternion.Slerp(startRot, endRot, rotT);
       yield return null;
     }
+
+    OnDoorClosed?.Invoke(); // 엘리베이터 문 닫는 함수 이벤트 호출
 
     // 엘리베이터 위치 도착
     player.transform.rotation = endRot;

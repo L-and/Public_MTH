@@ -10,10 +10,10 @@ public class MainMenuUIManager : MonoBehaviour
   public TextMeshProUGUI title;
   public RectTransform buttons;
   public GameObject options;
-    public GameObject startOption;
+  public GameObject startOption;
   // Start is called once before the first execution of Update after the MonoBehaviour is created
 
- 
+
   private void Start()
   {
     // 메인메뉴로 돌아오면 항상 층 초기화 (저장 기능 추가할 경우 수정)
@@ -41,16 +41,16 @@ public class MainMenuUIManager : MonoBehaviour
     ButtonsOn();
     options.SetActive(false);
   }
-    public void OpenStartOption()
-    {
-        ButtonsOff();
-        startOption.SetActive(true);
-    }
-    public void CloseStartOption()
-    {
-        ButtonsOn();
-        startOption.SetActive(false);
-    }
+  public void OpenStartOption()
+  {
+    ButtonsOff();
+    startOption.SetActive(true);
+  }
+  public void CloseStartOption()
+  {
+    ButtonsOn();
+    startOption.SetActive(false);
+  }
 
     void  PlayMainMusic()
     {
@@ -59,7 +59,7 @@ public class MainMenuUIManager : MonoBehaviour
     }
 
 
-    public void Quit()
+  public void Quit()
   {
     Application.Quit();
   }

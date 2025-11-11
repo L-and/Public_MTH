@@ -2,6 +2,7 @@ using _01.Scripts.PlayerControll.Status;
 using DG.Tweening;
 using System.Collections;
 using _01.Scripts.PlayerControll;
+using _01.Scripts.Utils;
 using TMPro;
 using UnityEditor.Playables;
 using UnityEngine;
@@ -55,7 +56,9 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogWarning("GameManager.PlayerManager가 정의되지 않았습니다!");
         }
-
+        
+        CursorLockUtil.Lock(); // 커서 숨기기
+        
         UpdateStatus();
     }
     #region 보스가 죽었을 경우 발생할 이벤트 등록 및 해제
@@ -88,6 +91,12 @@ public class UIManager : MonoBehaviour
         // PlayerStat값에 맞게 UI 업데이트
         UpdateStatus();
     }
+
+    void OnDestroy()
+    {
+        CursorLockUtil.Unlock(); // 커서숨기기 해제
+    }
+    
     #region METHOD
     public void SetHp(float value)
     {
