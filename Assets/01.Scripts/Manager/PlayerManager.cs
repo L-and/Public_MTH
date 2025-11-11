@@ -3,6 +3,7 @@ using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
 using _01.Scripts.Weapons_ScriptableObjects.Loadout;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace _01.Scripts.Manager
@@ -44,8 +45,6 @@ namespace _01.Scripts.Manager
         private GameObject _playerInstance; 
         
         # endregion
-        
-        
         
         /// <summary>
         /// 인게임 시작 시 플레이어를 생성
@@ -100,6 +99,17 @@ namespace _01.Scripts.Manager
                 {
                     Debug.LogWarning("[## 중요 ##]플레이어 프리팹에서 PlayerController 컴포넌트를 찾을 수 없습니다.\n 플레이어 장비 초기설정에 실패했습니다.");
                 }
+            }
+            else 
+                // 플레이어가 이미 생성되어서 재활용된다면, 즉 위치만 변한다면 "elevtest3.cs"에서 업그레이드UI 표시시에 비활성화된 컴포넌트를 활성화
+            {
+                var pc = _playerInstance.GetComponent<PlayerController>();
+                var aimLook = _playerInstance.GetComponentInChildren<AimLook>();
+                var playerInput = _playerInstance.GetComponent<PlayerInput>();
+                
+                pc.enabled = true;
+                aimLook.enabled = true;
+                playerInput.enabled = true;
             }
             
             // 스폰위치로 플레이어 이동
