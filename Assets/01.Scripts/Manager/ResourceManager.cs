@@ -55,7 +55,7 @@ public class ResourceManager : MonoBehaviour
     await LoadBossPrefab();
     await LoadEnemyPrefabs();
     await LoadElevatorPrefabs();
-    //await LoadSounds();
+    await LoadSounds();
         
     // 엘리베이터 데이터 정리
     mappingDict = new Dictionary<string, string>();
