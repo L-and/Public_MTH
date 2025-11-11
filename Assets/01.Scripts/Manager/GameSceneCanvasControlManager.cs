@@ -1,3 +1,4 @@
+using _01.Scripts.Utils;
 using UnityEngine;
 
 public class GameSceneCanvasControlManager : MonoBehaviour
@@ -18,6 +19,7 @@ public class GameSceneCanvasControlManager : MonoBehaviour
   void OnEnable()
   {
     elevtest3.OnUpgradeUIEnable += OnUpgradeUI;
+    elevtest3.OnUpgradeUIEnable += CursorLockUtil.Unlock; // 마우스커서 사용가능하도록 설정
   }
 
   // Canvas가 비활성화 되면 이벤트 등록 해제
@@ -25,6 +27,7 @@ public class GameSceneCanvasControlManager : MonoBehaviour
   void OnDisable()
   {
     elevtest3.OnUpgradeUIEnable -= OnUpgradeUI;
+    elevtest3.OnUpgradeUIEnable -= CursorLockUtil.Lock; // 마우스커서 잠금설정
   }
 
   // GameUI만 활성화

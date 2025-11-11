@@ -5,6 +5,7 @@ using System.Globalization;
 using _01.Scripts.Enums;
 using _01.Scripts.PlayerControll.Animation;
 using _01.Scripts.PlayerControll.Status;
+using _01.Scripts.Utils;
 using _01.Scripts.Weapons_ScriptableObjects.Emission;
 using _01.Scripts.Weapons_ScriptableObjects.Loadout;
 using _01.Scripts.Weapons_ScriptableObjects.SubWeapon;
@@ -413,6 +414,7 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         public void ActivePlayerInput()
         {
+            CursorLockUtil.Lock();
             PlayerInput.ActivateInput();
         }
         
@@ -421,6 +423,7 @@ namespace _01.Scripts.PlayerControll
         /// </summary>
         public void DeactivePlayerInput()
         {
+            CursorLockUtil.Unlock();
             PlayerInput.DeactivateInput();
         }
         
