@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -64,6 +65,9 @@ public class BossPhase : MonoBehaviour
     public float CurrentHp => _currentHp;
     public float CurrentMax => _currentMax;
     public bool IsDead => _isDead;
+
+    // 보스 죽었을 경우 발생하는 이벤트 등록
+    public static event Action OnBossDefeated;
 
     private void Start()
     {
