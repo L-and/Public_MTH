@@ -1,3 +1,4 @@
+using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
 using System.Collections;
 using System.Collections.Generic;
@@ -69,8 +70,6 @@ public class UpgradePersistence : MonoBehaviour
     {
         // 씬 바뀔 때마다 재적용 시도
         StartCoroutine(ReapplyWhenPlayerReady());
-
-         
     }
 
     private IEnumerator ReapplyWhenPlayerReady()
@@ -92,7 +91,7 @@ public class UpgradePersistence : MonoBehaviour
 
         if (playerStat == null)
         {
-            Debug.LogWarning("[UpgradePersistence] PlayerStat을 찾지 못해 업그레이드 재적용을 건너뜁니다.");
+            Debug.Log("[UpgradePersistence] PlayerStat을 찾지 못해 업그레이드 재적용을 건너뜁니다.");
             yield break;
         }
 
