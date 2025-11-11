@@ -139,20 +139,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetUpgradeSlot()
-    {
-        Image[] upgradeSlots = new Image[3] { upgradeSlot1, upgradeSlot2, upgradeSlot3 };
-
-        for (int i = 0; i < upgradeSlots.Length; i++)
-        { 
-            if (i <= PlayerStat.UpgradeNumber - 1) upgradeSlots[i].gameObject.SetActive(true);
-            else upgradeSlots[i].gameObject.SetActive(false);
-        }
-
-
-    }
-
-
     public void GameOver()
     {
         isGameover = true;
@@ -193,22 +179,18 @@ public class UIManager : MonoBehaviour
 
     public void Pause()
     {
-        if (!isPause)
-        {
-            pauseMenu.SetActive(true);
-            PlayerController.DeactivePlayerInput();
-            Time.timeScale = 0;
-            isPause = true;
-            return;
-        }
-        else
-        {
-            PlayerController.ActivePlayerInput();
-            pauseMenu.SetActive(false);
-            Time.timeScale = 1;
-            isPause = false;
-            return;
-        }
+        pauseMenu.SetActive(true);
+        PlayerController.DeactivePlayerInput();
+        Time.timeScale = 0;
+        isPause = true;
+    }
+    public void UnPause()
+    {
+        PlayerController.ActivePlayerInput();
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1;
+        isPause = false;
+        return;
     }
 
     void UpdateStatus()
@@ -216,7 +198,6 @@ public class UIManager : MonoBehaviour
         SetHp(PlayerStat.hp.Value);
         SetOh(PlayerStat.overheat.Value);
         SetStm(PlayerStat.stamina.Value);
-        SetUpgradeSlot();
     }
     #endregion
 }

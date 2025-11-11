@@ -41,7 +41,7 @@ public class PauseMenuManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-
+        GameManager.Sound.PlayMusic("bgm_cold_dawn");
         SceneManager.LoadScene("MainMenu");
     }
 }

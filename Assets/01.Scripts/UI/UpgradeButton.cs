@@ -1,3 +1,4 @@
+using _01.Scripts.PlayerControll.Status;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public GameObject upgradeUi;
     private Button button;
     private Vector2 originPosition;
+    public UpgradeData upgradeData;
 
     [SerializeField] private int order;
     private bool isTouchable = false;
@@ -84,7 +86,6 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             }
         }
     }
-
 
     void UpgradeOn()
     {

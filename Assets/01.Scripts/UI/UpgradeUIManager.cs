@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class UpgradeUIManager : MonoBehaviour
 {
@@ -17,6 +17,9 @@ public class UpgradeUIManager : MonoBehaviour
     public UpgradeButton upgradeButton;
     public UpgradeButton upgradeButton2;
     public UpgradeButton upgradeButton3;
+    public Image upgradeButtonImage;
+    public Image upgradeButtonImage2;
+    public Image upgradeButtonImage3;
     int dataId;
     int dataId2;
     int dataId3;
@@ -28,6 +31,9 @@ public class UpgradeUIManager : MonoBehaviour
     {
         // 0~21 id랜덤 제시 ->  UpgradeUI 반영
         SetDataID();
+        upgradeButtonImage.sprite = upgradeData.Upgrade[dataId].Icon;
+        upgradeButtonImage2.sprite = upgradeData.Upgrade[dataId2].Icon;
+        upgradeButtonImage3.sprite = upgradeData.Upgrade[dataId3].Icon;
         GameManager.Sound.PlaySFX("Upgrade_Show");
     }
 

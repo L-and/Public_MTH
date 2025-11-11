@@ -537,7 +537,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4219951465941207361}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: Pause
+        m_MethodName: UnPause
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3086,7 +3086,6 @@ MonoBehaviour:
   stmBarFill: {fileID: 618405137952097261}
   levelInfo: {fileID: 1908922647221227039}
   pauseMenu: {fileID: 7431147818731793364}
-  statText: {fileID: 0}
   upgradeSlot1: {fileID: 5708947857359162740}
   upgradeSlot2: {fileID: 2899498487511083153}
   upgradeSlot3: {fileID: 1410178827845961286}
@@ -3565,7 +3564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9061772005014303752
 RectTransform:
   m_ObjectHideFlags: 0
