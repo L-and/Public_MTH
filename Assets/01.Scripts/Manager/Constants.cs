@@ -37,6 +37,7 @@ public static class Constants
   public const string ENEMY = "Enemy";
   public const string ELEVATOR = "Elevator";
   public const string SOUND = "Sound";
+  public const string BOSS = "Boss";
 
   // Scene 이름 구분
   public const string CUTSCENE = "CutScene Test";
