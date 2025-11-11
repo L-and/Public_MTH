@@ -3,6 +3,7 @@ using _01.Scripts.PlayerControll;
 using _01.Scripts.PlayerControll.Status;
 using _01.Scripts.Weapons_ScriptableObjects.Loadout;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _01.Scripts.Manager
 {
@@ -36,13 +37,15 @@ namespace _01.Scripts.Manager
    
         public PlayerController PlayerController { get; private set; }
         
-        # endregion
-        
         /// <summary>
         /// 플레이어 게임오브젝트
         /// 부가설명: 레벨1 시작에서 생성된 플레이어GO의 사용이 필요할 듯 하여 캐싱해둠
         /// </summary>
         private GameObject _playerInstance; 
+        
+        # endregion
+        
+        
         
         /// <summary>
         /// 인게임 시작 시 플레이어를 생성
@@ -51,7 +54,7 @@ namespace _01.Scripts.Manager
         /// spawnPosition으로 플레이어 위치변경 
         /// </summary>
         /// <param name="spawnPosition">스폰할 위치</param>
-        public void PlayerSpawn(Vector3 spawnPosition, GameObject playerInstance = null)
+        public void PlayerSpawn(Vector3 spawnPosition, GameObject testPrefab = null)
         {
             Debug.Log($"스폰위치: {spawnPosition}");
             // 플레이어가 처음 스폰되는것이라면
@@ -66,7 +69,7 @@ namespace _01.Scripts.Manager
                 // 플레이어 프리팹 로드
                 // TODO 테스트를 위한 코드임으로 수정이 필요할 수 있음
                 // (GameManager.ResourceEx.playerPrefab이 준비되지 않았으면 테스트용 프리팹으로 생성)
-                var playerPrefab = GameManager.ResourceEx.playerPrefab ? GameManager.ResourceEx.playerPrefab : playerInstance;
+                var playerPrefab = GameManager.ResourceEx.playerPrefab ? GameManager.ResourceEx.playerPrefab : testPrefab;
                 
                 Debug.Log(playerPrefab);
                 if (!playerPrefab)
@@ -83,7 +86,7 @@ namespace _01.Scripts.Manager
 
                 // 플레이어 생성
                 _playerInstance = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
-                // stroyOnLoad(_playerInstance); // 게임진행중 타이틀이동시 플레이어가 안사라지는 문제가 있어서 주석처리함
+                DontDestroyOnLoad(_playerInstance); // 게임진행중 타이틀이동시 플레이어가 안사라지는 문제가 있어서 주석처리함
                 
                 // 필요한 컴포넌트 캐싱
                 if (_playerInstance.TryGetComponent<PlayerController>(out var pc))
@@ -101,6 +104,22 @@ namespace _01.Scripts.Manager
             
             // 스폰위치로 플레이어 이동
             PlayerController.Rb.MovePosition(spawnPosition);
+        }
+
+        /// <summary>
+        /// 플레이어GO Instance를 파괴, 게임진행시 사용되는 참조변수를 해제하는 메서드
+        /// </summary>
+        public void PlayerDespawn()
+        {
+            // 스탯, 장비 인스턴스 제거
+            _playerStat = null;
+            currentLoadout = null;
+            
+            PlayerController = null;
+            
+            // 플레이어 GO파괴 및 참조제거
+            Destroy(_playerInstance);
+            _playerInstance = null;
         }
         
         /// <summary>
