@@ -589,7 +589,9 @@ namespace _01.Scripts.PlayerControll
             var dir = (MoveInput == Vector2.zero) ? 
                 transform.forward : 
                 MoveDirection;
-        
+
+            //대시 사운드
+            GameManager.Sound.PlaySFX("Dash");
             var velocity = dir * Stat.dashPower;
             Rb.AddForce(velocity, ForceMode.Impulse);
         }
@@ -666,12 +668,15 @@ namespace _01.Scripts.PlayerControll
                 StyleEventManager.TriggerStyleAction(EStyleType.Dodge);
                 return;
             }
+            GameManager.Sound.PlaySFX("Player_Hurt");
             Stat.hp.Value -= damage;
 
             if (Stat.hp.Value <= 0f)
             {
                 Debug.Log("## 플레이어 사망 ##");
-                // TODO 플레이어 사망로직 추가
+                //플레이어 사망 사운드
+                GameManager.Sound.PlaySFX("Player_Die");
+                GameObject.Find("GameUI").GetComponent<UIManager>().GameOver();
             }
         }
 
