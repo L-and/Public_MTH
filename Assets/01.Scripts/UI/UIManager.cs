@@ -198,13 +198,13 @@ public class UIManager : MonoBehaviour
   {
     if (!isPause)
     {
-      pauseMenu.SetActive(true);
-      PlayerController.DeactivePlayerInput();
-      Time.timeScale = 0;
-      isPause = true;
-      return;
+        SetHp(PlayerStat.hp.Value);
+        SetOh(PlayerStat.overheat.Value);
+        SetStm(PlayerStat.stamina.Value);
+        SetUpgradeSlot();
     }
-    else
+    
+    void SetStatText()
     {
       PlayerController.ActivePlayerInput();
       pauseMenu.SetActive(false);

@@ -1,3 +1,4 @@
+using _01.Scripts.Enums;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -108,7 +109,7 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
         if (health <= 0)
         {            
-            Kill();
+            Kill(zone);
         }
         //EnemyHealth -= rawDamage;
         // if (bodyHitCount >= bodyHitsToDie)
@@ -127,10 +128,14 @@ public class EnemyDamage : MonoBehaviour, IDamageableZone
 
     // ────────────────────────────────────────────────────────────────────────────
     #region Death / Ragdoll
-    private void Kill()
+    private void Kill(HitZones zone)
     {
         if (IsDead) return;
         IsDead = true;
+        
+        // [스타일리쉬 액션] 적 처치
+        var styleType = zone == HitZones.Weak ? EStyleType.HeadshotKill : EStyleType.EnemyKill;
+        StyleEventManager.TriggerStyleAction(styleType);
 
         /// 사망시 스포너에게 알리는 구문
         // 현재 방을 가르키는 변수 null 체크
