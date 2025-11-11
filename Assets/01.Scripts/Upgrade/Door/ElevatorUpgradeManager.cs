@@ -96,13 +96,15 @@ public class ElevatorUpgradeManager : MonoBehaviour
         {
             Debug.LogWarning("[ElevatorUpgradeManager] UpgradePersistence 인스턴스를 찾지 못했습니다!");
         }
+        
+        
     }
 
     public void SetUpgradeSlot()
     {
-        Image upgradeSlot1 = GameObject.Find("Upgrade Slot 1").GetComponent<Image>();
-        Image upgradeSlot2 = GameObject.Find("Upgrade Slot 2").GetComponent<Image>();
-        Image upgradeSlot3 = GameObject.Find("Upgrade Slot 3").GetComponent<Image>();
+        Image upgradeSlot1 = GameObject.Find("Upgrade 1").GetComponent<Image>();
+        Image upgradeSlot2 = GameObject.Find("Upgrade 2").GetComponent<Image>();
+        Image upgradeSlot3 = GameObject.Find("Upgrade 3").GetComponent<Image>();
         Image[] upgradeSlots = new Image[3] { upgradeSlot1, upgradeSlot2, upgradeSlot3 };
         int[] upgradeSlotIDs = new int[3] { GameManager.PlayerManager.PlayerStat.UpgradeSlot1ID, GameManager.PlayerManager.PlayerStat.UpgradeSlot2ID, GameManager.PlayerManager.PlayerStat.UpgradeSlot3ID };
 
