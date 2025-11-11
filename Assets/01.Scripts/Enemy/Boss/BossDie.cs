@@ -104,6 +104,9 @@ public class BossDie : MonoBehaviour
         {
             if (destroyAfterScene) Destroy(gameObject);
             if (rig) Destroy(rig.gameObject);
+
+            if (cam)
+                cam.SetParent(null, true);
         });
     }
 
