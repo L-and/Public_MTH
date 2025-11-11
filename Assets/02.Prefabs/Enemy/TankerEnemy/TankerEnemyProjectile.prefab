@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3568955505207255}
   - component: {fileID: 7233018786496207728}
   - component: {fileID: 8886471115289453319}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TankerEnemyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,6 +242,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TankerEnemyRangeEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 7086458004933473948, guid: a426c13c31311b14b83a57c82d8be3db,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8250559951547118766, guid: a426c13c31311b14b83a57c82d8be3db,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

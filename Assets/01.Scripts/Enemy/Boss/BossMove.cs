@@ -82,10 +82,10 @@ public class BossMove : MonoBehaviour
                 //FaceTarget3D(player.position, 8f);
 
                 // 2) 능력 사용 우선순위대로 나열
+                if (summoner != null && summoner.CanUse(player, dist)) { summoner.Execute(player); break; }
                 if (melee != null && melee.CanUse(player, dist)) { melee.Execute(player); }
                 if (ranged != null && ranged.CanUse(player, dist)) { ranged.Execute(player); break; }
                 if (beamed != null && beamed.CanUse(player, dist)) { beamed.Execute(player); break; }
-                if (summoner != null && summoner.CanUse(player, dist)) { summoner.Execute(player); break; }
                 break;
 
             case State.Stop:
