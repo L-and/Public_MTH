@@ -329,24 +329,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b646333204303c746929b8cff493112e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossDie
-  explosion: {fileID: 19800008, guid: fafeb973cad62304ba2abdc5dfafbf8f, type: 3}
-  explosionSfx: {fileID: 8300000, guid: 8cd12f923fd782242bb45a3543e8e1de, type: 3}
+  mainExplosionSfx: {fileID: 8300000, guid: 8cd12f923fd782242bb45a3543e8e1de, type: 3}
+  fallScreamSfx: {fileID: 8300000, guid: 6d0b7158e0a461241a200c38cf1ba2c0, type: 3}
+  smallExplosionSfx: {fileID: 8300000, guid: f9260bb7a5405714bafdb07feb2bba1b, type: 3}
   sfxVolume: 1
+  mainExplosionFx: {fileID: 19800002, guid: e7bdce6c7d53b1b4ead020a9a9af5ba7, type: 3}
+  smallExplosionFx: {fileID: 19800006, guid: 493a2646b6946ac4d959e8ef86cf10cb, type: 3}
   descendToY: 0
   descendDuration: 3
-  camOffset: {x: 15.37, y: 23.07, z: -2.57}
+  camOffset: {x: 9, y: 19, z: 4}
   camApproachTime: 0.4
-  lingerAfterExplosion: 1.2
-  restoreCameraAfter: 1
-  destroyBossAfter: 1
-  doShakeOnExplosion: 1
-  shakeDuration: 0.35
-  shakeStrength: 0.55
-  shakeVibrato: 18
-  shakeRandomness: 90
-  fadeImage: {fileID: 0}
-  fadeOutTime: 1
+  explosionMoments:
+  - 0.3
+  - 0.7
+  - 1.2
+  - 1.8
+  camLerpT: 0.25
+  camJitterXY: {x: 1.2, y: 0.8}
+  yLockToBossAdd: 0
   heart: {fileID: 778718138289790720}
+  destroyAfterScene: 1
 --- !u!1 &5851249134251070336
 GameObject:
   m_ObjectHideFlags: 0

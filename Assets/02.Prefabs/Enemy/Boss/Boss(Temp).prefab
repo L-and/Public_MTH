@@ -2327,19 +2327,7 @@ MonoBehaviour:
         m_Calls: []
   onPhaseStarted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 656250645264033097}
-        m_TargetAssemblyTypeName: BossMove, Assembly-CSharp
-        m_MethodName: SetPhaseByZeroBasedIndex
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onDamage:
     m_PersistentCalls:
       m_Calls: []
@@ -2349,7 +2337,7 @@ MonoBehaviour:
   _bossMove: {fileID: 656250645264033097}
   bossDeathPrefab: {fileID: 5670699079487340968, guid: 324c40c19fd1543429957f7a0ec09d25,
     type: 3}
-  deathSpawnOffset: {x: 0, y: 1.9, z: 27.96}
+  deathSpawnOffset: {x: 0, y: 1.9, z: 8}
   inheritRotationOnDeath: 1
   inheritScaleOnDeath: 0
   bossRootToDestroy: {fileID: 700789269304864771}
