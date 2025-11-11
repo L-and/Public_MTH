@@ -1,6 +1,8 @@
 ﻿using _01.Scripts.PlayerControll.Status;
+using DG.Tweening;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ElevatorUpgradeManager : MonoBehaviour
 {
@@ -53,6 +55,8 @@ public class ElevatorUpgradeManager : MonoBehaviour
         PlayerStat.UpgradeNumber++;
         Debug.Log(PlayerStat.UpgradeSlot1ID);
 
+        SetUpgradeSlot();
+
         //아직 효과가 로드 안되면 즉시 다시 시도
         if (!effectsLoaded || allEffects == null || allEffects.Length == 0)
         {
@@ -85,11 +89,35 @@ public class ElevatorUpgradeManager : MonoBehaviour
         if (UpgradePersistence.Instance != null)
         {
             UpgradePersistence.Instance.SaveAndApply(id, PlayerStat);
-            Debug.Log($"[ElevatorUpgradeManager] UpgradePersistence에 ID {id} 저장 및 적용 요청 완료");
+      Debug.Log($"[ElevatorUpgradeManager] UpgradePersistence에 ID {id} 저장 및 적용 요청 완료");
+            
         }
         else
         {
             Debug.LogWarning("[ElevatorUpgradeManager] UpgradePersistence 인스턴스를 찾지 못했습니다!");
+        }
+    }
+
+    public void SetUpgradeSlot()
+    {
+        Image upgradeSlot1 = GameObject.Find("Upgrade Slot 1").GetComponent<Image>();
+        Image upgradeSlot2 = GameObject.Find("Upgrade Slot 2").GetComponent<Image>();
+        Image upgradeSlot3 = GameObject.Find("Upgrade Slot 3").GetComponent<Image>();
+        Image[] upgradeSlots = new Image[3] { upgradeSlot1, upgradeSlot2, upgradeSlot3 };
+        int[] upgradeSlotIDs = new int[3] { GameManager.PlayerManager.PlayerStat.UpgradeSlot1ID, GameManager.PlayerManager.PlayerStat.UpgradeSlot2ID, GameManager.PlayerManager.PlayerStat.UpgradeSlot3ID };
+
+        for (int i = 0; i < upgradeSlots.Length; i++)
+        {
+            if (i <= GameManager.PlayerManager.PlayerStat.UpgradeNumber - 1)
+            {
+                int index = upgradeSlotIDs[i];
+                upgradeSlots[i].DOFade(1, 0);
+                upgradeSlots[i].sprite = upgradeData.Upgrade[index].Icon;
+            }
+            else
+            {
+                upgradeSlots[i].DOFade(0, 0);
+            }
         }
     }
 }

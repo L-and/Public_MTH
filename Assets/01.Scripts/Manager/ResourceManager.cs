@@ -29,6 +29,7 @@ public class ResourceManager : MonoBehaviour
   private AsyncOperationHandle<IList<GameObject>> _elevatorPrefabLoadHandle;     // 엘리베이터
   // 핸들 저장할 변수 (단일)
   private AsyncOperationHandle<GameObject> _playerPrefabLoadHandle;       // 플레이어
+  private AsyncOperationHandle<GameObject> _bossPrefabLoadHandle;     // 보스
 
 
   // 리소스 데이터를 가지고 있는 변수 (다수)
@@ -39,6 +40,7 @@ public class ResourceManager : MonoBehaviour
   private Dictionary<string, GameObject> _elevatorPrefabDict; // 엘리베이터 Dictionary
   // 리소스 데이터를 가지고 있는 변수 (단일)
   public GameObject playerPrefab { get; private set; }    // 플레이어
+  public GameObject bossPrefab { get; private set; }    // 보스
 
   // 엘리베이터 관리
   [Header("맵과 엘리베이터 String으로 연결하는 Mapping List")]
@@ -49,7 +51,8 @@ public class ResourceManager : MonoBehaviour
   // 게임 시작하자마자 불러옴.
   async void Awake()
   {
-    await LoadPlayerPrefabs();
+    await LoadPlayerPrefab();
+    await LoadBossPrefab();
     await LoadEnemyPrefabs();
     await LoadElevatorPrefabs();
     await LoadSounds();
@@ -190,7 +193,7 @@ public class ResourceManager : MonoBehaviour
   #endregion
 
   #region 플레이어 리소스
-  public async Task LoadPlayerPrefabs()
+  public async Task LoadPlayerPrefab()
   {
     // 0) 있을 수 있는 핸들 해제
     ReleasePlayerPrefab();
@@ -284,7 +287,7 @@ public class ResourceManager : MonoBehaviour
       // 5-2) 가져오기 실패 했을 때
       Debug.Log("사운드 로딩에 실패했습니다.");
     }
-  }
+    }
 
   // 리소스 해제 함수
   public void ReleaseSounds()
@@ -300,6 +303,38 @@ public class ResourceManager : MonoBehaviour
   }
   #endregion
 
+  #region 보스 리소스
+  public async Task LoadBossPrefab()
+  {
+    // 0) 있을 수 있는 핸들 해제
+    ReleaseBossPrefab();
+    // 1) 리소스 데이터 변수 초기화
+    bossPrefab = null;
+
+    // 2) 리소스 핸들값을 가져오기 (단일)
+    _bossPrefabLoadHandle = Addressables.LoadAssetAsync<GameObject>(Constants.BOSS);
+
+    // 3) 비동기 실행
+    await _bossPrefabLoadHandle.Task;
+
+    // 4) 잘 가져왔는지 체크
+    if (_bossPrefabLoadHandle.Status == AsyncOperationStatus.Succeeded)
+      bossPrefab = _bossPrefabLoadHandle.Result;
+    else
+      Debug.LogError("플레이어 프리팹 로드 실패");
+  }
+
+  // 리소스 해제
+  public void ReleaseBossPrefab()
+  {
+    // 핸들이 있는지 확인
+    if (_bossPrefabLoadHandle.IsValid())
+    {
+      Addressables.Release(_bossPrefabLoadHandle);
+      bossPrefab = null;
+    }
+  }
+  #endregion
 
   // 엘리베이터 프리팹 내보내는 함수
   public GameObject GetElevatorPrefab(string mapConceptName)

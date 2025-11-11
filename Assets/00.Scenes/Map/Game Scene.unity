@@ -178,13 +178,14 @@ GameObject:
   - component: {fileID: 331680609}
   - component: {fileID: 331680615}
   - component: {fileID: 331680614}
+  - component: {fileID: 331680616}
   m_Layer: 0
   m_Name: "GameManager(\uC784\uC2DC)"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &331680609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,6 +333,18 @@ MonoBehaviour:
   autoSpawn: 1
   playerPrefab: {fileID: 5456434453428423699, guid: 9512e0d16021f1e42b955162bc2f43a7,
     type: 3}
+--- !u!114 &331680616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331680608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16d2e45c824ff4f4cafb73cb4aef0bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawnManager
 --- !u!1 &713892777
 GameObject:
   m_ObjectHideFlags: 0

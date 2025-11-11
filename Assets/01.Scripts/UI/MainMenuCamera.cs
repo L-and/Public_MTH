@@ -34,6 +34,7 @@ public class MainMenuCamera : MonoBehaviour
     IEnumerator SceneMove()
     {
         yield return new WaitForSeconds(1.75f);
+        GameManager.Sound.PlayMusic("BGM_InGame");
         GameManager.SceneEx.LoadScene(Constants.GAMESCENE);
     }
 }
