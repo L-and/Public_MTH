@@ -523,22 +523,22 @@ PrefabInstance:
     - target: {fileID: 5088388019481458124, guid: 4e726b6badd311a41a90e8dd2ea14b4e,
         type: 3}
       propertyPath: _floorDataList.Array.data[0].endFloor
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5088388019481458124, guid: 4e726b6badd311a41a90e8dd2ea14b4e,
         type: 3}
       propertyPath: _floorDataList.Array.data[2].endFloor
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5088388019481458124, guid: 4e726b6badd311a41a90e8dd2ea14b4e,
-        type: 3}
-      propertyPath: _floorDataList.Array.data[0].startFloor
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5088388019481458124, guid: 4e726b6badd311a41a90e8dd2ea14b4e,
         type: 3}
-      propertyPath: _floorDataList.Array.data[2].startFloor
+      propertyPath: _floorDataList.Array.data[0].startFloor
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088388019481458124, guid: 4e726b6badd311a41a90e8dd2ea14b4e,
+        type: 3}
+      propertyPath: _floorDataList.Array.data[2].startFloor
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8996654894955637762, guid: 4e726b6badd311a41a90e8dd2ea14b4e,
         type: 3}

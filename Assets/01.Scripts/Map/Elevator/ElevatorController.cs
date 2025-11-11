@@ -43,17 +43,20 @@ public class ElevatorController : MonoBehaviour
   [SerializeField] private GameObject _doorOpenCollider;
 
   private bool _hasBeenTriggered = false;  // Trigger 작동 했는지 체크하는 함수
-  
+
   void Start()
   {
-    
-
     var curFloor = GameManager.GameData.currentFloor;
 
-    if(_elevatorEntranceFloorText != null) _elevatorEntranceFloorText.text = curFloor.ToString();
-    if(_elevatorInsideFloorText != null) _elevatorInsideFloorText.text = curFloor.ToString();
+    if (_elevatorEntranceFloorText != null) _elevatorEntranceFloorText.text = curFloor.ToString();
+    if (_elevatorInsideFloorText != null) _elevatorInsideFloorText.text = curFloor.ToString();
 
     SwitchArrows(false, false);
+  }
+
+  void OnDisable()
+  {
+    elevtest3.OnDoorClosed -= HandleDoorsClose;
   }
 
   public GameObject StartPoint
@@ -68,7 +71,6 @@ public class ElevatorController : MonoBehaviour
     if (_startPoint != null) _startPoint.SetActive(true);
 
     var collider = GetComponent<BoxCollider>();
-
     if (collider != null) collider.enabled = false;
 
     if (_doorOpenCollider != null) _doorOpenCollider.SetActive(false);
@@ -80,8 +82,9 @@ public class ElevatorController : MonoBehaviour
     if (_startPoint != null) _startPoint.SetActive(true);
 
     var collider = GetComponent<BoxCollider>();
-
     if (collider != null) collider.enabled = true;
+
+    elevtest3.OnDoorClosed += HandleDoorsClose;
 
     if (_roomCollider != null) _roomCollider.GetComponent<ElevatorRoomTrigger>().IsEndRoom(true);
   }
@@ -129,6 +132,11 @@ public class ElevatorController : MonoBehaviour
   {
     StartCoroutine(DoorsOpenClose(_innerDoorsAnim, 1, -1, delayTime, _doorCloseAudio));
     StartCoroutine(DoorsOpenClose(_outterDoorsAnim, 1, -1, delayTime, _doorCloseAudio));
+  }
+
+  private void HandleDoorsClose()
+  {
+    DoorsClose(1f);
   }
 
   // 엘리베이터 문 닫히는 함수

@@ -56,7 +56,7 @@ public class ResourceManager : MonoBehaviour
     await LoadEnemyPrefabs();
     await LoadElevatorPrefabs();
     await LoadSounds();
-        
+
     // 엘리베이터 데이터 정리
     mappingDict = new Dictionary<string, string>();
 
@@ -281,13 +281,15 @@ public class ResourceManager : MonoBehaviour
       // 5-1) 잘 가져왔으면 리소스 데이터 변수에 하나씩 추가 (여러개 일 경우)
       foreach (AudioClip sound in _SoundLoadHandle.Result)
         SoundDict.Add(sound.name, sound);
+
+      GameManager.Sound.Set_soundDict();
     }
     else
     {
       // 5-2) 가져오기 실패 했을 때
       Debug.Log("사운드 로딩에 실패했습니다.");
     }
-    }
+  }
 
   // 리소스 해제 함수
   public void ReleaseSounds()
