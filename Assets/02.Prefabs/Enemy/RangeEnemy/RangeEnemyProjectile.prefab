@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3568955505207255}
   - component: {fileID: 7233018786496207728}
   - component: {fileID: 8886471115289453319}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: RangeEnemyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,10 +173,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5832635835183817367}
     m_Modifications:
+    - target: {fileID: 263277191041436249, guid: ce299e9d840a0e546a30c736868a9651,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 342854756052684434, guid: ce299e9d840a0e546a30c736868a9651,
         type: 3}
       propertyPath: m_Name
       value: RangeEnemyEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 342854756052684434, guid: ce299e9d840a0e546a30c736868a9651,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701145544360667928, guid: ce299e9d840a0e546a30c736868a9651,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 2808463635136486217, guid: ce299e9d840a0e546a30c736868a9651,
         type: 3}
@@ -242,6 +257,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3759006294566918318, guid: ce299e9d840a0e546a30c736868a9651,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4251139125900306096, guid: ce299e9d840a0e546a30c736868a9651,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149396099807992945, guid: ce299e9d840a0e546a30c736868a9651,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905672587004873724, guid: ce299e9d840a0e546a30c736868a9651,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200558910700682155, guid: ce299e9d840a0e546a30c736868a9651,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8990151444904949517, guid: ce299e9d840a0e546a30c736868a9651,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
