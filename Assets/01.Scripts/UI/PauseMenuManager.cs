@@ -42,7 +42,7 @@ public class PauseMenuManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         GameManager.Sound.PlayMusic("bgm_cold_dawn");
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(Constants.MAINMENU);
         
         // 플레이어GO 및 관련데이터 제거
         GameManager.PlayerManager.PlayerDespawn();

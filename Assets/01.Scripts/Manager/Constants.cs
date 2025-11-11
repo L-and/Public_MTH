@@ -40,8 +40,8 @@ public static class Constants
   public const string BOSS = "Boss";
 
   // Scene 이름 구분
-  public const string CUTSCENE = "CutScene Test";
-  public const string MAINMENU = "MainMenu";
+  public const string CUTSCENE = "CutScene";
+  public const string MAINMENU = "MainMenu Scene";
   public const string GAMESCENE = "Game Scene";
 }
 
