@@ -485,6 +485,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2878257313644934843, guid: f653ece3382b72c4d8cde9ccf084a054,
+        type: 3}
+      propertyPath: killsValue
+      value: 
+      objectReference: {fileID: 838291997}
     - target: {fileID: 4852705149962116616, guid: f653ece3382b72c4d8cde9ccf084a054,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -610,6 +615,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f653ece3382b72c4d8cde9ccf084a054, type: 3}
+--- !u!114 &838291997 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2395062987476643662, guid: f653ece3382b72c4d8cde9ccf084a054,
+    type: 3}
+  m_PrefabInstance: {fileID: 838291996}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &1120184749
 PrefabInstance:
   m_ObjectHideFlags: 0
