@@ -148,6 +148,7 @@ public class BossPhase : MonoBehaviour
         Debug.Log("[BossPhase] Boss dead");
         onBossDead?.Invoke();
         if (_bossMove) _bossMove.enabled = false;
+        OnBossDefeated?.Invoke();
         // 필요 시 Destroy(gameObject) 또는 연출 코루틴
         // 1) 사망 컷신 프리팹 소환
         if (bossDeathPrefab != null)
