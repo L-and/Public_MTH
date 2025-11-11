@@ -48,7 +48,7 @@ public class CutsceneController : MonoBehaviour
     {
         //컷씬 시작 전 오디오 재생 (3초 지연 포함)
         yield return new WaitForSeconds(3f);
-        GameManager.Sound.PlayMusic("Wind Sound SOUND");
+        GameManager.Sound.PlayMusic("Wind Sound SOUND EFFECT ");
 
         for (int i = 0; i < cuts.Length; i++)
         {
