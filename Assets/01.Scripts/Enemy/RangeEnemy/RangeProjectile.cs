@@ -128,7 +128,6 @@ public class RangeProjectile: MonoBehaviour
         if (owner && hitCol.transform.IsChildOf(owner)) return;
 
         // 맞출 대상만 반응
-        Debug.LogWarning((hitMask.value & (1 << hitCol.gameObject.layer)) == 0);
         if ((hitMask.value & (1 << hitCol.gameObject.layer)) == 0) return;
 
         // TODO 김민서: 이부분은 튕겨난 투사체가 적에게 적중했을 때 과열게이지를 충전하는식으로 변경하면 될듯함
