@@ -46,6 +46,8 @@ public class ElevatorController : MonoBehaviour
 
   void Start()
   {
+    
+
     var curFloor = GameManager.GameData.currentFloor;
 
     if(_elevatorEntranceFloorText != null) _elevatorEntranceFloorText.text = curFloor.ToString();
@@ -89,7 +91,7 @@ public class ElevatorController : MonoBehaviour
     if (!_hasBeenTriggered && other.CompareTag("Player"))
     {
       // TODO : 엘리베이터 안에 들어왔을때 발생하는 업그레이드 선택창 관련 추가
-
+    
       // 화살표 내려가는 표시
       SwitchArrows(false, true);
       // Trigger 작동 했기 때문에 더이상 추가 작동되지 않게 하기 위해서 true

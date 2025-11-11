@@ -58,6 +58,18 @@ public class UIManager : MonoBehaviour
 
         UpdateStatus();
     }
+    #region 보스가 죽었을 경우 발생할 이벤트 등록 및 해제
+    void OnEnable()
+    {
+        BossPhase.OnBossDefeated += GameWon;
+    }
+
+    void OnDisable()
+    {
+        BossPhase.OnBossDefeated -= GameWon;
+    }
+    #endregion
+
 
     // Update is called once per frame
     void Update()
