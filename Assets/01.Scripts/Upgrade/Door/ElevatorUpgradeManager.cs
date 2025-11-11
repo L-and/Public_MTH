@@ -89,7 +89,8 @@ public class ElevatorUpgradeManager : MonoBehaviour
         if (UpgradePersistence.Instance != null)
         {
             UpgradePersistence.Instance.SaveAndApply(id, PlayerStat);
-            Debug.Log($"[ElevatorUpgradeManager] UpgradePersistence에 ID {id} 저장 및 적용 요청 완료");
+      Debug.Log($"[ElevatorUpgradeManager] UpgradePersistence에 ID {id} 저장 및 적용 요청 완료");
+            
         }
         else
         {
