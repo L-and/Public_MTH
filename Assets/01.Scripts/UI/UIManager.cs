@@ -4,7 +4,7 @@ using System.Collections;
 using _01.Scripts.PlayerControll;
 using _01.Scripts.Utils;
 using TMPro;
-using UnityEditor.Playables;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
